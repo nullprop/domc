@@ -1,11 +1,18 @@
 DoIncludeScript("dotf/util.nut", null);
 DoIncludeScript("dotf/player.nut", null);
+DoIncludeScript("dotf/bot.nut", null);
 
-function Precache()
-{
-    PrecacheModel("models/bots/heavy/bot_heavy.mdl");
-    PrecacheModel("models/bots/sniper/bot_sniper.mdl");
-}
+PrecacheModel("models/bots/heavy/bot_heavy.mdl");
+PrecacheModel("models/bots/gibs/heavybot_gib_pelvis.mdl");
+PrecacheModel("models/bots/gibs/heavybot_gib_arm.mdl");
+PrecacheModel("models/bots/gibs/heavybot_gib_arm2.mdl");
+PrecacheModel("models/bots/gibs/heavybot_gib_leg.mdl");
+PrecacheModel("models/bots/gibs/heavybot_gib_leg2.mdl");
+PrecacheModel("models/bots/gibs/heavybot_gib_head.mdl");
+PrecacheModel("models/bots/gibs/heavybot_gib_chest.mdl");
+
+PrecacheModel("models/bots/sniper/bot_sniper.mdl");
+PrecacheModel("models/bots/gibs/sniperbot_gib_head.mdl");
 
 function Think()
 {
@@ -18,9 +25,11 @@ function Think()
 class GamemodeDotf
 {
     players = null;
+    bots = null;
 
     constructor()
     {
+        this.bots = [];
         this.players = {};
         local ply = null;
         while(ply = Entities.FindByClassname(ply, "player"))
@@ -34,6 +43,10 @@ class GamemodeDotf
         foreach(ply in this.players)
         {
             ply.Think();
+        }
+        foreach(bot in this.bots)
+        {
+            bot.Think();
         }
     }
 
@@ -69,6 +82,13 @@ class GamemodeDotf
         }
 
         delete this.players[userid];
+    }
+
+    function AddBot(type, team, pos, ang)
+    {
+        Log(format("AddBot %d, %d", type, team));
+        local bot = Bot(type, team, pos, ang);
+        this.bots.append(bot);
     }
 }
 
@@ -111,4 +131,18 @@ if (!("gamemode_dotf" in getroottable()))
 else
 {
     ::gamemode_dotf.OnRoundStart();
+}
+
+::TestBot <- function(type, team)
+{
+    if ("gamemode_dotf" in getroottable())
+    {
+        local ply = GetListenServerHost();
+        ::gamemode_dotf.AddBot(
+            type,
+            team,
+            ply.EyePosition() + ply.GetForwardVector()*256,
+            ply.GetAbsAngles()
+        );
+    }
 }
