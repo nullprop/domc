@@ -39,10 +39,16 @@ class Bot
         }
 
         this.botEnt = Entities.CreateByClassname("prop_dynamic");
+
         this.botEnt.SetModelSimple(this.botSettings["model"]);
         this.botEnt.SetModelScale(this.botSettings["model_scale"], 0.0);
         this.botEnt.SetSkin(this.botSettings["model_skin_" + this.teamName]);
         NetProps.SetPropInt(this.botEnt, "m_bClientSideAnimation", 1);
+
+        this.botEnt.SetSolid(Constants.ESolidType.SOLID_BBOX);
+        this.botEnt.SetCollisionGroup(Constants.ECollisionGroup.COLLISION_GROUP_NPC);
+        this.botEnt.SetGravity(800.0);
+        // this.botEnt.SetVelocity(Vector(200.0, 0.0, 0.0));
 
         this.botEnt.SetTeam(team);
 
@@ -86,8 +92,8 @@ class Bot
             local passedIndex = -1;
             for (local i = 0; i < this.navPath.len(); i++) {
                 local center = this.navPath[i].GetCenter();
-                local tmp = center - currentPos;
-                local dist = tmp.Length();
+                local delta = center - currentPos;
+                local dist = delta.Length();
 
                 if (dist < PATH_MARGIN)
                 {
@@ -95,7 +101,7 @@ class Bot
                     continue;
                 }
 
-                moveDir = tmp;
+                moveDir = delta / dist;
                 break;
             }
 
@@ -105,8 +111,11 @@ class Bot
 
             if (moveDir)
             {
-                local move = moveDir * moveSpeed * dt;
-                this.botEnt.SetAbsOrigin(currentPos + move);
+                local move = moveDir * moveSpeed;
+                local velocity = this.botEnt.GetAbsVelocity();
+                velocity.x = move.x;
+                velocity.y = move.y;
+                this.botEnt.SetVelocity(velocity);
             }
         }
 
