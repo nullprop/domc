@@ -146,3 +146,23 @@ else
         );
     }
 }
+
+::TestThink <- function()
+{
+    if ("gamemode_dotf" in getroottable())
+    {
+        ::gamemode_dotf.Think();
+    }
+}
+
+// https://github.com/ValveSoftware/Source-1-Games/issues/4481#issuecomment-1328052130
+::TestNav <- function()
+{
+    local ply = GetListenServerHost();
+    local navArea = NavMesh.GetNavArea(ply.GetOrigin(), 512.0);
+    printl("navArea " + navArea);
+    if (navArea)
+    {
+        navArea.DebugDrawFilled(0, 255, 0, 100, 5.0, false, 1.0);
+    }
+}
