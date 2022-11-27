@@ -3,6 +3,7 @@ DoIncludeScript("dotf/settings.nut", null);
 
 const PATH_INTERVAL = 1.0;
 const PATH_MARGIN = 64.0;
+const STEP_HEIGHT = 24.0;
 
 class Bot
 {
@@ -21,6 +22,9 @@ class Bot
     hasPath = false;
     pathTime = 0.0;
     lastThink = 0.0;
+    velocity = Vector(0.0, 0.0, 0.0);
+    gravity = 800.0;
+    groundNormal = null;
 
     constructor(type, team, pos, ang){
         this.botType = type;
@@ -32,11 +36,11 @@ class Bot
         this.lastThink = Time();
 
         // Spawn on navmesh
-        local navArea = NavMesh.GetNavArea(pos, 512.0);
-        if (navArea)
-        {
-            pos = navArea.FindRandomSpot();
-        }
+        // local navArea = NavMesh.GetNavArea(pos, 512.0);
+        // if (navArea)
+        // {
+        //     pos = navArea.FindRandomSpot();
+        // }
 
         this.botEnt = Entities.CreateByClassname("prop_dynamic");
 
@@ -47,8 +51,6 @@ class Bot
 
         this.botEnt.SetSolid(Constants.ESolidType.SOLID_BBOX);
         this.botEnt.SetCollisionGroup(Constants.ECollisionGroup.COLLISION_GROUP_NPC);
-        this.botEnt.SetGravity(800.0);
-        // this.botEnt.SetVelocity(Vector(200.0, 0.0, 0.0));
 
         this.botEnt.SetTeam(team);
 
@@ -69,6 +71,7 @@ class Bot
     {
         local time = Time();
         local dt = time - this.lastThink;
+        this.velocity.z -= this.gravity * dt;
 
         if (this.targetEnt == null)
         {
@@ -78,7 +81,41 @@ class Bot
         if (time - this.pathTime > PATH_INTERVAL)
         {
             this.GetTargetPos();
-            this.GetPath();
+            //this.GetPath();
+        }
+
+        if (this.targetPos)
+        {
+            local delta = this.targetPos - this.botEnt.GetOrigin();
+            local dist = delta.length();
+            if (dist < PATH_MARGIN)
+            {
+                this.targetPos = null;
+            }
+            else
+            {
+                local moveDir = delta * (1.0 / delta.Length());
+                local moveSpeed = this.botSettings["move_speed"];
+                local move = moveDir * moveSpeed;
+                this.velocity.x = move.x;
+                this.velocity.y = move.y;
+            }
+        }
+
+        local moveTime = dt;
+        local iter = 0;
+        while (moveTime > Constants.Math.Epsilon && iter < 3)
+        {
+            printl("SlideMove iter " + iter + ", moveTime " + moveTime);
+            moveTime = this.SlideMove(moveTime);
+            iter++;
+        }
+
+        // friction
+        if (this.groundNormal != null)
+        {
+            this.velocity.x *= 0.9;
+            this.velocity.y *= 0.9;
         }
 
         if (this.hasPath)
@@ -120,6 +157,60 @@ class Bot
         }
 
         this.lastThink = Time();
+    }
+
+    function SlideMove(dt)
+    {
+        local startPos = this.botEnt.GetOrigin();
+        local endPos = startPos + this.velocity * dt;
+
+        // lazy fake step up
+        startPos.z += STEP_HEIGHT;
+
+        local tr = {
+            "start": startPos,
+            "end": endPos,
+            "hullmin": this.botEnt.GetBoundingMins(),
+            "hullmax": this.botEnt.GetBoundingMaxs(),
+            "mask": MASK_PLAYER_SOLID,
+            "ignore": this.botEnt,
+        };
+
+        this.groundNormal = null;
+
+        if (TraceHull(tr))
+        {
+            // TODO: fix allsolid invalid index..
+            // if (tr["allsolid"])
+            // {
+            //     Log(format("Bot trace allsolid at (%f, %f, %f), killing", startPos.x, startPos.y, startPos.z));
+            //     // TODO die
+            //     return;
+            // }
+
+            endPos = tr["endpos"];
+
+            if (tr["fraction"] >= 1.0 - Constants.Math.Epsilon)
+            {
+                dt = 0.0;
+            }
+            else
+            {
+                dt -= dt * tr["fraction"];
+            }
+
+            if (tr["plane_normal"].z > 0.7)
+            {
+                this.groundNormal = tr["plane_normal"];
+            }
+
+            this.velocity = ClipVelocity(this.velocity, tr["plane_normal"], 1.0);
+        }
+
+        printl(format("SlideMove from (%f, %f, %f) to (%f, %f, %f)", startPos.x, startPos.y, startPos.z, endPos.x, endPos.y, endPos.z));
+        this.botEnt.SetAbsOrigin(endPos);
+
+        return dt;
     }
 
     function FindTarget()
