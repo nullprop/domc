@@ -32,13 +32,15 @@ TF_TEAM_NAMES <-
 TF_BOT_TYPE <-
 {
     "MELEE": 0,
-    "RANGED": 1
+    "RANGED": 1,
+    "SIEGE": 2
 }
 
 TF_BOT_TYPE_NAME <-
 [
     "melee",
-    "ranged"
+    "ranged",
+    "siege"
 ]
 
 MASK_PLAYER_SOLID <-

@@ -15,6 +15,8 @@ PrecacheModel("models/bots/gibs/heavybot_gib_chest.mdl");
 PrecacheModel("models/bots/sniper/bot_sniper.mdl");
 PrecacheModel("models/bots/gibs/sniperbot_gib_head.mdl");
 
+PrecacheModel("models/bots/demo_boss/bot_demo_boss.mdl");
+
 PrecacheModel("models/items/currencypack_small.mdl");
 PrecacheModel("models/items/currencypack_medium.mdl");
 PrecacheModel("models/items/currencypack_large.mdl");

@@ -5,6 +5,70 @@ const PATH_INTERVAL = 1.0;
 const PATH_MARGIN = 64.0;
 const STEP_HEIGHT = 24.0;
 
+BOT_SETTINGS <-
+{
+	"melee":
+	{
+		"health": 300,
+		"damage": 8.0,
+		"attack_range": 64.0,
+		"attack_range_min": 36.0,
+		"aggro_range": 512.0,
+		"class": Constants.ETFClass.TF_CLASS_HEAVYWEAPONS,
+		"model": "models/bots/heavy/bot_heavy.mdl",
+		"model_scale": 0.6,
+		"model_skin_blu": 1,
+		"model_skin_red": 0,
+		"model_anim_idle": "Stand_MELEE",
+		"model_anim_move": "Run_MELEE",
+		"model_anim_attack": "TODO",
+		// "weapon": "tf_weapon_fists",
+		"weapon": null,
+		"ammo": 0,
+		"move_speed": 110
+	},
+	"ranged":
+	{
+		"health": 150,
+		"damage": 12.0,
+		"attack_range": 232.0,
+		"attack_range_min": 36.0,
+		"aggro_range": 512.0,
+		"class": Constants.ETFClass.TF_CLASS_SNIPER,
+		"model": "models/bots/sniper/bot_sniper.mdl",
+		"model_scale": 0.6,
+		"model_skin_blu": 1,
+		"model_skin_red": 0,
+		"model_anim_idle": "Stand_PRIMARY",
+		"model_anim_move": "Run_PRIMARY",
+		"model_anim_attack": "TODO",
+		"weapon": "tf_weapon_sniperrifle",
+        "weapon_model": "models/weapons/w_models/w_sniperrifle.mdl",
+		"ammo": 25,
+		"move_speed": 100
+	},
+	"siege":
+	{
+		"health": 500,
+		"damage": 50.0,
+		"attack_range": 450.0,
+		"attack_range_min": 36.0,
+		"aggro_range": 512.0,
+		"class": Constants.ETFClass.TF_CLASS_DEMOMAN,
+		"model": "models/bots/demo_boss/bot_demo_boss.mdl",
+		"model_scale": 0.8,
+		"model_skin_blu": 1,
+		"model_skin_red": 0,
+		"model_anim_idle": "Stand_PRIMARY",
+		"model_anim_move": "Run_PRIMARY",
+		"model_anim_attack": "TODO",
+		"weapon": "tf_weapon_grenadelauncher",
+        "weapon_model": "models/weapons/w_models/w_grenadelauncher.mdl",
+		"ammo": 25,
+		"move_speed": 90
+	}
+}
+
 class Bot
 {
     botEnt = null;
@@ -18,6 +82,9 @@ class Bot
     team = null;
     teamName = null;
     botSettings = null;
+    weaponEnt = null;
+
+    uname = null;
 
     targetEnt = null;
     targetPos = null;
@@ -34,6 +101,7 @@ class Bot
         this.team = team;
         this.teamName = TF_TEAM_NAMES[team];
         this.botSettings = BOT_SETTINGS[this.botTypeName];
+        this.uname = UniqueString();
 
         this.lastThink = Time();
 
@@ -47,7 +115,7 @@ class Bot
         this.botEnt = SpawnEntityFromTable(
             "base_boss",
             {
-                targetname = "bot",
+                targetname = "bot_" + this.uname,
                 origin = pos,
                 model = this.botSettings["model"],
                 playbackrate = 1.0,
@@ -79,6 +147,22 @@ class Bot
 
         this.botEnt.GetScriptScope().my_bot <- this;
         AddThinkToEnt(this.botEnt, "BotThink");
+
+        if (this.botSettings["weapon"])
+        {
+            this.weaponEnt = Entities.CreateByClassname("prop_dynamic");
+            this.weaponEnt.SetTeam(team);
+            this.weaponEnt.SetAbsOrigin(pos + Vector(0, 0, 40.0 * this.botSettings["model_scale"]));
+            this.weaponEnt.SetSolidFlags(Constants.FSolid.FSOLID_NOT_SOLID);
+            this.weaponEnt.SetCollisionGroup(Constants.ECollisionGroup.COLLISION_GROUP_NONE);
+            this.weaponEnt.SetModelSimple(this.botSettings["weapon_model"]);
+            this.weaponEnt.SetModelScale(this.botSettings["model_scale"], 0.0);
+            this.weaponEnt.DispatchSpawn();
+
+            EntFireByHandle(this.weaponEnt, "SetParent", "bot_" + this.uname, 0.1, null, null);
+            // TODO: lookup attachment name in HLMV
+            // EntFireByHandle(this.weaponEnt, "SetParentAttachment", "weapon_bone", 0.2, null, null);
+        }
     }
 
     function Update()
@@ -115,7 +199,10 @@ class Bot
             this.locomotion.Approach(moveTarget, 0.1);
             this.locomotion.FaceTowards(moveTarget);
 
-            this.botEnt.SetForwardVector(this.locomotion.GetGroundMotionVector());
+            if (this.botType != TF_BOT_TYPE["SIEGE"])
+            {
+                this.botEnt.SetForwardVector(this.locomotion.GetGroundMotionVector());
+            }
 
             this.PlayAnim(this.botSettings["model_anim_move"]);
             this.SetPoseParameter("move_x", 1.0);
@@ -130,7 +217,7 @@ class Bot
             this.SetPoseParameter("move_x", 0.0);
             if (this.botType == TF_BOT_TYPE["RANGED"])
             {
-                this.SetPoseParameter("move_scale", 0.0);
+                this.SetPoseParameter("move_scale", 1.0);
             }
         }
 
@@ -219,10 +306,12 @@ class Bot
             }
         }
 
+        /*
         foreach (p in this.navPath)
         {
             DebugDrawBox(p, Vector(-8.0, -8.0, -8.0), Vector(8.0, 8.0, 8.0), 255, 255, 255, 100, 1.0);
         }
+        */
     }
 
     function PlayAnim(name)

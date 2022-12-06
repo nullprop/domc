@@ -60,7 +60,6 @@ class Lane
         local nearest = this.GetNearestPoint(pos);
         if (!nearest.point)
         {
-            Log("No nearest point on lane. Did you add nodes?");
             return pos;
         }
 
