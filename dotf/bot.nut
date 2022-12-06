@@ -200,15 +200,28 @@ class Bot
             local area = pathTable["area0"];
             while (area != null)
             {
+                /*
                 // Don't add current area so bot will actually leave it...
                 // Don't add end area, use actual targetPos for final point
                 if (area != startArea && area != endArea)
                 {
                     this.navPath.append(area.GetCenter());
                 }
+                */
+                local parentArea = area.GetParent();
+                if (parentArea)
+                {
+                    local portalPoint = area.ComputeClosestPointInPortal(parentArea, area.GetParentHow(), area.GetCenter());
+                    this.navPath.append(portalPoint);
+                }
 
-                area = area.GetParent();
+                area = parentArea;
             }
+        }
+
+        foreach (p in this.navPath)
+        {
+            DebugDrawBox(p, Vector(-8.0, -8.0, -8.0), Vector(8.0, 8.0, 8.0), 255, 255, 255, 100, 1.0);
         }
     }
 

@@ -77,7 +77,7 @@ class Lane
         local endPos = nearest.line.endPos;
         endPos += nearest.line.vecNorm * 128.0;
 
-        DebugDrawBox(nearest.point, Vector(-16.0, -16.0, -16.0), Vector(16.0, 16.0, 16.0), 0, 0, 255, 128, 1.0);
+        //DebugDrawBox(nearest.point, Vector(-16.0, -16.0, -16.0), Vector(16.0, 16.0, 16.0), 0, 0, 255, 128, 1.0);
 
         return endPos;
     }
