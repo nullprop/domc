@@ -135,9 +135,15 @@ if (!("gamemode_dotf" in getroottable()))
 
     if (!("HOOKED_EVENTS" in getroottable()))
     {
-        // __CollectEventCallbacks(this, "OnGameEvent_", "GameEventCallbacks", RegisterScriptGameEventListener);
         __CollectGameEventCallbacks(this);
         ::HOOKED_EVENTS <- true;
+    }
+
+    local thinker = SpawnEntityFromTable("info_target", { targetname = "dotf_gamemode" } )
+    if(thinker.ValidateScriptScope())
+    {
+        thinker.GetScriptScope()["Think"] <- Think;
+        AddThinkToEnt(thinker, "Think");
     }
 }
 else
