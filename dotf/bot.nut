@@ -8,6 +8,10 @@ const STEP_HEIGHT = 24.0;
 class Bot
 {
     botEnt = null;
+    locomotion = null;
+    body = null;
+    vision = null;
+
     botType = null;
     botTypeName = null;
     team = null;
@@ -18,13 +22,9 @@ class Bot
     targetPos = null;
     targetPath = null;
     navArea = null;
-    navPath = null;
-    hasPath = false;
+    navPath = [];
     pathTime = 0.0;
     lastThink = 0.0;
-    velocity = Vector(0.0, 0.0, 0.0);
-    gravity = 800.0;
-    groundNormal = null;
 
     constructor(type, team, pos, ang){
         this.botType = type;
@@ -36,42 +36,68 @@ class Bot
         this.lastThink = Time();
 
         // Spawn on navmesh
-        // local navArea = NavMesh.GetNavArea(pos, 512.0);
-        // if (navArea)
-        // {
-        //     pos = navArea.FindRandomSpot();
-        // }
+        local navArea = NavMesh.GetNavArea(pos, 512.0);
+        if (navArea)
+        {
+            pos = navArea.FindRandomSpot();
+        }
 
-        this.botEnt = Entities.CreateByClassname("prop_dynamic");
+        // this.botEnt = Entities.CreateByClassname("base_boss");
+        this.botEnt = SpawnEntityFromTable(
+            "base_boss",
+            {
+                targetname = "bot",
+                origin = pos,
+                model = this.botSettings["model"],
+                playbackrate = 1.0,
+                health = this.botSettings["health"],
+                speed = this.botSettings["move_speed"]
+            }
+        );
 
-        this.botEnt.SetModelSimple(this.botSettings["model"]);
+        this.locomotion = this.botEnt.GetLocomotionInterface();
+        this.body = this.botEnt.GetBodyInterface();
+        this.vision = this.botEnt.GetVisionInterface();
+
+        this.botEnt.SetGravity(800.0);
+
+        // this.botEnt.SetModelSimple(this.botSettings["model"]);
         this.botEnt.SetModelScale(this.botSettings["model_scale"], 0.0);
         this.botEnt.SetSkin(this.botSettings["model_skin_" + this.teamName]);
         NetProps.SetPropInt(this.botEnt, "m_bClientSideAnimation", 1);
 
-        this.botEnt.SetSolid(Constants.ESolidType.SOLID_BBOX);
-        this.botEnt.SetCollisionGroup(Constants.ECollisionGroup.COLLISION_GROUP_NPC);
+        // this.botEnt.SetSolid(Constants.ESolidType.SOLID_BBOX);
+        // this.botEnt.SetCollisionGroup(Constants.ECollisionGroup.COLLISION_GROUP_NPC);
 
         this.botEnt.SetTeam(team);
 
-        this.botEnt.SetAbsOrigin(pos);
-        this.botEnt.SetAbsAngles(QAngle(ang));
+        // this.botEnt.SetAbsOrigin(pos);
+        // this.botEnt.SetAbsAngles(QAngle(ang));
 
-        this.botEnt.DispatchSpawn();
+        // this.botEnt.DispatchSpawn();
+
+        // this.locomotion.DriveTo(pos);
 
         // can get reset on spawn depending on classname
-        this.botEnt.SetMaxHealth(this.botSettings["health"]);
-        this.botEnt.SetHealth(this.botSettings["health"]);
+        // this.botEnt.SetMaxHealth(this.botSettings["health"]);
+        // this.botEnt.SetHealth(this.botSettings["health"]);
 
-        this.PlayAnim(this.botSettings["model_anim_move"]);
-        //this.botEnt.SetPoseParameter(0, 1.0); # TODO: ask if string version could be exposed or LookupPoseParameter
+        this.locomotion.SetDesiredSpeed(this.botSettings["move_speed"]);
+        this.locomotion.SetSpeedLimit(3500.0);
+
+        if (!this.botEnt.ValidateScriptScope())
+        {
+            Log("Failed to validate bot script scope");
+            return;
+        }
+
+        this.botEnt.GetScriptScope().my_bot <- this;
+        AddThinkToEnt(this.botEnt, "BotThink");
     }
 
-    function Think()
+    function Update()
     {
         local time = Time();
-        local dt = time - this.lastThink;
-        this.velocity.z -= this.gravity * dt;
 
         if (this.targetEnt == null)
         {
@@ -81,136 +107,58 @@ class Bot
         if (time - this.pathTime > PATH_INTERVAL)
         {
             this.GetTargetPos();
-            //this.GetPath();
+            this.GetPath();
         }
 
-        if (this.targetPos)
+        local moveTarget = null;
+        local currentPos = this.botEnt.GetOrigin();
+
+        for (local i = this.navPath.len() - 1; i >= 0; i--) {
+            if ((this.navPath[i] - currentPos).Length2D() < PATH_MARGIN)
+            {
+                this.navPath.remove(i);
+                continue;
+            }
+
+            moveTarget = this.navPath[i];
+            break;
+        }
+
+        if (moveTarget)
         {
-            local delta = this.targetPos - this.botEnt.GetOrigin();
-            local dist = delta.length();
-            if (dist < PATH_MARGIN)
+            this.locomotion.Approach(moveTarget, 0.1);
+            this.locomotion.FaceTowards(moveTarget);
+
+            this.botEnt.SetForwardVector(this.locomotion.GetGroundMotionVector());
+
+            this.PlayAnim(this.botSettings["model_anim_move"]);
+            this.SetPoseParameter("move_x", 1.0);
+            if (this.botType == TF_BOT_TYPE["RANGED"])
             {
-                this.targetPos = null;
-            }
-            else
-            {
-                local moveDir = delta * (1.0 / delta.Length());
-                local moveSpeed = this.botSettings["move_speed"];
-                local move = moveDir * moveSpeed;
-                this.velocity.x = move.x;
-                this.velocity.y = move.y;
+                this.SetPoseParameter("move_scale", 1.0);
             }
         }
-
-        local moveTime = dt;
-        local iter = 0;
-        while (moveTime > Constants.Math.Epsilon && iter < 3)
+        else
         {
-            printl("SlideMove iter " + iter + ", moveTime " + moveTime);
-            moveTime = this.SlideMove(moveTime);
-            iter++;
-        }
-
-        // friction
-        if (this.groundNormal != null)
-        {
-            this.velocity.x *= 0.9;
-            this.velocity.y *= 0.9;
-        }
-
-        if (this.hasPath)
-        {
-            local moveSpeed = this.botSettings["move_speed"];
-            local currentPos = this.botEnt.GetOrigin();
-            local moveDir = null;
-
-            printl("path type " + typeof(this.navPath));
-
-            local passedIndex = -1;
-            for (local i = 0; i < this.navPath.len(); i++) {
-                local center = this.navPath[i].GetCenter();
-                local delta = center - currentPos;
-                local dist = delta.Length();
-
-                if (dist < PATH_MARGIN)
-                {
-                    passedIndex = i;
-                    continue;
-                }
-
-                moveDir = delta / dist;
-                break;
-            }
-
-            for (local i = passedIndex; i >= 0; i--) {
-                delete this.navPath[i];
-            }
-
-            if (moveDir)
+            this.PlayAnim(this.botSettings["model_anim_idle"]);
+            this.SetPoseParameter("move_x", 0.0);
+            if (this.botType == TF_BOT_TYPE["RANGED"])
             {
-                local move = moveDir * moveSpeed;
-                local velocity = this.botEnt.GetAbsVelocity();
-                velocity.x = move.x;
-                velocity.y = move.y;
-                this.botEnt.SetVelocity(velocity);
+                this.SetPoseParameter("move_scale", 0.0);
             }
         }
 
-        this.lastThink = Time();
-    }
-
-    function SlideMove(dt)
-    {
-        local startPos = this.botEnt.GetOrigin();
-        local endPos = startPos + this.velocity * dt;
-
-        // lazy fake step up
-        startPos.z += STEP_HEIGHT;
-
-        local tr = {
-            "start": startPos,
-            "end": endPos,
-            "hullmin": this.botEnt.GetBoundingMins(),
-            "hullmax": this.botEnt.GetBoundingMaxs(),
-            "mask": MASK_PLAYER_SOLID,
-            "ignore": this.botEnt,
-        };
-
-        this.groundNormal = null;
-
-        if (TraceHull(tr))
-        {
-            // TODO: fix allsolid invalid index..
-            // if (tr["allsolid"])
-            // {
-            //     Log(format("Bot trace allsolid at (%f, %f, %f), killing", startPos.x, startPos.y, startPos.z));
-            //     // TODO die
-            //     return;
-            // }
-
-            endPos = tr["endpos"];
-
-            if (tr["fraction"] >= 1.0 - Constants.Math.Epsilon)
-            {
-                dt = 0.0;
-            }
-            else
-            {
-                dt -= dt * tr["fraction"];
-            }
-
-            if (tr["plane_normal"].z > 0.7)
-            {
-                this.groundNormal = tr["plane_normal"];
-            }
-
-            this.velocity = ClipVelocity(this.velocity, tr["plane_normal"], 1.0);
+        // loop anim
+        if (this.botEnt.GetCycle() > 0.99)
+		{
+            this.botEnt.SetCycle(0.0);
         }
 
-        printl(format("SlideMove from (%f, %f, %f) to (%f, %f, %f)", startPos.x, startPos.y, startPos.z, endPos.x, endPos.y, endPos.z));
-        this.botEnt.SetAbsOrigin(endPos);
+        // advance anim
+        this.botEnt.StudioFrameAdvance();
+        this.botEnt.DispatchAnimEvents(this.botEnt);
 
-        return dt;
+        this.lastThink = time;
     }
 
     function FindTarget()
@@ -235,15 +183,38 @@ class Bot
             return;
         }
 
+        this.navPath = [];
+        // Path is in reverse
+        this.navPath.append(this.targetPos);
+
         this.navArea = NavMesh.GetNavArea(this.botEnt.GetOrigin(), 512.0);
+        if (this.navArea == null)
+        {
+            NavMesh.GetNearestNavArea(this.botEnt.GetOrigin(), 512.0, false, true);
+        }
         if (this.navArea == null)
         {
             return;
         }
 
-        this.navPath = {};
-        this.hasPath = NavMesh.GetNavAreasFromBuildPath(this.navArea, null, this.targetPos, 10000.0, this.team, false, this.navPath);
+        local pathTable = {};
+        local builtPath = NavMesh.GetNavAreasFromBuildPath(this.navArea, null, this.targetPos, 10000.0, this.team, false, pathTable);
         this.pathTime = Time();
+
+        if (builtPath && pathTable.len() > 0)
+        {
+            local area = pathTable["area0"];
+            while (area != null)
+            {
+                // Don't add current area so bot will actually leave it...
+                if (area != this.navArea)
+                {
+                    this.navPath.append(area.GetCenter());
+                }
+
+                area = area.GetParent();
+            }
+        }
     }
 
     function PlayAnim(name)
@@ -251,4 +222,24 @@ class Bot
         local seq = this.botEnt.LookupSequence(name);
         this.botEnt.ResetSequence(seq);
     }
+
+    function SetPoseParameter(name, val)
+    {
+        local index = this.botEnt.LookupPoseParameter(name);
+        if (index > 0)
+        {
+            this.botEnt.SetPoseParameter(index, val);
+        }
+    }
+
+    function IsCurrentAnim(name)
+    {
+        local seq = this.botEnt.LookupSequence(name);
+        return this.botEnt.GetSequence() == seq;
+    }
+}
+
+function BotThink()
+{
+	return self.GetScriptScope().my_bot.Update();
 }

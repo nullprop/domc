@@ -42,8 +42,8 @@ TF_BOT_TYPE_NAME <-
 ]
 
 MASK_PLAYER_SOLID <-
-    Constants.ContentsFlags.CONTENTS_SOLID |
-    Constants.ContentsFlags.CONTENTS_PLAYERCLIP |
-    Constants.ContentsFlags.CONTENTS_WINDOW |
-    Constants.ContentsFlags.CONTENTS_MONSTER |
-    Constants.ContentsFlags.CONTENTS_GRATE;
+    Constants.FContents.CONTENTS_SOLID |
+    Constants.FContents.CONTENTS_PLAYERCLIP |
+    Constants.FContents.CONTENTS_WINDOW |
+    Constants.FContents.CONTENTS_MONSTER |
+    Constants.FContents.CONTENTS_GRATE;

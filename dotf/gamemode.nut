@@ -14,6 +14,10 @@ PrecacheModel("models/bots/gibs/heavybot_gib_chest.mdl");
 PrecacheModel("models/bots/sniper/bot_sniper.mdl");
 PrecacheModel("models/bots/gibs/sniperbot_gib_head.mdl");
 
+PrecacheModel("models/items/currencypack_small.mdl");
+PrecacheModel("models/items/currencypack_medium.mdl");
+PrecacheModel("models/items/currencypack_large.mdl");
+
 function Think()
 {
     if (("gamemode_dotf" in getroottable()))
@@ -43,10 +47,6 @@ class GamemodeDotf
         foreach(ply in this.players)
         {
             ply.Think();
-        }
-        foreach(bot in this.bots)
-        {
-            bot.Think();
         }
     }
 
@@ -118,13 +118,25 @@ function OnGameEvent_teamplay_round_waiting_ends(data)
     Log("teamplay_round_waiting_ends");
 }
 
+function OnScriptHook_OnTakeDamage(params)
+{
+	local ent = params.const_entity;
+	local inf = params.inflictor;
+    if (ent.IsPlayer() && inf.GetClassname() == "base_boss" && params.damage_type == 1)
+    {
+		// Don't crush the player if a bot pushes them into a wall
+        params.damage = 0;
+    }
+}
+
 if (!("gamemode_dotf" in getroottable()))
 {
     ::gamemode_dotf <- GamemodeDotf();
 
     if (!("HOOKED_EVENTS" in getroottable()))
     {
-        __CollectEventCallbacks(this, "OnGameEvent_", "GameEventCallbacks", RegisterScriptGameEventListener);
+        // __CollectEventCallbacks(this, "OnGameEvent_", "GameEventCallbacks", RegisterScriptGameEventListener);
+        __CollectGameEventCallbacks(this);
         ::HOOKED_EVENTS <- true;
     }
 }
@@ -144,25 +156,5 @@ else
             ply.EyePosition() + ply.GetForwardVector()*256,
             ply.GetAbsAngles()
         );
-    }
-}
-
-::TestThink <- function()
-{
-    if ("gamemode_dotf" in getroottable())
-    {
-        ::gamemode_dotf.Think();
-    }
-}
-
-// https://github.com/ValveSoftware/Source-1-Games/issues/4481#issuecomment-1328052130
-::TestNav <- function()
-{
-    local ply = GetListenServerHost();
-    local navArea = NavMesh.GetNavArea(ply.GetOrigin(), 512.0);
-    printl("navArea " + navArea);
-    if (navArea)
-    {
-        navArea.DebugDrawFilled(0, 255, 0, 100, 5.0, false, 1.0);
     }
 }
