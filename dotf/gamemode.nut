@@ -1,6 +1,7 @@
 DoIncludeScript("dotf/util.nut", null);
 DoIncludeScript("dotf/player.nut", null);
 DoIncludeScript("dotf/bot.nut", null);
+DoIncludeScript("dotf/lane.nut", null);
 
 PrecacheModel("models/bots/heavy/bot_heavy.mdl");
 PrecacheModel("models/bots/gibs/heavybot_gib_pelvis.mdl");
@@ -30,6 +31,7 @@ class GamemodeDotf
 {
     players = null;
     bots = null;
+    lanes = []
 
     constructor()
     {
@@ -39,6 +41,10 @@ class GamemodeDotf
         while(ply = Entities.FindByClassname(ply, "player"))
         {
             this.players[ply.entindex()] <- Player(ply);
+        }
+        for (local i = 0; i < 3; i++)
+        {
+            this.lanes.append(Lane());
         }
     }
 
@@ -84,11 +90,25 @@ class GamemodeDotf
         delete this.players[userid];
     }
 
-    function AddBot(type, team, pos, ang)
+    function AddBot(type, team, pos, ang, laneIndex)
     {
-        Log(format("AddBot %d, %d", type, team));
-        local bot = Bot(type, team, pos, ang);
+        Log(format("AddBot %d, %d", type, team, laneIndex));
+        local bot = Bot(type, team, pos, ang, this.lanes[laneIndex]);
         this.bots.append(bot);
+    }
+
+    function AddNodeToLane(laneIndex, pos)
+    {
+        Log(format("AddNodeToLane %d %s", laneIndex, pos.tostring()));
+        this.lanes[laneIndex].AddNode(pos);
+    }
+
+    function DebugDrawLanes(duration)
+    {
+        foreach (lane in this.lanes)
+        {
+            lane.DebugDraw(duration);
+        }
     }
 }
 
@@ -139,7 +159,7 @@ if (!("gamemode_dotf" in getroottable()))
         ::HOOKED_EVENTS <- true;
     }
 
-    local thinker = SpawnEntityFromTable("info_target", { targetname = "dotf_gamemode" } )
+    local thinker = SpawnEntityFromTable("info_target", { targetname = "dotf_gamemode" } );
     if(thinker.ValidateScriptScope())
     {
         thinker.GetScriptScope()["Think"] <- Think;
@@ -151,7 +171,7 @@ else
     ::gamemode_dotf.OnRoundStart();
 }
 
-::TestBot <- function(type, team)
+::TestBot <- function(type, team, laneIndex)
 {
     if ("gamemode_dotf" in getroottable())
     {
@@ -160,7 +180,19 @@ else
             type,
             team,
             ply.EyePosition() + ply.GetForwardVector()*256,
-            ply.GetAbsAngles()
+            ply.GetAbsAngles(),
+            laneIndex
         );
     }
+}
+
+::AddLaneNode <- function(laneIndex)
+{
+    local ply = GetListenServerHost();
+    ::gamemode_dotf.AddNodeToLane(laneIndex, ply.GetOrigin());
+}
+
+::DebugDrawLanes <- function()
+{
+    ::gamemode_dotf.DebugDrawLanes(10.0);
 }

@@ -12,6 +12,7 @@ class Bot
     body = null;
     vision = null;
 
+    lane = null;
     botType = null;
     botTypeName = null;
     team = null;
@@ -26,7 +27,8 @@ class Bot
     pathTime = 0.0;
     lastThink = 0.0;
 
-    constructor(type, team, pos, ang){
+    constructor(type, team, pos, ang, lane){
+        this.lane = lane;
         this.botType = type;
         this.botTypeName = TF_BOT_TYPE_NAME[type];
         this.team = team;
@@ -42,7 +44,6 @@ class Bot
             pos = navArea.FindRandomSpot();
         }
 
-        // this.botEnt = Entities.CreateByClassname("base_boss");
         this.botEnt = SpawnEntityFromTable(
             "base_boss",
             {
@@ -61,26 +62,11 @@ class Bot
 
         this.botEnt.SetGravity(800.0);
 
-        // this.botEnt.SetModelSimple(this.botSettings["model"]);
         this.botEnt.SetModelScale(this.botSettings["model_scale"], 0.0);
         this.botEnt.SetSkin(this.botSettings["model_skin_" + this.teamName]);
         NetProps.SetPropInt(this.botEnt, "m_bClientSideAnimation", 1);
 
-        // this.botEnt.SetSolid(Constants.ESolidType.SOLID_BBOX);
-        // this.botEnt.SetCollisionGroup(Constants.ECollisionGroup.COLLISION_GROUP_NPC);
-
         this.botEnt.SetTeam(team);
-
-        // this.botEnt.SetAbsOrigin(pos);
-        // this.botEnt.SetAbsAngles(QAngle(ang));
-
-        // this.botEnt.DispatchSpawn();
-
-        // this.locomotion.DriveTo(pos);
-
-        // can get reset on spawn depending on classname
-        // this.botEnt.SetMaxHealth(this.botSettings["health"]);
-        // this.botEnt.SetHealth(this.botSettings["health"]);
 
         this.locomotion.SetDesiredSpeed(this.botSettings["move_speed"]);
         this.locomotion.SetSpeedLimit(3500.0);
@@ -104,7 +90,7 @@ class Bot
             this.FindTarget();
         }
 
-        if (time - this.pathTime > PATH_INTERVAL)
+        if (time - this.pathTime > PATH_INTERVAL || this.navPath.len() <= 0)
         {
             this.GetTargetPos();
             this.GetPath();
@@ -163,17 +149,20 @@ class Bot
 
     function FindTarget()
     {
-        local ply = GetListenServerHost();
-        this.targetEnt = ply;
+        // TODO
+        //local ply = GetListenServerHost();
+        //this.targetEnt = ply;
     }
 
     function GetTargetPos()
     {
-        if (this.targetEnt == null)
+        if (this.targetEnt != null)
         {
+            this.targetPos = this.targetEnt.GetOrigin();
             return;
         }
-        this.targetPos = this.targetEnt.GetOrigin();
+
+        this.targetPos = this.lane.GetNextLanePoint(this.botEnt.GetOrigin());
     }
 
     function GetPath()
@@ -187,18 +176,23 @@ class Bot
         // Path is in reverse
         this.navPath.append(this.targetPos);
 
-        this.navArea = NavMesh.GetNavArea(this.botEnt.GetOrigin(), 512.0);
-        if (this.navArea == null)
+        local startArea = NavMesh.GetNavArea(this.botEnt.GetOrigin(), 512.0);
+        if (startArea == null)
         {
             NavMesh.GetNearestNavArea(this.botEnt.GetOrigin(), 512.0, false, true);
         }
-        if (this.navArea == null)
+        if (startArea == null)
         {
             return;
         }
+        local endArea = NavMesh.GetNavArea(this.targetPos, 512.0);
+        if (endArea == null)
+        {
+            NavMesh.GetNearestNavArea(this.targetPos, 512.0, false, true);
+        }
 
         local pathTable = {};
-        local builtPath = NavMesh.GetNavAreasFromBuildPath(this.navArea, null, this.targetPos, 10000.0, this.team, false, pathTable);
+        local builtPath = NavMesh.GetNavAreasFromBuildPath(startArea, endArea, this.targetPos, 10000.0, this.team, false, pathTable);
         this.pathTime = Time();
 
         if (builtPath && pathTable.len() > 0)
@@ -207,7 +201,8 @@ class Bot
             while (area != null)
             {
                 // Don't add current area so bot will actually leave it...
-                if (area != this.navArea)
+                // Don't add end area, use actual targetPos for final point
+                if (area != startArea && area != endArea)
                 {
                     this.navPath.append(area.GetCenter());
                 }
