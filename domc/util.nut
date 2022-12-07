@@ -1,7 +1,7 @@
 ::Log <- function(msg)
 {
     local time = Time();
-    printl(format("[dotf][%.2f] | %s", time, msg));
+    printl(format("[domc][%.2f] | %s", time, msg));
 }
 
 ::ClipVelocity <- function(vel, normal, bounce)
@@ -106,4 +106,40 @@ class Line
     {
         DebugDrawLine(this.startPos, this.endPos, 0, 255, 0, true, duration);
     }
+}
+
+const FLT_BIG = 100000.0;
+
+IsValidAndAlive <- function(ent)
+{
+    if (ent == null)
+    {
+        return false;
+    }
+
+    if (!ent.IsValid())
+    {
+        return false;
+    }
+
+    if (ent.GetHealth() < 0)
+    {
+        return false;
+    }
+
+    return true;
+}
+
+RandomElement <- function(arr)
+{
+    local len = arr.len();
+    if (len == 0)
+    {
+        return null;
+    }
+    if (len == 1)
+    {
+        return arr[0];
+    }
+    return arr[RandomInt(0, len - 1)];
 }

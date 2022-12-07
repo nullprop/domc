@@ -1,4 +1,4 @@
-DoIncludeScript("dotf/util.nut", null);
+DoIncludeScript("domc/util.nut", null);
 
 const LANE_EPSILON = 256.0;
 
@@ -38,7 +38,7 @@ class Lane
 
     function GetNearestPoint(pos)
     {
-        local nearest = NearestPoint(null, 100000.0, null);
+        local nearest = NearestPoint(null, FLT_BIG, null);
 
         foreach (line in this.lines)
         {

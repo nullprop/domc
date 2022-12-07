@@ -1,7 +1,8 @@
-DoIncludeScript("dotf/util.nut", null);
-DoIncludeScript("dotf/settings.nut", null);
+DoIncludeScript("domc/util.nut", null);
+DoIncludeScript("domc/settings.nut", null);
 
 const PATH_INTERVAL = 1.0;
+const TARGET_INTERVAL = 3.0;
 const PATH_MARGIN = 64.0;
 const STEP_HEIGHT = 24.0;
 
@@ -11,8 +12,8 @@ BOT_SETTINGS <-
 	{
 		"health": 300,
 		"damage": 8.0,
+        "attack_interval": 1.0,
 		"attack_range": 64.0,
-		"attack_range_min": 36.0,
 		"aggro_range": 512.0,
 		"class": Constants.ETFClass.TF_CLASS_HEAVYWEAPONS,
 		"model": "models/bots/heavy/bot_heavy.mdl",
@@ -21,18 +22,20 @@ BOT_SETTINGS <-
 		"model_skin_red": 0,
 		"model_anim_idle": "Stand_MELEE",
 		"model_anim_move": "Run_MELEE",
-		"model_anim_attack": "TODO",
-		// "weapon": "tf_weapon_fists",
+		"model_anim_attack":
+        [
+            "AttackStand_MELEE_R",
+            "AttackStand_MELEE_L"
+        ],
 		"weapon": null,
-		"ammo": 0,
 		"move_speed": 110
 	},
 	"ranged":
 	{
 		"health": 150,
 		"damage": 12.0,
+        "attack_interval": 1.5,
 		"attack_range": 232.0,
-		"attack_range_min": 36.0,
 		"aggro_range": 512.0,
 		"class": Constants.ETFClass.TF_CLASS_SNIPER,
 		"model": "models/bots/sniper/bot_sniper.mdl",
@@ -41,18 +44,17 @@ BOT_SETTINGS <-
 		"model_skin_red": 0,
 		"model_anim_idle": "Stand_PRIMARY",
 		"model_anim_move": "Run_PRIMARY",
-		"model_anim_attack": "TODO",
+		"model_anim_attack": ["AttackStand_PRIMARY"],
 		"weapon": "tf_weapon_sniperrifle",
         "weapon_model": "models/weapons/w_models/w_sniperrifle.mdl",
-		"ammo": 25,
 		"move_speed": 100
 	},
 	"siege":
 	{
 		"health": 500,
 		"damage": 50.0,
+        "attack_interval": 3.0,
 		"attack_range": 450.0,
-		"attack_range_min": 36.0,
 		"aggro_range": 512.0,
 		"class": Constants.ETFClass.TF_CLASS_DEMOMAN,
 		"model": "models/bots/demo_boss/bot_demo_boss.mdl",
@@ -61,10 +63,9 @@ BOT_SETTINGS <-
 		"model_skin_red": 0,
 		"model_anim_idle": "Stand_PRIMARY",
 		"model_anim_move": "Run_PRIMARY",
-		"model_anim_attack": "TODO",
+		"model_anim_attack": ["AttackStand_PRIMARY"],
 		"weapon": "tf_weapon_grenadelauncher",
         "weapon_model": "models/weapons/w_models/w_grenadelauncher.mdl",
-		"ammo": 25,
 		"move_speed": 90
 	}
 }
@@ -87,12 +88,14 @@ class Bot
     uname = null;
 
     targetEnt = null;
+    targetCheckTime = 0.0;
     targetPos = null;
     targetPath = null;
     navArea = null;
     navPath = [];
     pathTime = 0.0;
     lastThink = 0.0;
+    lastAttackTime = 0.0;
 
     constructor(type, team, pos, ang, lane){
         this.lane = lane;
@@ -169,12 +172,90 @@ class Bot
     {
         local time = Time();
 
-        if (this.targetEnt == null)
+        local hasNewTarget = false;
+        if (
+            // time to recheck?
+            time - this.targetCheckTime > TARGET_INTERVAL ||
+            // has our previous target died?
+            !IsValidAndAlive(this.targetEnt)
+        )
         {
-            this.FindTarget();
+            this.targetCheckTime = time;
+            this.targetEnt = this.FindTarget();
+            hasNewTarget = true;
         }
 
-        if (time - this.pathTime > PATH_INTERVAL || this.navPath.len() <= 0)
+        if (IsValidAndAlive(this.targetEnt))
+        {
+            local targetOrigin = this.targetEnt.GetOrigin();
+            local myPos = this.botEnt.GetOrigin();
+            local attackVec = targetOrigin - myPos;
+            local inRange = attackVec.Length() <= this.botSettings["attack_range"];
+
+            if (inRange)
+            {
+                this.botEnt.SetForwardVector(attackVec);
+
+                if (this.CanAttack(myPos, attackVec))
+                {
+                    this.Attack(myPos, attackVec);
+                }
+                else
+                {
+                    this.Idle();
+                }
+            }
+            else
+            {
+                this.PathFind(hasNewTarget);
+            }
+        }
+        else
+        {
+            this.PathFind(hasNewTarget);
+        }
+
+        // loop anim
+        if (this.botEnt.GetCycle() > 0.99)
+		{
+            this.botEnt.SetCycle(0.0);
+        }
+
+        // advance anim
+        this.botEnt.StudioFrameAdvance();
+        this.botEnt.DispatchAnimEvents(this.botEnt);
+
+        this.lastThink = time;
+    }
+
+    function CanAttack(myPos, attackVec)
+    {
+        if (Time() - this.lastAttackTime < this.botSettings["attack_interval"])
+        {
+            return false;
+        }
+
+        // TODO: LOS
+
+        return true;
+    }
+
+    function Attack(myPos, attackVec)
+    {
+        this.lastAttackTime = Time();
+        this.PlayAnim(RandomElement(this.botSettings["model_anim_attack"]));
+        this.SetPoseParameter("move_x", 0.0);
+        if (this.botType == TF_BOT_TYPE["RANGED"])
+        {
+            this.SetPoseParameter("move_scale", 1.0);
+        }
+    }
+
+    function PathFind(hasNewTarget)
+    {
+        local time = Time();
+
+        if (time - this.pathTime > PATH_INTERVAL || this.navPath.len() <= 0 || hasNewTarget)
         {
             this.GetTargetPos();
             this.GetPath();
@@ -199,10 +280,7 @@ class Bot
             this.locomotion.Approach(moveTarget, 0.1);
             this.locomotion.FaceTowards(moveTarget);
 
-            if (this.botType != TF_BOT_TYPE["SIEGE"])
-            {
-                this.botEnt.SetForwardVector(this.locomotion.GetGroundMotionVector());
-            }
+            this.botEnt.SetForwardVector(this.locomotion.GetGroundMotionVector());
 
             this.PlayAnim(this.botSettings["model_anim_move"]);
             this.SetPoseParameter("move_x", 1.0);
@@ -213,37 +291,84 @@ class Bot
         }
         else
         {
-            this.PlayAnim(this.botSettings["model_anim_idle"]);
-            this.SetPoseParameter("move_x", 0.0);
-            if (this.botType == TF_BOT_TYPE["RANGED"])
-            {
-                this.SetPoseParameter("move_scale", 1.0);
-            }
+            this.Idle();
         }
+    }
 
-        // loop anim
-        if (this.botEnt.GetCycle() > 0.99)
-		{
-            this.botEnt.SetCycle(0.0);
+    function Idle()
+    {
+        this.PlayAnim(this.botSettings["model_anim_idle"]);
+        this.SetPoseParameter("move_x", 0.0);
+        if (this.botType == TF_BOT_TYPE["RANGED"])
+        {
+            this.SetPoseParameter("move_scale", 1.0);
         }
-
-        // advance anim
-        this.botEnt.StudioFrameAdvance();
-        this.botEnt.DispatchAnimEvents(this.botEnt);
-
-        this.lastThink = time;
     }
 
     function FindTarget()
     {
-        // TODO
-        //local ply = GetListenServerHost();
-        //this.targetEnt = ply;
+        // classnames to target, in order of priority
+        local nearest =
+        {
+            "base_boss":
+            {
+                "ent": null,
+                "dist": FLT_BIG
+            },
+            "obj_sentrygun":
+            {
+                "ent": null,
+                "dist": FLT_BIG
+            }
+            "player":
+            {
+                "ent": null,
+                "dist": FLT_BIG
+            },
+        };
+
+        local ent = null;
+        local pos = this.botEnt.GetOrigin();
+        local radius = this.botSettings["aggro_range"];
+        local myTeam = this.botEnt.GetTeam();
+
+        while (ent = Entities.FindInSphere(ent, pos, radius))
+        {
+            local team = ent.GetTeam();
+            if (team == myTeam || (team != Constants.ETFTeam.TF_TEAM_RED && team != Constants.ETFTeam.TF_TEAM_BLUE))
+            {
+                continue;
+            }
+
+            local classname = ent.GetClassname();
+            if (!(classname in nearest))
+            {
+                continue;
+            }
+
+            local origin = ent.GetOrigin();
+            local dist = (origin - pos).Length();
+            if (dist < nearest[classname]["dist"])
+            {
+                nearest[classname]["dist"] = dist;
+                nearest[classname]["ent"] = ent;
+            }
+        }
+
+        foreach (type in nearest)
+        {
+            if (type["ent"] != null)
+            {
+                return type["ent"];
+            }
+        }
+
+        return null;
     }
 
     function GetTargetPos()
     {
-        if (this.targetEnt != null)
+        if (this.targetEnt != null && this.targetEnt.IsValid())
         {
             this.targetPos = this.targetEnt.GetOrigin();
             return;

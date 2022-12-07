@@ -1,5 +1,5 @@
-DoIncludeScript("dotf/util.nut", null);
-DoIncludeScript("dotf/settings.nut", null);
+DoIncludeScript("domc/util.nut", null);
+DoIncludeScript("domc/settings.nut", null);
 
 class Player
 {

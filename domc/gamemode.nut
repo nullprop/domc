@@ -1,7 +1,7 @@
-DoIncludeScript("dotf/util.nut", null);
-DoIncludeScript("dotf/player.nut", null);
-DoIncludeScript("dotf/bot.nut", null);
-DoIncludeScript("dotf/lane.nut", null);
+DoIncludeScript("domc/util.nut", null);
+DoIncludeScript("domc/player.nut", null);
+DoIncludeScript("domc/bot.nut", null);
+DoIncludeScript("domc/lane.nut", null);
 
 PrecacheModel("models/bots/heavy/bot_heavy.mdl");
 PrecacheModel("models/bots/gibs/heavybot_gib_pelvis.mdl");
@@ -23,13 +23,13 @@ PrecacheModel("models/items/currencypack_large.mdl");
 
 function Think()
 {
-    if (("gamemode_dotf" in getroottable()))
+    if (("gamemode_domc" in getroottable()))
     {
-        ::gamemode_dotf.Think();
+        ::gamemode_domc.Think();
     }
 }
 
-class GamemodeDotf
+class GamemodeDomc
 {
     players = null;
     bots = null;
@@ -117,13 +117,13 @@ class GamemodeDotf
 function OnGameEvent_player_spawn(data)
 {
     Log("player " + data.userid + " spawned");
-    ::gamemode_dotf.AddPlayer(data.userid);
+    ::gamemode_domc.AddPlayer(data.userid);
 }
 
 function OnGameEvent_player_death(data)
 {
     Log("player " + data.userid + " died");
-    ::gamemode_dotf.RemovePlayer(data.userid);
+    ::gamemode_domc.RemovePlayer(data.userid);
 }
 
 function OnGameEvent_teamplay_round_start(data)
@@ -131,7 +131,7 @@ function OnGameEvent_teamplay_round_start(data)
     local collected = collectgarbage();
     Log("gc: deleted " + collected + " ref cycles");
 
-    ::gamemode_dotf.OnRoundStart();
+    ::gamemode_domc.OnRoundStart();
 }
 
 function OnGameEvent_teamplay_round_waiting_ends(data)
@@ -151,9 +151,9 @@ function OnScriptHook_OnTakeDamage(params)
     }
 }
 
-if (!("gamemode_dotf" in getroottable()))
+if (!("gamemode_domc" in getroottable()))
 {
-    ::gamemode_dotf <- GamemodeDotf();
+    ::gamemode_domc <- GamemodeDomc();
 
     if (!("HOOKED_EVENTS" in getroottable()))
     {
@@ -161,7 +161,7 @@ if (!("gamemode_dotf" in getroottable()))
         ::HOOKED_EVENTS <- true;
     }
 
-    local thinker = SpawnEntityFromTable("info_target", { targetname = "dotf_gamemode" } );
+    local thinker = SpawnEntityFromTable("info_target", { targetname = "domc_gamemode" } );
     if(thinker.ValidateScriptScope())
     {
         thinker.GetScriptScope()["Think"] <- Think;
@@ -170,15 +170,15 @@ if (!("gamemode_dotf" in getroottable()))
 }
 else
 {
-    ::gamemode_dotf.OnRoundStart();
+    ::gamemode_domc.OnRoundStart();
 }
 
 ::TestBot <- function(type, team, laneIndex)
 {
-    if ("gamemode_dotf" in getroottable())
+    if ("gamemode_domc" in getroottable())
     {
         local ply = GetListenServerHost();
-        ::gamemode_dotf.AddBot(
+        ::gamemode_domc.AddBot(
             type,
             team,
             ply.EyePosition() + ply.GetForwardVector()*256,
@@ -191,10 +191,10 @@ else
 ::AddLaneNode <- function(laneIndex)
 {
     local ply = GetListenServerHost();
-    ::gamemode_dotf.AddNodeToLane(laneIndex, ply.GetOrigin());
+    ::gamemode_domc.AddNodeToLane(laneIndex, ply.GetOrigin());
 }
 
 ::DebugDrawLanes <- function()
 {
-    ::gamemode_dotf.DebugDrawLanes(10.0);
+    ::gamemode_domc.DebugDrawLanes(10.0);
 }
