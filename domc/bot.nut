@@ -12,8 +12,9 @@ BOT_SETTINGS <-
 	{
 		"health": 300,
 		"damage": 8.0,
+        "damage_type": Constants.FDmgType.DMG_CLUB,
         "attack_interval": 1.0,
-		"attack_range": 64.0,
+		"attack_range": 96.0,
 		"aggro_range": 512.0,
 		"class": Constants.ETFClass.TF_CLASS_HEAVYWEAPONS,
 		"model": "models/bots/heavy/bot_heavy.mdl",
@@ -34,6 +35,7 @@ BOT_SETTINGS <-
 	{
 		"health": 150,
 		"damage": 12.0,
+        "damage_type": Constants.FDmgType.DMG_BULLET,
         "attack_interval": 1.5,
 		"attack_range": 232.0,
 		"aggro_range": 512.0,
@@ -55,7 +57,7 @@ BOT_SETTINGS <-
 		"damage": 50.0,
         "damage_radius": 128.0,
         "projectile_vel": 600.0, // horizontal
-        "attack_interval": 3.0,
+        "attack_interval": 4.0,
 		"attack_range": 450.0,
 		"aggro_range": 512.0,
 		"class": Constants.ETFClass.TF_CLASS_DEMOMAN,
@@ -196,9 +198,10 @@ class Bot
 
             if (inRange)
             {
-                this.botEnt.SetForwardVector(attackVec);
+                local frontTowardEnemy = Vector(attackVec.x, attackVec.y, 0.0);
+                this.botEnt.SetForwardVector(frontTowardEnemy);
 
-                if (this.CanAttack(myPos, attackVec))
+                if (this.CanAttack(myPos))
                 {
                     this.Attack(myPos, attackVec);
                 }
@@ -206,6 +209,10 @@ class Bot
                 {
                     this.Idle();
                 }
+            }
+            else if (this.HasLOS(myPos + Vector(0, 0, 48), targetOrigin + Vector(0, 0, 48), this.targetEnt))
+            {
+                this.Move(targetOrigin);
             }
             else
             {
@@ -230,16 +237,42 @@ class Bot
         this.lastThink = time;
     }
 
-    function CanAttack(myPos, attackVec)
+    function HasLOS(startPos, endPos, targetEnt)
+    {
+        local tr =
+        {
+            "start": startPos,
+            "end": endPos,
+            "mask": MASK_ATTACK_TRACE,
+            "ignore": this.botEnt
+        };
+        if (TraceLineEx(tr))
+        {
+            if (tr["fraction"] >= 1.0 - Constants.Math.Epsilon)
+            {
+                return true;
+            }
+            if (tr["enthit"] == targetEnt)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    function CanAttack(myPos)
     {
         if (Time() - this.lastAttackTime < this.botSettings["attack_interval"])
         {
             return false;
         }
 
-        // TODO: LOS
+        if (this.HasLOS(myPos + Vector(0, 0, 48), this.targetEnt.GetOrigin() + Vector(0, 0, 48), this.targetEnt))
+        {
+            return true;
+        }
 
-        return true;
+        return false;
     }
 
     function Attack(myPos, attackVec)
@@ -277,6 +310,13 @@ class Bot
             // needed for nades
             nade.Teleport(true, startPos, true, startAng, true, startVel);
         }
+        else
+        {
+            if (this.targetEnt && this.targetEnt.IsValid())
+            {
+                this.targetEnt.TakeDamage(this.botSettings["damage"], this.botSettings["damage_type"], this.botEnt);
+            }
+        }
     }
 
     function PathFind(hasNewTarget)
@@ -305,21 +345,26 @@ class Bot
 
         if (moveTarget)
         {
-            this.locomotion.Approach(moveTarget, 0.1);
-            this.locomotion.FaceTowards(moveTarget);
-
-            this.botEnt.SetForwardVector(this.locomotion.GetGroundMotionVector());
-
-            this.PlayAnim(this.botSettings["model_anim_move"]);
-            this.SetPoseParameter("move_x", 1.0);
-            if (this.botType == TF_BOT_TYPE["RANGED"])
-            {
-                this.SetPoseParameter("move_scale", 1.0);
-            }
+            this.Move(moveTarget);
         }
         else
         {
             this.Idle();
+        }
+    }
+
+    function Move(targetPos)
+    {
+        this.locomotion.Approach(targetPos, 0.1);
+        this.locomotion.FaceTowards(targetPos);
+
+        this.botEnt.SetForwardVector(this.locomotion.GetGroundMotionVector());
+
+        this.PlayAnim(this.botSettings["model_anim_move"]);
+        this.SetPoseParameter("move_x", 1.0);
+        if (this.botType == TF_BOT_TYPE["RANGED"])
+        {
+            this.SetPoseParameter("move_scale", 1.0);
         }
     }
 

@@ -2,7 +2,6 @@ todo:
 - bot unstuck
   - if no movement in x secs while there should be,
     pick a random nearby nav spot as target
-- reverse lane support for other team
 - entity for lane nodes
 - entity for bot spawn point
   - bot type, team, lane index

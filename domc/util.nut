@@ -50,6 +50,12 @@ MASK_PLAYER_SOLID <-
     Constants.FContents.CONTENTS_MONSTER |
     Constants.FContents.CONTENTS_GRATE;
 
+MASK_ATTACK_TRACE <-
+    Constants.FContents.CONTENTS_SOLID |
+    Constants.FContents.CONTENTS_PLAYERCLIP |
+    Constants.FContents.CONTENTS_WINDOW |
+    Constants.FContents.CONTENTS_GRATE;
+
 ::Min <- function(a, b)
 {
     if (a < b) return a;
