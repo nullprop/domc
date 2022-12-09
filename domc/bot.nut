@@ -53,6 +53,8 @@ BOT_SETTINGS <-
 	{
 		"health": 500,
 		"damage": 50.0,
+        "damage_radius": 128.0,
+        "projectile_vel": 600.0, // horizontal
         "attack_interval": 3.0,
 		"attack_range": 450.0,
 		"aggro_range": 512.0,
@@ -248,6 +250,32 @@ class Bot
         if (this.botType == TF_BOT_TYPE["RANGED"])
         {
             this.SetPoseParameter("move_scale", 1.0);
+        }
+
+        // TODO: direct hits are broken due to m_flFullDamage
+        if (this.botType == TF_BOT_TYPE["SIEGE"])
+        {
+            local forward = this.botEnt.GetForwardVector();
+            local startPos = myPos + Vector(0, 0, 48.0) + forward * 32.0;
+            local startAng = this.botEnt.GetAbsAngles();
+            local horizontalVel = this.botSettings["projectile_vel"];
+            local verticalVel = TrajectoryVertVel(attackVec.Length2D(), horizontalVel, 800.0);
+            local startVel = forward * horizontalVel + Vector(0.0, 0.0, verticalVel);
+
+            // local nadeUname = UniqueString();
+            // local targetname = "bot_" + this.uname + "_grenade_" + nadeUname;
+            local nade = Entities.CreateByClassname("tf_projectile_pipe");
+
+            nade.SetTeam(this.team);
+            nade.SetOwner(this.botEnt);
+            NetProps.SetPropEntity(nade, "m_hThrower", this.botEnt);
+            NetProps.SetPropVector(nade, "m_vInitialVelocity", startVel);
+            NetProps.SetPropFloat(nade, "m_flDamage", this.botSettings["damage"]);
+            NetProps.SetPropFloat(nade, "m_DmgRadius", this.botSettings["damage_radius"]);
+            NetProps.SetPropBool(nade, "m_bCritical", false);
+            nade.DispatchSpawn();
+            // needed for nades
+            nade.Teleport(true, startPos, true, startAng, true, startVel);
         }
     }
 

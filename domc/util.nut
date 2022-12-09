@@ -143,3 +143,34 @@ RandomElement <- function(arr)
     }
     return arr[RandomInt(0, len - 1)];
 }
+
+TrajectoryDistance <- function(velX, velY, gravity)
+{
+    // parabolic trajectory
+    // y = h0 + (sinθ)v0t - (g/2)t2
+    // x = (cosθ)v0t
+    // -->
+    // assume start height is 0,
+    // don't care about the angle since
+    // we pass velX and velY directly
+    // -->
+    // y = velY * t - (g/2) * t^2
+    // x = velX * t
+    // -->
+    // assume start and end are at the same height (y = 0)
+    // -->
+    // (g/2) * t^2 = velY * t
+    // (g/2) * t = velY
+    // t = 2 * velY / g
+    // x = velX * 2 * velY / g
+
+    return velX * 2.0 * velY / gravity;
+}
+
+TrajectoryVertVel <- function(distX, velX, gravity)
+{
+    // x = velX * 2 * velY / g
+    // x * g = velX * 2 * velY
+    // velY = x * g / (2 * velX)
+    return distX * gravity * 0.5 / velX;
+}

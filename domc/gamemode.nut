@@ -112,6 +112,19 @@ class GamemodeDomc
             lane.DebugDraw(duration);
         }
     }
+
+    function IsBot(entIndex)
+    {
+        foreach(bot in this.bots)
+        {
+            if (bot.botEnt.IsValid() && bot.botEnt.GetEntityIndex() == entIndex)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }
 
 function OnGameEvent_player_spawn(data)
@@ -142,8 +155,9 @@ function OnGameEvent_teamplay_round_waiting_ends(data)
 
 function OnScriptHook_OnTakeDamage(params)
 {
-	local ent = params.const_entity;
+    local ent = params.const_entity;
 	local inf = params.inflictor;
+    Log(format("take dmg | %s -> %s : %d", inf.GetClassname(), ent.GetClassname(), params.damage));
     if (ent.IsPlayer() && inf.GetClassname() == "base_boss" && params.damage_type == 1)
     {
 		// Don't crush the player if a bot pushes them into a wall
