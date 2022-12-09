@@ -374,7 +374,7 @@ class Bot
             return;
         }
 
-        this.targetPos = this.lane.GetNextLanePoint(this.botEnt.GetOrigin());
+        this.targetPos = this.lane.GetNextLanePoint(this.botEnt.GetOrigin(), this.team);
     }
 
     function GetPath()

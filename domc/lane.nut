@@ -55,7 +55,7 @@ class Lane
         return nearest;
     }
 
-    function GetNextLanePoint(pos)
+    function GetNextLanePoint(pos, team)
     {
         local nearest = this.GetNearestPoint(pos);
         if (!nearest.point)
@@ -70,11 +70,20 @@ class Lane
         }
 
         // On or close enough to the lane.
-        // Overshoot the line endPos a bit so we
+        // Overshoot the line end a bit so we
         // don't get stuck and move to the next line.
 
-        local endPos = nearest.line.endPos;
-        endPos += nearest.line.vecNorm * 128.0;
+        local endPos = null;
+        local overShoot = 128.0;
+
+        if (team == Constants.ETFTeam.TF_TEAM_RED)
+        {
+            endPos = nearest.line.endPos + nearest.line.vecNorm * overShoot;
+        }
+        else
+        {
+            endPos = nearest.line.startPos - nearest.line.vecNorm * overShoot;
+        }
 
         //DebugDrawBox(nearest.point, Vector(-16.0, -16.0, -16.0), Vector(16.0, 16.0, 16.0), 0, 0, 255, 128, 1.0);
 
