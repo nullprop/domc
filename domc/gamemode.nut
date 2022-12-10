@@ -120,17 +120,17 @@ class GamemodeDomc
         }
     }
 
-    function IsBot(entIndex)
+    function GetBot(ent)
     {
         foreach(bot in this.bots)
         {
-            if (bot.botEnt.IsValid() && bot.botEnt.GetEntityIndex() == entIndex)
+            if (bot.GetEnt() == ent)
             {
-                return true;
+                return bot;
             }
         }
 
-        return false;
+        return null;
     }
 
     function GetTower(ent)
@@ -142,7 +142,39 @@ class GamemodeDomc
                 return tower;
             }
         }
+
         return null;
+    }
+
+    function CollectGarbage()
+    {
+        local garbageBots = 0;
+        for (local i = this.bots.len() - 1; i >= 0; i--)
+        {
+            if (!IsValidAndAlive(this.bots[i].GetEnt()))
+            {
+                this.bots.remove(i);
+                garbageBots++;
+            }
+        }
+
+        local garbageTowers = 0;
+        for (local i = this.towers.len() - 1; i >= 0; i--)
+        {
+            if (!IsValidAndAlive(this.towers[i].GetEnt()))
+            {
+                this.towers.remove(i);
+                garbageTowers++;
+            }
+        }
+
+        local collected = collectgarbage();
+        Log(format(
+            "CollectGarbage: removed %d bots, %d towers, collected %d ref cycles",
+            garbageBots,
+            garbageTowers,
+            collected
+        ));
     }
 }
 
@@ -160,9 +192,6 @@ function OnGameEvent_player_death(data)
 
 function OnGameEvent_teamplay_round_start(data)
 {
-    local collected = collectgarbage();
-    Log("gc: deleted " + collected + " ref cycles");
-
     ::gamemode_domc.OnRoundStart();
 }
 
@@ -180,7 +209,7 @@ function OnScriptHook_OnTakeDamage(params)
     local infClassname = inf.GetClassname();
     local entName = ent.GetName();
     local infName = inf.GetName();
-    Log(format("take dmg | %s (%s) -> %s (%s) : %d", infClassname, infName, entClassname, entName, params.damage));
+    //Log(format("take dmg | %s (%s) -> %s (%s) : %d", infClassname, infName, entClassname, entName, params.damage));
 
     if (ent.IsPlayer() && infClassname == "base_boss" && params.damage_type == 1)
     {
@@ -195,6 +224,15 @@ function OnScriptHook_OnTakeDamage(params)
         if (tower)
         {
             params.damage = tower.GetDamage();
+        }
+    }
+
+    if (entClassname == "base_boss")
+    {
+        local bot = ::gamemode_domc.GetBot(ent);
+        if (bot)
+        {
+            bot.OnTakeDamage(params);
         }
     }
 }
@@ -260,4 +298,9 @@ else
 ::DebugDrawLanes <- function()
 {
     ::gamemode_domc.DebugDrawLanes(10.0);
+}
+
+::TestGC <- function()
+{
+    ::gamemode_domc.CollectGarbage();
 }

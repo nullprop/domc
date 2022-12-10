@@ -93,6 +93,7 @@ class Bot
 
     targetEnt = null;
     targetCheckTime = 0.0;
+    hasNewTarget = false;
     targetPos = null;
     targetPath = null;
     navArea = null;
@@ -180,9 +181,12 @@ class Bot
         {
             local stuckTime = this.locomotion.GetStuckDuration();
             Log(format("bot %s stuck for %f at %s", this.uname, stuckTime, this.botEnt.GetOrigin()));
+            if (stuckTime > 10.0)
+            {
+                this.botEnt.Kill();
+            }
         }
 
-        local hasNewTarget = false;
         if (
             // time to recheck?
             time - this.targetCheckTime > TARGET_INTERVAL ||
@@ -192,7 +196,7 @@ class Bot
         {
             this.targetCheckTime = time;
             this.targetEnt = this.FindTarget();
-            hasNewTarget = true;
+            this.hasNewTarget = true;
         }
 
         if (IsValidAndAlive(this.targetEnt))
@@ -222,12 +226,12 @@ class Bot
             }
             else
             {
-                this.PathFind(hasNewTarget);
+                this.PathFind();
             }
         }
         else
         {
-            this.PathFind(hasNewTarget);
+            this.PathFind();
         }
 
         // loop anim
@@ -325,12 +329,13 @@ class Bot
         }
     }
 
-    function PathFind(hasNewTarget)
+    function PathFind()
     {
         local time = Time();
 
-        if (time - this.pathTime > PATH_INTERVAL || this.navPath.len() <= 0 || hasNewTarget)
+        if (time - this.pathTime > PATH_INTERVAL || this.navPath.len() <= 0 || this.hasNewTarget)
         {
+            this.hasNewTarget = false;
             this.GetTargetPos();
             this.GetPath();
         }
@@ -537,6 +542,38 @@ class Bot
     {
         local seq = this.botEnt.LookupSequence(name);
         return this.botEnt.GetSequence() == seq;
+    }
+
+    function GetEnt()
+    {
+        return this.botEnt;
+    }
+
+    function OnTakeDamage(params)
+    {
+        // Climb up owner hierarchy for projectiles, etc.
+        local inf = params.inflictor;
+        local owner = inf.GetOwner();
+        local ownerCount = 0; // sanity
+        while (IsValidAndAlive(owner) && ownerCount < 10)
+        {
+            inf = owner;
+            owner = owner.GetOwner();
+            ownerCount++;
+        }
+
+        // If no target already, aggro on to whoever did damage to us
+        if (!IsValidAndAlive(this.targetEnt))
+        {
+            this.targetEnt = inf;
+            this.hasNewTarget = true;
+            this.targetCheckTime = Time();
+        }
+        else if (this.targetEnt == inf)
+        {
+            // Reset timer if current aggro target
+            this.targetCheckTime = Time();
+        }
     }
 }
 
