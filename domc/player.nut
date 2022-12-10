@@ -59,6 +59,20 @@ class Player
             this.playerEnt.SetHealth(this.playerEnt.GetMaxHealth());
         }
 
+        // refill reserve ammo
+        local weapon = this.playerEnt.GetActiveWeapon();
+        if (weapon && !weapon.IsMeleeWeapon())
+        {
+            if (weapon.UsesPrimaryAmmo())
+            {
+                NetProps.SetPropIntArray(this.playerEnt, "m_iAmmo", 99, weapon.GetPrimaryAmmoType());
+            }
+            if (weapon.UsesSecondaryAmmo())
+            {
+                NetProps.SetPropIntArray(this.playerEnt, "m_iAmmo", 99, weapon.GetSecondaryAmmoType());
+            }
+        }
+
         if (time - this.lastSentryProtectTime > SENTRY_PROTECT_INTERVAL)
         {
             this.UpdateSentryProtection();
