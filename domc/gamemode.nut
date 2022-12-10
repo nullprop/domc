@@ -2,6 +2,7 @@ DoIncludeScript("domc/util.nut", null);
 DoIncludeScript("domc/player.nut", null);
 DoIncludeScript("domc/bot.nut", null);
 DoIncludeScript("domc/tower.nut", null);
+DoIncludeScript("domc/fountain.nut", null);
 DoIncludeScript("domc/lane.nut", null);
 
 PrecacheModel("models/bots/heavy/bot_heavy.mdl");
@@ -28,7 +29,8 @@ class GamemodeDomc
     players = {};
     bots = [];
     towers = [];
-    lanes = []
+    lanes = [];
+    fountains = [];
 
     constructor()
     {
@@ -99,6 +101,13 @@ class GamemodeDomc
         this.towers.append(tower);
     }
 
+    function AddFountain(team, pos, ang)
+    {
+        Log(format("AddFountain %d", team));
+        local fountain = Fountain(team, pos, ang);
+        this.fountains.append(fountain);
+    }
+
     function AddNodeToLane(laneIndex, pos)
     {
         Log(format("AddNodeToLane %d %s", laneIndex, pos.tostring()));
@@ -133,6 +142,19 @@ class GamemodeDomc
             if (tower.GetEnt() == ent)
             {
                 return tower;
+            }
+        }
+
+        return null;
+    }
+
+    function GetFountain(ent)
+    {
+        foreach (fountain in this.fountains)
+        {
+            if (fountain.GetEnt() == ent)
+            {
+                return fountain;
             }
         }
 
@@ -214,6 +236,13 @@ function OnScriptHook_OnTakeDamage(params)
 
     // Don't crush things
     if (infClassname == "base_boss" && params.damage_type == Constants.FDmgType.DMG_CRUSH)
+    {
+        params.damage = 0;
+        return;
+    }
+
+    // Can't damage fountains
+    if (::gamemode_domc.GetFountain(ent))
     {
         params.damage = 0;
         return;
@@ -302,6 +331,19 @@ else
             tier,
             team,
             laneIndex,
+            ply.EyePosition() + ply.GetForwardVector()*256,
+            ply.GetAbsAngles()
+        );
+    }
+}
+
+::TestFountain <- function(team)
+{
+    if ("gamemode_domc" in getroottable())
+    {
+        local ply = GetListenServerHost();
+        ::gamemode_domc.AddFountain(
+            team,
             ply.EyePosition() + ply.GetForwardVector()*256,
             ply.GetAbsAngles()
         );
