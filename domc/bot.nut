@@ -392,7 +392,7 @@ class Bot
             {
                 "ent": null,
                 "dist": FLT_BIG
-            }
+            },
             "player":
             {
                 "ent": null,

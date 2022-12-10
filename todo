@@ -1,6 +1,10 @@
 todo:
 - tower prio mobs over players
 - show enemy tower, bot healthbars
+- bot aggro when taking dmg even if not in range
+- kill money dropped by bots
+- give money/xp directly to player who got the kill
+- maintain player script through respawns
 - bot unstuck
   - if no movement in x secs while there should be,
     pick a random nearby nav spot as target

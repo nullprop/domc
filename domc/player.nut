@@ -1,6 +1,9 @@
 DoIncludeScript("domc/util.nut", null);
 DoIncludeScript("domc/settings.nut", null);
 
+const SENTRY_PROTECT_INTERVAL = 1.0;
+const SENTRY_PROTECT_RADIUS = 512.0;
+
 class Player
 {
     playerEnt = null;
@@ -9,6 +12,7 @@ class Player
     classSettings = null;
 
     lastRegenTime = null;
+    lastSentryProtectTime = 0.0;
 
     constructor(ent)
     {
@@ -34,6 +38,8 @@ class Player
 
     function Think()
     {
+        local time = Time();
+
         // regen
         local regenInterval = this.classSettings["regen_interval"];
         if (regenInterval > 0)
@@ -51,6 +57,47 @@ class Player
         if (this.playerEnt.GetHealth() > this.playerEnt.GetMaxHealth())
         {
             this.playerEnt.SetHealth(this.playerEnt.GetMaxHealth());
+        }
+
+        if (time - this.lastSentryProtectTime > SENTRY_PROTECT_INTERVAL)
+        {
+            this.UpdateSentryProtection();
+            this.lastSentryProtectTime = time;
+        }
+    }
+
+    function UpdateSentryProtection()
+    {
+        // Add FL_NOTARGET if near friendly bots or towers
+        // so sentries attack bots first
+        local ent = null;
+        local protected = false;
+        local myTeam = this.playerEnt.GetTeam();
+        while (ent = Entities.FindInSphere(ent, this.playerEnt.GetOrigin(), SENTRY_PROTECT_RADIUS))
+        {
+            local team = ent.GetTeam();
+            if (team != myTeam)
+            {
+                continue;
+            }
+
+            local classname = ent.GetClassname();
+            if (classname != "base_boss" && classname != "obj_sentrygun")
+            {
+                continue;
+            }
+
+            protected = true;
+            break;
+        }
+
+        if (protected)
+        {
+            this.playerEnt.AddFlag(Constants.FPlayer.FL_NOTARGET);
+        }
+        else
+        {
+            this.playerEnt.RemoveFlag(Constants.FPlayer.FL_NOTARGET);
         }
     }
 }
