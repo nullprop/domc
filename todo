@@ -1,4 +1,6 @@
 todo:
+- tower prio mobs over players
+- show enemy tower, bot healthbars
 - bot unstuck
   - if no movement in x secs while there should be,
     pick a random nearby nav spot as target

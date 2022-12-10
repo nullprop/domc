@@ -1,6 +1,7 @@
 DoIncludeScript("domc/util.nut", null);
 DoIncludeScript("domc/player.nut", null);
 DoIncludeScript("domc/bot.nut", null);
+DoIncludeScript("domc/tower.nut", null);
 DoIncludeScript("domc/lane.nut", null);
 
 PrecacheModel("models/bots/heavy/bot_heavy.mdl");
@@ -31,14 +32,13 @@ function Think()
 
 class GamemodeDomc
 {
-    players = null;
-    bots = null;
+    players = {};
+    bots = [];
+    towers = [];
     lanes = []
 
     constructor()
     {
-        this.bots = [];
-        this.players = {};
         local ply = null;
         while(ply = Entities.FindByClassname(ply, "player"))
         {
@@ -92,11 +92,18 @@ class GamemodeDomc
         delete this.players[userid];
     }
 
-    function AddBot(type, team, pos, ang, laneIndex)
+    function AddBot(type, team, laneIndex, pos, ang)
     {
-        Log(format("AddBot %d, %d", type, team, laneIndex));
-        local bot = Bot(type, team, pos, ang, this.lanes[laneIndex]);
+        Log(format("AddBot %d, %d, %d", type, team, laneIndex));
+        local bot = Bot(type, team, this.lanes[laneIndex], pos, ang);
         this.bots.append(bot);
+    }
+
+    function AddTower(tier, team, laneIndex, pos, ang)
+    {
+        Log(format("AddTower %d, %d, %d", tier, team, laneIndex));
+        local tower = Tower(tier, team, laneIndex, pos, ang);
+        this.towers.append(tower);
     }
 
     function AddNodeToLane(laneIndex, pos)
@@ -124,6 +131,18 @@ class GamemodeDomc
         }
 
         return false;
+    }
+
+    function GetTower(ent)
+    {
+        foreach (tower in this.towers)
+        {
+            if (tower.GetEnt() == ent)
+            {
+                return tower;
+            }
+        }
+        return null;
     }
 }
 
@@ -157,11 +176,26 @@ function OnScriptHook_OnTakeDamage(params)
 {
     local ent = params.const_entity;
 	local inf = params.inflictor;
-    Log(format("take dmg | %s -> %s : %d", inf.GetClassname(), ent.GetClassname(), params.damage));
-    if (ent.IsPlayer() && inf.GetClassname() == "base_boss" && params.damage_type == 1)
+    local entClassname = ent.GetClassname();
+    local infClassname = inf.GetClassname();
+    local entName = ent.GetName();
+    local infName = inf.GetName();
+    Log(format("take dmg | %s (%s) -> %s (%s) : %d", infClassname, infName, entClassname, entName, params.damage));
+
+    if (ent.IsPlayer() && infClassname == "base_boss" && params.damage_type == 1)
     {
 		// Don't crush the player if a bot pushes them into a wall
         params.damage = 0;
+        return;
+    }
+
+    if (infClassname == "obj_sentrygun")
+    {
+        local tower = ::gamemode_domc.GetTower(inf);
+        if (tower)
+        {
+            params.damage = tower.GetDamage();
+        }
     }
 }
 
@@ -195,9 +229,24 @@ else
         ::gamemode_domc.AddBot(
             type,
             team,
+            laneIndex,
             ply.EyePosition() + ply.GetForwardVector()*256,
-            ply.GetAbsAngles(),
-            laneIndex
+            ply.GetAbsAngles()
+        );
+    }
+}
+
+::TestTower <- function(tier, team, laneIndex)
+{
+    if ("gamemode_domc" in getroottable())
+    {
+        local ply = GetListenServerHost();
+        ::gamemode_domc.AddTower(
+            tier,
+            team,
+            laneIndex,
+            ply.EyePosition() + ply.GetForwardVector()*256,
+            ply.GetAbsAngles()
         );
     }
 }

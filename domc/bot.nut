@@ -101,7 +101,7 @@ class Bot
     lastThink = 0.0;
     lastAttackTime = 0.0;
 
-    constructor(type, team, pos, ang, lane){
+    constructor(type, team, lane, pos, ang){
         this.lane = lane;
         this.botType = type;
         this.botTypeName = TF_BOT_TYPE_NAME[type];
