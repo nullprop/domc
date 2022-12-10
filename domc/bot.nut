@@ -176,6 +176,12 @@ class Bot
     {
         local time = Time();
 
+        if (this.locomotion.IsStuck())
+        {
+            local stuckTime = this.locomotion.GetStuckDuration();
+            Log(format("bot %s stuck for %f at %s", this.uname, stuckTime, this.botEnt.GetOrigin()));
+        }
+
         local hasNewTarget = false;
         if (
             // time to recheck?
