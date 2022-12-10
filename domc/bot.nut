@@ -180,7 +180,7 @@ class Bot
         if (this.locomotion.IsStuck())
         {
             local stuckTime = this.locomotion.GetStuckDuration();
-            Log(format("bot %s stuck for %f at %s", this.uname, stuckTime, this.botEnt.GetOrigin()));
+            Log(format("bot %s stuck for %f at %s", this.uname, stuckTime, this.botEnt.GetOrigin().tostring()));
             if (stuckTime > 10.0)
             {
                 this.botEnt.Kill();
@@ -313,6 +313,8 @@ class Bot
             nade.SetOwner(this.botEnt);
             NetProps.SetPropEntity(nade, "m_hThrower", this.botEnt);
             NetProps.SetPropVector(nade, "m_vInitialVelocity", startVel);
+            // TODO m_flFullDamage for direct hits
+            // https://github.com/ValveSoftware/Source-1-Games/issues/4481#issuecomment-1344759066
             NetProps.SetPropFloat(nade, "m_flDamage", this.botSettings["damage"]);
             NetProps.SetPropFloat(nade, "m_DmgRadius", this.botSettings["damage_radius"]);
             NetProps.SetPropBool(nade, "m_bCritical", false);

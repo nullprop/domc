@@ -1,5 +1,7 @@
 todo:
 - show enemy tower, bot healthbars
+
+- item_currencypack_custom
 - money idea 1:
   - kill money dropped by bots
   - give money/xp directly to player who got the kill
@@ -12,6 +14,7 @@ todo:
   - mobs only drop money if last hitted?
     - maybe not relevant? money is only gained if picked up
     - last hitting is not the goal
+
 - maintain player script through respawns
 - bot unstuck
   - if no movement in x secs while there should be,
@@ -19,8 +22,8 @@ todo:
 - entity for lane nodes
 - entity for bot spawn point
   - bot type, team, lane index
-- towers = sentry guns, increasing tiers
 - fountain = big dispenser with sentry gun on top, both invuln
+- fix bots attacking spectator camera if player dead (on red or blu team)
 
 ideas:
 - intel = aegis of the immortal
