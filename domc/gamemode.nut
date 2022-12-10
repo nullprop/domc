@@ -22,13 +22,6 @@ PrecacheModel("models/items/currencypack_small.mdl");
 PrecacheModel("models/items/currencypack_medium.mdl");
 PrecacheModel("models/items/currencypack_large.mdl");
 
-function Think()
-{
-    if (("gamemode_domc" in getroottable()))
-    {
-        ::gamemode_domc.Think();
-    }
-}
 
 class GamemodeDomc
 {
@@ -178,6 +171,10 @@ class GamemodeDomc
     }
 }
 
+// --------------------------------
+// Events
+// --------------------------------
+
 function OnGameEvent_player_spawn(data)
 {
     Log("player " + data.userid + " spawned");
@@ -201,6 +198,10 @@ function OnGameEvent_teamplay_round_waiting_ends(data)
     Log("teamplay_round_waiting_ends");
 }
 
+// --------------------------------
+// Hooks
+// --------------------------------
+
 function OnScriptHook_OnTakeDamage(params)
 {
     local ent = params.const_entity;
@@ -211,13 +212,14 @@ function OnScriptHook_OnTakeDamage(params)
     local infName = inf.GetName();
     //Log(format("take dmg | %s (%s) -> %s (%s) : %d", infClassname, infName, entClassname, entName, params.damage));
 
-    if (ent.IsPlayer() && infClassname == "base_boss" && params.damage_type == 1)
+    // Don't crush things
+    if (infClassname == "base_boss" && params.damage_type == Constants.FDmgType.DMG_CRUSH)
     {
-		// Don't crush the player if a bot pushes them into a wall
         params.damage = 0;
         return;
     }
 
+    // Apply proper tower dmg
     if (infClassname == "obj_sentrygun")
     {
         local tower = ::gamemode_domc.GetTower(inf);
@@ -227,6 +229,7 @@ function OnScriptHook_OnTakeDamage(params)
         }
     }
 
+    // Bot callback for aggro
     if (entClassname == "base_boss")
     {
         local bot = ::gamemode_domc.GetBot(ent);
@@ -234,6 +237,18 @@ function OnScriptHook_OnTakeDamage(params)
         {
             bot.OnTakeDamage(params);
         }
+    }
+}
+
+// --------------------------------
+// Init
+// --------------------------------
+
+function Think()
+{
+    if (("gamemode_domc" in getroottable()))
+    {
+        ::gamemode_domc.Think();
     }
 }
 
@@ -258,6 +273,10 @@ else
 {
     ::gamemode_domc.OnRoundStart();
 }
+
+// --------------------------------
+// Test functions
+// --------------------------------
 
 ::TestBot <- function(type, team, laneIndex)
 {

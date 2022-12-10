@@ -1,7 +1,17 @@
 todo:
 - show enemy tower, bot healthbars
-- kill money dropped by bots
-- give money/xp directly to player who got the kill
+- money idea 1:
+  - kill money dropped by bots
+  - give money/xp directly to player who got the kill
+- money idea 2:
+  - dropped money is colored by team
+  - each team can only pick up their own money
+  - must get close to mobs to get dosh
+  - other team can deny you reaching it / do damage
+  - everyone is ranged in tf2, can't really punish people trying to last hit
+  - mobs only drop money if last hitted?
+    - maybe not relevant? money is only gained if picked up
+    - last hitting is not the goal
 - maintain player script through respawns
 - bot unstuck
   - if no movement in x secs while there should be,
