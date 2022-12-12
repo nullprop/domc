@@ -65,15 +65,16 @@ class GamemodeDomc
 
     function AddPlayer(userid)
     {
-        if (userid in this.players)
+        local ent = GetPlayerFromUserID(userid);
+        local entindex = ent.entindex();
+        if (entindex in this.players)
         {
             return;
         }
 
-        local ent = GetPlayerFromUserID(userid);
         if (ent && ent.IsValid() && ent.IsPlayer())
         {
-            this.players[userid] <- Player(ent);
+            this.players[entindex] <- Player(ent);
         }
     }
 
@@ -206,7 +207,6 @@ function OnGameEvent_player_spawn(data)
 function OnGameEvent_player_death(data)
 {
     Log("player " + data.userid + " died");
-    ::gamemode_domc.RemovePlayer(data.userid);
 }
 
 function OnGameEvent_teamplay_round_start(data)

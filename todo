@@ -1,29 +1,29 @@
 todo:
-- show enemy tower, bot healthbars
-
-- item_currencypack_custom
-- money idea 1:
-  - kill money dropped by bots
-  - give money/xp directly to player who got the kill
-- money idea 2:
-  - dropped money is colored by team
-  - each team can only pick up their own money
-  - must get close to mobs to get dosh
-  - other team can deny you reaching it / do damage
-  - everyone is ranged in tf2, can't really punish people trying to last hit
-  - mobs only drop money if last hitted?
-    - maybe not relevant? money is only gained if picked up
-    - last hitting is not the goal
-
 - maintain player script through respawns
+- show enemy tower, bot healthbars
+- add sentry to fountain
+- fix bots attacking spectator camera if player dead (on red or blu team)
+
+money:
+- item_currencypack_custom
+- dropped money is colored by team
+- each team can only pick up their own money
+- must get close to mobs to get dosh
+- other team can deny you reaching it / do damage
+- everyone is ranged in tf2, can't really punish people trying to last hit
+- mobs only drop money if last hitted?
+  - maybe not relevant? money is only gained if picked up
+  - last hitting is not the goal
+
+bot:
 - bot unstuck
   - if no movement in x secs while there should be,
     pick a random nearby nav spot as target
+
+hammer:
 - entity for lane nodes
 - entity for bot spawn point
   - bot type, team, lane index
-- fountain = big dispenser with sentry gun on top, both invuln
-- fix bots attacking spectator camera if player dead (on red or blu team)
 
 ideas:
 - intel = aegis of the immortal

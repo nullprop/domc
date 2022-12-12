@@ -38,6 +38,11 @@ class Player
 
     function Think()
     {
+        if (!IsValidAndAlive(this.playerEnt))
+        {
+            return;
+        }
+
         local time = Time();
 
         // regen
