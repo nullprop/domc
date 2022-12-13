@@ -184,6 +184,7 @@ class Bot
             if (stuckTime > 10.0)
             {
                 this.botEnt.Kill();
+                return;
             }
         }
 
