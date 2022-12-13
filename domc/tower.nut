@@ -3,16 +3,16 @@ DoIncludeScript("domc/util.nut", null);
 TOWER_SETTINGS <-
 [
 	{
-		"health": 10000,
-		"damage": 8.0,
+		"health": 15000,
+		"damage": 10.0,
 	},
     {
-		"health": 24000,
-		"damage": 15.0,
+		"health": 25000,
+		"damage": 20.0,
 	},
     {
 		"health": 30000,
-		"damage": 25.0,
+		"damage": 30.0,
 	}
 ];
 
