@@ -78,6 +78,22 @@ class GamemodeDomc
         }
     }
 
+    function OnPlayerSpawn(userid)
+    {
+        local ent = GetPlayerFromUserID(userid);
+        local entindex = ent.entindex();
+        if (!(entindex in this.players))
+        {
+            Log(format("OnPlayerSpawn called for %d but not in players", userid));
+            return;
+        }
+
+        if (ent && ent.IsValid() && ent.IsPlayer())
+        {
+            this.players[entindex].OnSpawn();
+        }
+    }
+
     function RemovePlayer(userid)
     {
         if (!(userid in this.players))
@@ -202,6 +218,7 @@ function OnGameEvent_player_spawn(data)
 {
     Log("player " + data.userid + " spawned");
     ::gamemode_domc.AddPlayer(data.userid);
+    ::gamemode_domc.OnPlayerSpawn(data.userid);
 }
 
 function OnGameEvent_player_death(data)
@@ -347,6 +364,17 @@ else
             ply.EyePosition() + ply.GetForwardVector()*256,
             ply.GetAbsAngles()
         );
+    }
+}
+
+::GiveXP <- function(amount)
+{
+    if ("gamemode_domc" in getroottable())
+    {
+        foreach(player in ::gamemode_domc.players)
+        {
+            player.OnGainXP(amount);
+        }
     }
 }
 

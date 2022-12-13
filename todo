@@ -1,5 +1,11 @@
 todo:
-- maintain player script through respawns
+player progression:
+- xp from nearby dying enemy mobs, players
+- leveling up increases max hp, hp regen, dmg
+- buy mvm upgrades with money?
+
+misc:
+- towers drop money
 - show enemy tower, bot healthbars
 - add sentry to fountain
 - fix bots attacking spectator camera if player dead (on red or blu team)
