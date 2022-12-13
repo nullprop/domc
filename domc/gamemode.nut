@@ -291,12 +291,8 @@ function OnScriptHook_OnTakeDamage(params)
     }
 
     // Player inflictor dmg bonus
-    local infOwner = GetTopOwner(inf);
-    local player = ::gamemode_domc.GetPlayer(inf);
-    if (!player && infOwner)
-    {
-        player = ::gamemode_domc.GetPlayer(infOwner);
-    }
+    local trueInf = GetTrueInflictor(inf);
+    local player = ::gamemode_domc.GetPlayer(trueInf);
     if (player)
     {
         params.damage *= player.GetDamageMult();

@@ -146,10 +146,18 @@ IsValid <- function(ent)
     return true;
 }
 
-GetTopOwner <- function(ent)
+GetTrueInflictor <- function(ent)
 {
+    local top = ent;
+
+    local thrower = GetThrower(ent);
+    if (thrower)
+    {
+        ent = thrower;
+        top = ent;
+    }
+
     local owner = ent.GetOwner();
-    local top = null;
     local ownerCount = 0; // sanity
     while (IsValid(owner) && ownerCount < 10)
     {
@@ -157,7 +165,17 @@ GetTopOwner <- function(ent)
         owner = owner.GetOwner();
         ownerCount++;
     }
+
     return top;
+}
+
+GetThrower <- function(ent)
+{
+    if (!NetProps.HasProp(ent, "m_hThrower"))
+    {
+        return null;
+    }
+    return NetProps.GetPropEntity(ent, "m_hThrower");
 }
 
 RandomElement <- function(arr)

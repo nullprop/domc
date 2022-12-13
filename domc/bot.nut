@@ -554,13 +554,8 @@ class Bot
 
     function OnTakeDamage(params)
     {
-        local inf = params.inflictor;
         // Climb up owner hierarchy for projectiles, etc.
-        local owner = GetTopOwner(inf);
-        if (owner)
-        {
-            inf = owner;
-        }
+        local inf = GetTrueInflictor(params.inflictor);
 
         if (inf.GetTeam() == this.team)
         {
