@@ -1,6 +1,7 @@
 DoIncludeScript("domc/util.nut", null);
 DoIncludeScript("domc/player.nut", null);
 DoIncludeScript("domc/bot.nut", null);
+DoIncludeScript("domc/bot_spawner.nut", null);
 DoIncludeScript("domc/tower.nut", null);
 DoIncludeScript("domc/fountain.nut", null);
 DoIncludeScript("domc/lane.nut", null);
@@ -31,6 +32,7 @@ class GamemodeDomc
     towers = [];
     lanes = [];
     fountains = [];
+    spawners = [];
 
     constructor()
     {
@@ -51,6 +53,11 @@ class GamemodeDomc
         {
             ply.Think();
         }
+
+        foreach(spawner in this.spawners)
+        {
+            spawner.Think();
+        }
     }
 
     function OnRoundStart()
@@ -60,6 +67,11 @@ class GamemodeDomc
         foreach(ply in this.players)
         {
             ply.OnRoundStart();
+        }
+
+        foreach(spawner in this.spawners)
+        {
+            spawner.OnRoundStart();
         }
     }
 
@@ -102,13 +114,6 @@ class GamemodeDomc
         }
 
         delete this.players[userid];
-    }
-
-    function AddBot(type, team, laneIndex, pos, ang)
-    {
-        Log(format("AddBot %d, %d, %d", type, team, laneIndex));
-        local bot = Bot(type, team, this.lanes[laneIndex], pos, ang);
-        this.bots.append(bot);
     }
 
     function AddTower(tier, team, laneIndex, pos, ang)
@@ -351,13 +356,30 @@ else
     if ("gamemode_domc" in getroottable())
     {
         local ply = GetListenServerHost();
-        ::gamemode_domc.AddBot(
+        Bot(
             type,
             team,
-            laneIndex,
+            ::gamemode_domc.lanes[laneIndex],
             ply.EyePosition() + ply.GetForwardVector()*256,
             ply.GetAbsAngles()
         );
+    }
+}
+
+::TestSpawner <- function(type, team, laneIndex)
+{
+    if ("gamemode_domc" in getroottable())
+    {
+        local ply = GetListenServerHost();
+        local spawner = BotSpawner(
+            team,
+            type,
+            ::gamemode_domc.lanes[laneIndex],
+            ply.EyePosition() + ply.GetForwardVector()*256,
+            ply.GetAbsAngles()
+        );
+        ::gamemode_domc.spawners.append(spawner);
+        spawner.OnRoundStart();
     }
 }
 

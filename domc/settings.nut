@@ -1,8 +1,3 @@
-GAME_SETTINGS <-
-{
-	"bot_wave_interval": 30
-}
-
 BUILDING_SETTINGS <-
 {
 	"sentry":
