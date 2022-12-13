@@ -561,6 +561,11 @@ class Bot
             inf = owner;
         }
 
+        if (inf.GetTeam() == this.team)
+        {
+            return;
+        }
+
         // If no target already, aggro on to whoever did damage to us
         if (!IsValidAndAlive(this.targetEnt))
         {
