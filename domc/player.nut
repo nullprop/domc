@@ -12,111 +12,81 @@ CLASS_SETTINGS <-
     {
         "hp_base": 125,
         "hp_per_level": 10,
-        "damage_deal_mult": 0.2,
-        "damage_take_mult": 1.0,
-        "heal_deal_mult": 0.2,
-        "heal_take_mult": 1.0,
         "regen_base": 0.8,
-        "regen_per_level": 0.4
+        "regen_per_level": 0.4,
+        "dmg_mult_per_level": 0.1
     },
 	// SCOUT
     {
         "hp_base": 125,
         "hp_per_level": 10,
-        "damage_deal_mult": 0.2,
-        "damage_take_mult": 1.0,
-        "heal_deal_mult": 0.2,
-        "heal_take_mult": 1.0,
         "regen_base": 0.8,
-        "regen_per_level": 0.4
+        "regen_per_level": 0.4,
+        "dmg_mult_per_level": 0.1
     },
 	// SNIPER
     {
         "hp_base": 125,
         "hp_per_level": 10,
-        "damage_deal_mult": 0.2,
-        "damage_take_mult": 1.0,
-        "heal_deal_mult": 0.2,
-        "heal_take_mult": 1.0,
         "regen_base": 0.8,
-        "regen_per_level": 0.4
+        "regen_per_level": 0.4,
+        "dmg_mult_per_level": 0.1
     },
 	// SOLDIER
     {
         "hp_base": 200,
         "hp_per_level": 20,
-        "damage_deal_mult": 0.2,
-        "damage_take_mult": 1.0,
-        "heal_deal_mult": 0.2,
-        "heal_take_mult": 1.0,
         "regen_base": 0.6,
-        "regen_per_level": 1.0
+        "regen_per_level": 1.0,
+        "dmg_mult_per_level": 0.1
     },
 	// DEMOMAN
     {
         "hp_base": 175,
         "hp_per_level": 15,
-        "damage_deal_mult": 0.2,
-        "damage_take_mult": 1.0,
-        "heal_deal_mult": 0.2,
-        "heal_take_mult": 1.0,
         "regen_base": 0.7,
-        "regen_per_level": 0.8
+        "regen_per_level": 0.8,
+        "dmg_mult_per_level": 0.1
     },
 	// MEDIC
     {
         "hp_base": 150,
         "hp_per_level": 15,
-        "damage_deal_mult": 0.2,
-        "damage_take_mult": 1.0,
-        "heal_deal_mult": 0.2,
-        "heal_take_mult": 1.0,
         "regen_base": 0.7,
-        "regen_per_level": 1.0
+        "regen_per_level": 1.0,
+        "dmg_mult_per_level": 0.1
     },
 	// HEAVY
     {
         "hp_base": 300,
         "hp_per_level": 30,
-        "damage_deal_mult": 0.2,
-        "damage_take_mult": 1.0,
-        "heal_deal_mult": 0.2,
-        "heal_take_mult": 1.0,
         "regen_base": 0.6,
-        "regen_per_level": 2.0
+        "regen_per_level": 2.0,
+        "dmg_mult_per_level": 0.1
     },
 	// PYRO
     {
         "hp_base": 175,
         "hp_per_level": 15,
-        "damage_deal_mult": 0.2,
-        "damage_take_mult": 1.0,
-        "heal_deal_mult": 0.2,
-        "heal_take_mult": 1.0,
         "regen_base": 0.8,
-        "regen_per_level": 0.8
+        "regen_per_level": 0.8,
+        "dmg_mult_per_level": 0.1
     },
 	// SPY
     {
         "hp_base": 125,
         "hp_per_level": 10,
-        "damage_deal_mult": 0.2,
-        "damage_take_mult": 1.0,
-        "heal_deal_mult": 0.2,
-        "heal_take_mult": 1.0,
         "regen_base": 0.8,
-        "regen_per_level": 0.8
+        "regen_per_level": 0.8,
+        "dmg_mult_per_level": 0.1
     },
 	// ENGINEER
     {
         "hp_base": 125,
         "hp_per_level": 10,
-        "damage_deal_mult": 0.2,
-        "damage_take_mult": 1.0,
-        "heal_deal_mult": 0.2,
-        "heal_take_mult": 1.0,
         "regen_base": 0.8,
-        "regen_per_level": 0.4
+        "regen_per_level": 0.4,
+        "dmg_mult_per_level": 0.1
     },
 ]
 
@@ -291,5 +261,12 @@ class Player
         {
             this.playerEnt.RemoveFlag(Constants.FPlayer.FL_NOTARGET);
         }
+    }
+
+    function GetDamageMult()
+    {
+        local dmgMult = 1.0;
+        dmgMult += this.level * this.classSettings["dmg_mult_per_level"];
+        return dmgMult;
     }
 }

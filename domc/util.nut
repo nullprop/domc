@@ -118,12 +118,7 @@ const FLT_BIG = 100000.0;
 
 IsValidAndAlive <- function(ent)
 {
-    if (ent == null)
-    {
-        return false;
-    }
-
-    if (!ent.IsValid())
+    if (!IsValid(ent))
     {
         return false;
     }
@@ -134,6 +129,35 @@ IsValidAndAlive <- function(ent)
     }
 
     return true;
+}
+
+IsValid <- function(ent)
+{
+    if (ent == null)
+    {
+        return false;
+    }
+
+    if (!ent.IsValid())
+    {
+        return false;
+    }
+
+    return true;
+}
+
+GetTopOwner <- function(ent)
+{
+    local owner = ent.GetOwner();
+    local top = null;
+    local ownerCount = 0; // sanity
+    while (IsValid(owner) && ownerCount < 10)
+    {
+        top = owner;
+        owner = owner.GetOwner();
+        ownerCount++;
+    }
+    return top;
 }
 
 RandomElement <- function(arr)

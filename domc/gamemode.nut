@@ -139,6 +139,16 @@ class GamemodeDomc
         }
     }
 
+    function GetPlayer(ent)
+    {
+        local entindex = ent.entindex();
+        if (entindex in this.players)
+        {
+            return this.players[entindex];
+        }
+        return null;
+    }
+
     function GetBot(ent)
     {
         foreach(bot in this.bots)
@@ -273,6 +283,18 @@ function OnScriptHook_OnTakeDamage(params)
         {
             params.damage = tower.GetDamage();
         }
+    }
+
+    // Player inflictor dmg bonus
+    local infOwner = GetTopOwner(inf);
+    local player = ::gamemode_domc.GetPlayer(inf);
+    if (!player && infOwner)
+    {
+        player = ::gamemode_domc.GetPlayer(infOwner);
+    }
+    if (player)
+    {
+        params.damage *= player.GetDamageMult();
     }
 
     // Bot callback for aggro

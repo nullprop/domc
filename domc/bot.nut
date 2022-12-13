@@ -553,15 +553,12 @@ class Bot
 
     function OnTakeDamage(params)
     {
-        // Climb up owner hierarchy for projectiles, etc.
         local inf = params.inflictor;
-        local owner = inf.GetOwner();
-        local ownerCount = 0; // sanity
-        while (IsValidAndAlive(owner) && ownerCount < 10)
+        // Climb up owner hierarchy for projectiles, etc.
+        local owner = GetTopOwner(inf);
+        if (owner)
         {
             inf = owner;
-            owner = owner.GetOwner();
-            ownerCount++;
         }
 
         // If no target already, aggro on to whoever did damage to us
