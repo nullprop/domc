@@ -99,7 +99,6 @@ class Bot
     navArea = null;
     navPath = [];
     pathTime = 0.0;
-    lastThink = 0.0;
     lastAttackTime = 0.0;
 
     constructor(type, team, lane, pos, ang){
@@ -110,8 +109,6 @@ class Bot
         this.teamName = TF_TEAM_NAMES[team];
         this.botSettings = BOT_SETTINGS[this.botTypeName];
         this.uname = UniqueString();
-
-        this.lastThink = Time();
 
         // Spawn on navmesh
         local navArea = NavMesh.GetNavArea(pos, 512.0);
@@ -175,6 +172,11 @@ class Bot
 
     function Update()
     {
+        if (!IsValidAndAlive(this.botEnt))
+        {
+            return;
+        }
+
         local time = Time();
 
         if (this.locomotion.IsStuck())
@@ -244,8 +246,6 @@ class Bot
         // advance anim
         this.botEnt.StudioFrameAdvance();
         this.botEnt.DispatchAnimEvents(this.botEnt);
-
-        this.lastThink = time;
     }
 
     function HasLOS(startPos, endPos, targetEnt)

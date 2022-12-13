@@ -11,7 +11,7 @@ CLASS_SETTINGS <-
     // UNKNOWN
     {
         "hp_base": 125,
-        "hp_per_level": 10,
+        "hp_per_level": 15,
         "regen_base": 0.8,
         "regen_per_level": 0.4,
         "dmg_mult_per_level": 0.1
@@ -19,7 +19,7 @@ CLASS_SETTINGS <-
 	// SCOUT
     {
         "hp_base": 125,
-        "hp_per_level": 10,
+        "hp_per_level": 15,
         "regen_base": 0.8,
         "regen_per_level": 0.4,
         "dmg_mult_per_level": 0.1
@@ -27,7 +27,7 @@ CLASS_SETTINGS <-
 	// SNIPER
     {
         "hp_base": 125,
-        "hp_per_level": 10,
+        "hp_per_level": 15,
         "regen_base": 0.8,
         "regen_per_level": 0.4,
         "dmg_mult_per_level": 0.1
@@ -43,7 +43,7 @@ CLASS_SETTINGS <-
 	// DEMOMAN
     {
         "hp_base": 175,
-        "hp_per_level": 15,
+        "hp_per_level": 18,
         "regen_base": 0.7,
         "regen_per_level": 0.8,
         "dmg_mult_per_level": 0.1
@@ -51,7 +51,7 @@ CLASS_SETTINGS <-
 	// MEDIC
     {
         "hp_base": 150,
-        "hp_per_level": 15,
+        "hp_per_level": 18,
         "regen_base": 0.7,
         "regen_per_level": 1.0,
         "dmg_mult_per_level": 0.1
@@ -67,7 +67,7 @@ CLASS_SETTINGS <-
 	// PYRO
     {
         "hp_base": 175,
-        "hp_per_level": 15,
+        "hp_per_level": 18,
         "regen_base": 0.8,
         "regen_per_level": 0.8,
         "dmg_mult_per_level": 0.1
@@ -75,7 +75,7 @@ CLASS_SETTINGS <-
 	// SPY
     {
         "hp_base": 125,
-        "hp_per_level": 10,
+        "hp_per_level": 15,
         "regen_base": 0.8,
         "regen_per_level": 0.8,
         "dmg_mult_per_level": 0.1
@@ -83,7 +83,7 @@ CLASS_SETTINGS <-
 	// ENGINEER
     {
         "hp_base": 125,
-        "hp_per_level": 10,
+        "hp_per_level": 15,
         "regen_base": 0.8,
         "regen_per_level": 0.4,
         "dmg_mult_per_level": 0.1
