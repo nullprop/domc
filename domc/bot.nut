@@ -5,6 +5,7 @@ const PATH_INTERVAL = 1.0;
 const TARGET_INTERVAL = 3.0;
 const PATH_MARGIN = 64.0;
 const STEP_HEIGHT = 24.0;
+const BOT_XP_AWARD_BASE = 50.0;
 
 BOT_SETTINGS <-
 {
@@ -100,7 +101,7 @@ class Bot
     navPath = [];
     pathTime = 0.0;
     lastAttackTime = 0.0;
-    xpAward = 50.0;
+    xpAward = BOT_XP_AWARD_BASE;
 
     constructor(type, team, lane, pos, ang){
         this.lane = lane;
@@ -582,11 +583,6 @@ class Bot
         }
 
         return false;
-    }
-
-    function GetXPAward()
-    {
-        return 40.0;
     }
 
     function GetPos()

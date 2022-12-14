@@ -5,6 +5,8 @@ const SENTRY_PROTECT_INTERVAL = 1.0;
 const SENTRY_PROTECT_RADIUS = 512.0;
 const XP_PER_LEVEL = 1000.0;
 const MAX_LEVEL = 20;
+const XP_AWARD_BASE = 200.0;
+const XP_AWARD_KILLSTREAK = 50.0;
 
 CLASS_SETTINGS <-
 [
@@ -104,6 +106,7 @@ class Player
 
     level = 1;
     xp = 0.0;
+    xpAward = XP_AWARD_BASE;
 
     applySpawn = false;
 
@@ -139,6 +142,14 @@ class Player
         Log("Player.OnSpawn");
         // Apply class settings next think, doesn't work here
         this.applySpawn = true;
+        this.UpdateXPAward();
+    }
+
+    function UpdateXPAward()
+    {
+        this.xpAward = XP_AWARD_BASE;
+        local killStreak = 0; // TODO
+        this.xpAward += killStreak * XP_AWARD_KILLSTREAK;
     }
 
     function OnGainXP(amount)

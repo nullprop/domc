@@ -263,14 +263,22 @@ class GamemodeDomc
 
 function OnGameEvent_player_spawn(data)
 {
-    Log("player " + data.userid + " spawned");
+    Log("player uid " + data.userid + " spawned");
     ::gamemode_domc.AddPlayer(data.userid);
     ::gamemode_domc.OnPlayerSpawn(data.userid);
 }
 
 function OnGameEvent_player_death(data)
 {
-    Log("player " + data.userid + " died");
+    Log("player uid " + data.userid + " died");
+
+    local ent = GetPlayerFromUserID(data.userid);
+    local player = ::gamemode_domc.GetPlayer(ent);
+
+    if (player)
+    {
+        ::gamemode_domc.AwardXP(GetOppositeTeam(player.GetTeam()), player.xpAward, player.GetPos());
+    }
 }
 
 function OnGameEvent_teamplay_round_start(data)
@@ -343,6 +351,8 @@ function OnScriptHook_OnTakeDamage(params)
             }
         }
     }
+
+    // TODO player dmg taken reduction
 }
 
 // --------------------------------
