@@ -222,3 +222,17 @@ TrajectoryVertVel <- function(distX, velX, gravity)
     // velY = x * g / (2 * velX)
     return distX * gravity * 0.5 / velX;
 }
+
+GetOppositeTeam <- function(team)
+{
+    if (team == Constants.ETFTeam.TF_TEAM_RED)
+    {
+        return Constants.ETFTeam.TF_TEAM_BLUE;
+    }
+    else if (team == Constants.ETFTeam.TF_TEAM_BLUE)
+    {
+        return Constants.ETFTeam.TF_TEAM_RED;
+    }
+
+    return Constants.ETFTeam.TEAM_INVALID;
+}

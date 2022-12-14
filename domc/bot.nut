@@ -100,6 +100,7 @@ class Bot
     navPath = [];
     pathTime = 0.0;
     lastAttackTime = 0.0;
+    xpAward = 50.0;
 
     constructor(type, team, lane, pos, ang){
         this.lane = lane;
@@ -559,7 +560,12 @@ class Bot
 
         if (inf.GetTeam() == this.team)
         {
-            return;
+            return false;
+        }
+
+        if (params.damage >= this.botEnt.GetHealth())
+        {
+            return true;
         }
 
         // If no target already, aggro on to whoever did damage to us
@@ -574,6 +580,18 @@ class Bot
             // Reset timer if current aggro target
             this.targetCheckTime = Time();
         }
+
+        return false;
+    }
+
+    function GetXPAward()
+    {
+        return 40.0;
+    }
+
+    function GetPos()
+    {
+        return this.botEnt.GetOrigin();
     }
 }
 

@@ -24,6 +24,7 @@ PrecacheModel("models/items/currencypack_small.mdl");
 PrecacheModel("models/items/currencypack_medium.mdl");
 PrecacheModel("models/items/currencypack_large.mdl");
 
+const XP_AWARD_RADIUS = 768.0;
 
 class GamemodeDomc
 {
@@ -223,6 +224,37 @@ class GamemodeDomc
             collected
         ));
     }
+
+    function AwardXP(team, amount, pos)
+    {
+        local inRange = [];
+        foreach(player in this.players)
+        {
+            if (player.GetTeam() != team)
+            {
+                continue;
+            }
+
+            if ((pos - player.GetPos()).Length() > XP_AWARD_RADIUS)
+            {
+                continue;
+            }
+
+            inRange.append(player);
+        }
+
+        local playerCount = inRange.len();
+        if (playerCount == 0)
+        {
+            return;
+        }
+
+        local splitAmount = amount.tofloat() / playerCount;
+        foreach(player in inRange)
+        {
+            player.OnGainXP(splitAmount);
+        }
+    }
 }
 
 // --------------------------------
@@ -298,13 +330,17 @@ function OnScriptHook_OnTakeDamage(params)
         params.damage *= player.GetDamageMult();
     }
 
-    // Bot callback for aggro
+    // Bot callback for aggro + award xp
     if (entClassname == "base_boss")
     {
         local bot = ::gamemode_domc.GetBot(ent);
         if (bot)
         {
-            bot.OnTakeDamage(params);
+            local dead = bot.OnTakeDamage(params);
+            if (dead)
+            {
+                ::gamemode_domc.AwardXP(GetOppositeTeam(bot.team), bot.xpAward, bot.GetPos());
+            }
         }
     }
 }

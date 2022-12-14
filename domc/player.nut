@@ -3,7 +3,7 @@ DoIncludeScript("domc/settings.nut", null);
 
 const SENTRY_PROTECT_INTERVAL = 1.0;
 const SENTRY_PROTECT_RADIUS = 512.0;
-const XP_PER_LEVEL = 1000;
+const XP_PER_LEVEL = 1000.0;
 const MAX_LEVEL = 20;
 
 CLASS_SETTINGS <-
@@ -103,7 +103,7 @@ class Player
     lastSentryProtectTime = 0.0;
 
     level = 1;
-    xp = 0;
+    xp = 0.0;
 
     applySpawn = false;
 
@@ -143,6 +143,7 @@ class Player
 
     function OnGainXP(amount)
     {
+        Log("OnGainXP " + amount);
         if (this.level >= MAX_LEVEL)
         {
             return;
@@ -164,17 +165,28 @@ class Player
 
         if (this.level >= MAX_LEVEL)
         {
-            this.xp = 0;
+            this.xp = 0.0;
         }
 
-        // Log(format("Player %d leveled up to %d", this.playerEnt.entindex(), this.level));
         ClientPrint(null, Constants.EHudNotify.HUD_PRINTTALK, format("'%s' reached level %d!", this.GetPlayerName(), this.level));
+
+        // todo particles
     }
 
     function GetPlayerName()
     {
         local entindex = this.playerEnt.entindex();
         return Convars.GetClientConvarValue("name", entindex);
+    }
+
+    function GetPos()
+    {
+        return this.playerEnt.GetOrigin();
+    }
+
+    function GetTeam()
+    {
+        return this.playerEnt.GetTeam();
     }
 
     function Think()
