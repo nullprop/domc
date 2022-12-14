@@ -152,17 +152,29 @@ class Player
 
         while (this.xp >= XP_PER_LEVEL && this.level < MAX_LEVEL)
         {
-            this.xp -= XP_PER_LEVEL;
-            this.level++;
-            this.ApplyClassSettings();
-
-            if (this.level >= MAX_LEVEL)
-            {
-                this.xp = 0;
-            }
-
-            Log(format("Player %d leveled up to %d", this.playerEnt.entindex(), this.level));
+            this.OnLevelUp();
         }
+    }
+
+    function OnLevelUp()
+    {
+        this.xp -= XP_PER_LEVEL;
+        this.level++;
+        this.ApplyClassSettings();
+
+        if (this.level >= MAX_LEVEL)
+        {
+            this.xp = 0;
+        }
+
+        // Log(format("Player %d leveled up to %d", this.playerEnt.entindex(), this.level));
+        ClientPrint(null, Constants.EHudNotify.HUD_PRINTTALK, format("'%s' reached level %d!", this.GetPlayerName(), this.level));
+    }
+
+    function GetPlayerName()
+    {
+        local entindex = this.playerEnt.entindex();
+        return Convars.GetClientConvarValue("name", entindex);
     }
 
     function Think()

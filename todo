@@ -29,6 +29,7 @@ hammer:
 - entity for lane nodes
 - entity for bot spawn point
   - bot type, team, lane index
+- entity for sentries
 
 ideas:
 - intel = aegis of the immortal
