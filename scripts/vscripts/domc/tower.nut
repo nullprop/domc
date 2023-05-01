@@ -24,7 +24,7 @@ class Tower
     laneIndex = null;
     team = null;
 
-    constructor(tier, team, laneIndex, pos, ang)
+    constructor(team, tier, laneIndex, pos, ang)
     {
         if (team != Constants.ETFTeam.TF_TEAM_RED && team != Constants.ETFTeam.TF_TEAM_BLUE)
         {
@@ -103,6 +103,14 @@ class Tower
     function GetEnt()
     {
         return this.sentryEnt;
+    }
+
+    function Kill()
+    {
+        if (IsValid(this.sentryEnt))
+        {
+            this.sentryEnt.Kill();
+        }
     }
 }
 

@@ -37,3 +37,753 @@ Wrote ZIP buffer, estimated size 105881, actual size 105667
 reading c:\dev\domc\maps\domc_test.bsp
 reading c:\dev\domc\maps\domc_test.prt
 LoadPortals: couldn't read c:\dev\domc\maps\domc_test.prt
+
+
+
+materialPath: C:\Program Files (x86)\Steam\steamapps\common\Team Fortress 2\tf\materials
+Loading C:\dev\domc\maps\domc_test.vmf
+Patching WVT material: maps/domc_test/dev/dev_blendmeasure_wvt_patch
+fixing up env_cubemap materials on brush sides...
+0...1...2...3...4...5...6...7...8...9...100...1...2...3...4...5...6...7...8...9...10Processing areas...done (0)
+Building Faces...done (0)
+FixTjuncs...
+PruneNodes...
+WriteBSP...
+done (0)
+writing C:\dev\domc\maps\domc_test.prt...Building visibility clusters...
+done (0)
+*** Error: Skybox vtf files for skybox/sky_alpinestorm_01 weren't compiled with the same size texture and/or same flags!
+Can't load skybox file skybox/sky_alpinestorm_01 to build the default cubemap!
+*** Error: Skybox vtf files for skybox/sky_alpinestorm_01 weren't compiled with the same size texture and/or same flags!
+Can't load skybox file skybox/sky_alpinestorm_01 to build the default cubemap!
+Finding displacement neighbors...
+Finding lightmap sample positions...
+Displacement Alpha : 0...1...2...3...4...5...6...7...8...9...10
+Building Physics collision data...
+done (0) (4213 bytes)
+Placing detail props : 0...1...2...3...4...5...6...7...8...9...10
+Compacting texture/material tables...
+Reduced 15 texinfos to 10
+Reduced 5 texdatas to 4 (155 bytes to 134)
+Writing C:\dev\domc\maps\domc_test.bsp
+MSG_FILEWRITE - Filesystem was asked to write to 'C:\dev\domc\maps\domc_test.bsp', but we don't own that location. Allowing.
+Wrote ZIP buffer, estimated size 469, actual size 389
+0 seconds elapsed
+
+
+
+32 threads
+reading c:\dev\domc\maps\domc_test.bsp
+reading c:\dev\domc\maps\domc_test.prt
+ 200 portalclusters
+ 460 numportals
+0...1...2...3...4...5...6...7...8...9...10Optimized: 20 visible clusters (0.05%)
+Total clusters visible: 39064
+Average clusters visible: 195
+Building PAS...
+Average clusters audible: 200
+visdatasize:11604  compressed from 12800
+writing c:\dev\domc\maps\domc_test.bsp
+MSG_FILEWRITE - Filesystem was asked to write to 'c:\dev\domc\maps\domc_test.bsp', but we don't own that location. Allowing.
+0 seconds elapsed
+
+
+
+[Reading texlights from 'lights.rad']
+[56 texlights parsed from 'lights.rad']
+
+Loading c:\dev\domc\maps\domc_test.bsp
+1016 faces
+1748401 square feet [251769840.00 square inches]
+0 Displacements
+0 Square Feet [0.00 Square Inches]
+1016 patches before subdivision
+1016 patches after subdivision
+0 direct lights
+0...1...2...3...4...5...6...7...8...9...100...1...2...3...4...5...6...7...8...9...10transfers 77525, max 399
+transfer lists:   0.6 megs
+0...1...2...3...4...5...6...7...8...9...10	Bounce #1 added RGB(0, 0, 0)
+Build Patch/Sample Hash Table(s).....Done<0.0103 sec>
+0...1...2...3...4...5...6...7...8...9...10FinalLightFace Done
+0 of 0 (0% of) surface lights went in leaf ambient cubes.
+0...1...2...3...4...5...6...7...8...9...10Writing leaf ambient...done
+Ready to Finish
+
+Object names       Objects/Maxobjs  Memory / Maxmem  Fullness 
+------------       ---------------  ---------------  -------- 
+models                   1/1024           48/49152    ( 0.1%) 
+brushes                 11/8192          132/98304    ( 0.1%) 
+brushsides              66/65536         528/524288   ( 0.1%) 
+planes                  92/65536        1840/1310720  ( 0.1%) 
+vertexes              1195/65536       14340/786432   ( 1.8%) 
+nodes                  499/65536       15968/2097152  ( 0.8%) 
+texinfos                10/12288         720/884736   ( 0.1%) 
+texdata                  4/2048          128/65536    ( 0.2%) 
+dispinfos                0/0               0/0        ( 0.0%) 
+disp_verts               0/0               0/0        ( 0.0%) 
+disp_tris                0/0               0/0        ( 0.0%) 
+disp_lmsamples           0/0               0/0        ( 0.0%) 
+faces                 1016/65536       56896/3670016  ( 1.6%) 
+hdr faces                0/65536           0/3670016  ( 0.0%) 
+origfaces               32/65536        1792/3670016  ( 0.0%) 
+leaves                 501/65536       16032/2097152  ( 0.8%) 
+leaffaces             1120/65536        2240/131072   ( 1.7%) 
+leafbrushes            270/65536         540/131072   ( 0.4%) 
+areas                    2/256            16/2048     ( 0.8%) 
+surfedges             4516/512000      18064/2048000  ( 0.9%) 
+edges                 2279/256000       9116/1024000  ( 0.9%) 
+LDR worldlights          0/8192            0/720896   ( 0.0%) 
+HDR worldlights          0/8192            0/720896   ( 0.0%) 
+leafwaterdata            0/32768           0/393216   ( 0.0%) 
+waterstrips             71/32768         710/327680   ( 0.2%) 
+waterverts               0/65536           0/786432   ( 0.0%) 
+waterindices           870/65536        1740/131072   ( 1.3%) 
+cubemapsamples           0/1024            0/16384    ( 0.0%) 
+overlays                 0/512             0/180224   ( 0.0%) 
+LDR lightdata         [variable]     1338416/0        ( 0.0%) 
+HDR lightdata         [variable]           0/0        ( 0.0%) 
+visdata               [variable]       11604/16777216 ( 0.1%) 
+entdata               [variable]         632/393216   ( 0.2%) 
+LDR ambient table      501/65536        2004/262144   ( 0.8%) 
+HDR ambient table      501/65536        2004/262144   ( 0.8%) 
+LDR leaf ambient       200/65536        5600/1835008  ( 0.3%) 
+HDR leaf ambient       501/65536       14028/1835008  ( 0.8%) 
+occluders                0/0               0/0        ( 0.0%) 
+occluder polygons        0/0               0/0        ( 0.0%) 
+occluder vert ind        0/0               0/0        ( 0.0%) 
+detail props          [variable]           1/12       ( 8.3%) 
+static props          [variable]           1/12       ( 8.3%) 
+pakfile               [variable]         389/0        ( 0.0%) 
+physics               [variable]        4213/4194304  ( 0.1%) 
+physics terrain       [variable]           2/1048576  ( 0.0%) 
+
+Level flags = 0
+
+Total triangle count: 2356
+Writing c:\dev\domc\maps\domc_test.bsp
+4 seconds elapsed
+
+
+
+materialPath: C:\Program Files (x86)\Steam\steamapps\common\Team Fortress 2\tf\materials
+Loading C:\dev\domc\maps\domc_test.vmf
+Patching WVT material: maps/domc_test/dev/dev_blendmeasure_wvt_patch
+fixing up env_cubemap materials on brush sides...
+0...1...2...3...4...5...6...7...8...9...100...1...2...3...4...5...6...7...8...9...10Processing areas...done (0)
+Building Faces...done (0)
+FixTjuncs...
+PruneNodes...
+WriteBSP...
+done (0)
+writing C:\dev\domc\maps\domc_test.prt...Building visibility clusters...
+done (0)
+*** Error: Skybox vtf files for skybox/sky_alpinestorm_01 weren't compiled with the same size texture and/or same flags!
+Can't load skybox file skybox/sky_alpinestorm_01 to build the default cubemap!
+*** Error: Skybox vtf files for skybox/sky_alpinestorm_01 weren't compiled with the same size texture and/or same flags!
+Can't load skybox file skybox/sky_alpinestorm_01 to build the default cubemap!
+Finding displacement neighbors...
+Finding lightmap sample positions...
+Displacement Alpha : 0...1...2...3...4...5...6...7...8...9...10
+Building Physics collision data...
+done (0) (6629 bytes)
+Placing detail props : 0...1...2...3...4...5...6...7...8...9...10
+Compacting texture/material tables...
+Reduced 27 texinfos to 14
+Reduced 5 texdatas to 4 (155 bytes to 134)
+Writing C:\dev\domc\maps\domc_test.bsp
+MSG_FILEWRITE - Filesystem was asked to write to 'C:\dev\domc\maps\domc_test.bsp', but we don't own that location. Allowing.
+Wrote ZIP buffer, estimated size 469, actual size 389
+0 seconds elapsed
+
+
+
+32 threads
+reading c:\dev\domc\maps\domc_test.bsp
+reading c:\dev\domc\maps\domc_test.prt
+ 292 portalclusters
+ 718 numportals
+0...1...2...3...4...5...6...7...8...9...10Optimized: 312 visible clusters (0.37%)
+Total clusters visible: 83790
+Average clusters visible: 286
+Building PAS...
+Average clusters audible: 292
+visdatasize:23948  compressed from 23360
+writing c:\dev\domc\maps\domc_test.bsp
+MSG_FILEWRITE - Filesystem was asked to write to 'c:\dev\domc\maps\domc_test.bsp', but we don't own that location. Allowing.
+0 seconds elapsed
+
+
+
+[Reading texlights from 'lights.rad']
+[56 texlights parsed from 'lights.rad']
+
+Loading c:\dev\domc\maps\domc_test.bsp
+1126 faces
+2542780 square feet [366160384.00 square inches]
+0 Displacements
+0 Square Feet [0.00 Square Inches]
+1126 patches before subdivision
+1126 patches after subdivision
+0 direct lights
+0...1...2...3...4...5...6...7...8...9...100...1...2...3...4...5...6...7...8...9...10transfers 125530, max 384
+transfer lists:   1.0 megs
+0...1...2...3...4...5...6...7...8...9...10	Bounce #1 added RGB(0, 0, 0)
+Build Patch/Sample Hash Table(s).....Done<0.0095 sec>
+0...1...2...3...4...5...6...7...8...9...10FinalLightFace Done
+0 of 0 (0% of) surface lights went in leaf ambient cubes.
+0...1...2...3...4...5...6...7...8...9...10Writing leaf ambient...done
+Ready to Finish
+
+Object names       Objects/Maxobjs  Memory / Maxmem  Fullness 
+------------       ---------------  ---------------  -------- 
+models                   1/1024           48/49152    ( 0.1%) 
+brushes                 17/8192          204/98304    ( 0.2%) 
+brushsides             114/65536         912/524288   ( 0.2%) 
+planes                 160/65536        3200/1310720  ( 0.2%) 
+vertexes              1351/65536       16212/786432   ( 2.1%) 
+nodes                  761/65536       24352/2097152  ( 1.2%) 
+texinfos                14/12288        1008/884736   ( 0.1%) 
+texdata                  4/2048          128/65536    ( 0.2%) 
+dispinfos                0/0               0/0        ( 0.0%) 
+disp_verts               0/0               0/0        ( 0.0%) 
+disp_tris                0/0               0/0        ( 0.0%) 
+disp_lmsamples           0/0               0/0        ( 0.0%) 
+faces                 1126/65536       63056/3670016  ( 1.7%) 
+hdr faces                0/65536           0/3670016  ( 0.0%) 
+origfaces               58/65536        3248/3670016  ( 0.1%) 
+leaves                 763/65536       24416/2097152  ( 1.2%) 
+leaffaces             1194/65536        2388/131072   ( 1.8%) 
+leafbrushes            422/65536         844/131072   ( 0.6%) 
+areas                    2/256            16/2048     ( 0.8%) 
+surfedges             5160/512000      20640/2048000  ( 1.0%) 
+edges                 2621/256000      10484/1024000  ( 1.0%) 
+LDR worldlights          0/8192            0/720896   ( 0.0%) 
+HDR worldlights          0/8192            0/720896   ( 0.0%) 
+leafwaterdata            0/32768           0/393216   ( 0.0%) 
+waterstrips             84/32768         840/327680   ( 0.3%) 
+waterverts               0/65536           0/786432   ( 0.0%) 
+waterindices          1038/65536        2076/131072   ( 1.6%) 
+cubemapsamples           0/1024            0/16384    ( 0.0%) 
+overlays                 0/512             0/180224   ( 0.0%) 
+LDR lightdata         [variable]     1221116/0        ( 0.0%) 
+HDR lightdata         [variable]           0/0        ( 0.0%) 
+visdata               [variable]       23948/16777216 ( 0.1%) 
+entdata               [variable]         632/393216   ( 0.2%) 
+LDR ambient table      763/65536        3052/262144   ( 1.2%) 
+HDR ambient table      763/65536        3052/262144   ( 1.2%) 
+LDR leaf ambient       292/65536        8176/1835008  ( 0.4%) 
+HDR leaf ambient       763/65536       21364/1835008  ( 1.2%) 
+occluders                0/0               0/0        ( 0.0%) 
+occluder polygons        0/0               0/0        ( 0.0%) 
+occluder vert ind        0/0               0/0        ( 0.0%) 
+detail props          [variable]           1/12       ( 8.3%) 
+static props          [variable]           1/12       ( 8.3%) 
+pakfile               [variable]         389/0        ( 0.0%) 
+physics               [variable]        6629/4194304  ( 0.2%) 
+physics terrain       [variable]           2/1048576  ( 0.0%) 
+
+Level flags = 0
+
+Total triangle count: 2676
+Writing c:\dev\domc\maps\domc_test.bsp
+6 seconds elapsed
+
+
+
+materialPath: C:\Program Files (x86)\Steam\steamapps\common\Team Fortress 2\tf\materials
+Loading C:\dev\domc\maps\domc_test.vmf
+Patching WVT material: maps/domc_test/dev/dev_blendmeasure_wvt_patch
+fixing up env_cubemap materials on brush sides...
+0...1...2...3...4...5...6...7...8...9...100...1...2...3...4...5...6...7...8...9...10Processing areas...done (0)
+Building Faces...done (0)
+FixTjuncs...
+PruneNodes...
+WriteBSP...
+done (0)
+writing C:\dev\domc\maps\domc_test.prt...Building visibility clusters...
+done (0)
+*** Error: Skybox vtf files for skybox/sky_alpinestorm_01 weren't compiled with the same size texture and/or same flags!
+Can't load skybox file skybox/sky_alpinestorm_01 to build the default cubemap!
+*** Error: Skybox vtf files for skybox/sky_alpinestorm_01 weren't compiled with the same size texture and/or same flags!
+Can't load skybox file skybox/sky_alpinestorm_01 to build the default cubemap!
+Finding displacement neighbors...
+Finding lightmap sample positions...
+Displacement Alpha : 0...1...2...3...4...5...6...7...8...9...10
+Building Physics collision data...
+done (0) (6629 bytes)
+Placing detail props : 0...1...2...3...4...5...6...7...8...9...10
+Compacting texture/material tables...
+Reduced 27 texinfos to 14
+Reduced 5 texdatas to 4 (155 bytes to 134)
+Writing C:\dev\domc\maps\domc_test.bsp
+MSG_FILEWRITE - Filesystem was asked to write to 'C:\dev\domc\maps\domc_test.bsp', but we don't own that location. Allowing.
+Wrote ZIP buffer, estimated size 469, actual size 389
+0 seconds elapsed
+
+
+
+32 threads
+reading c:\dev\domc\maps\domc_test.bsp
+reading c:\dev\domc\maps\domc_test.prt
+ 270 portalclusters
+ 652 numportals
+0...1...2...3...4...5...6...7...8...9...10Optimized: 346 visible clusters (0.49%)
+Total clusters visible: 71198
+Average clusters visible: 263
+Building PAS...
+Average clusters audible: 270
+visdatasize:20524  compressed from 21600
+writing c:\dev\domc\maps\domc_test.bsp
+MSG_FILEWRITE - Filesystem was asked to write to 'c:\dev\domc\maps\domc_test.bsp', but we don't own that location. Allowing.
+0 seconds elapsed
+
+
+
+[Reading texlights from 'lights.rad']
+[56 texlights parsed from 'lights.rad']
+
+Loading c:\dev\domc\maps\domc_test.bsp
+977 faces
+2449828 square feet [352775296.00 square inches]
+0 Displacements
+0 Square Feet [0.00 Square Inches]
+977 patches before subdivision
+977 patches after subdivision
+0 direct lights
+0...1...2...3...4...5...6...7...8...9...100...1...2...3...4...5...6...7...8...9...10transfers 101583, max 313
+transfer lists:   0.8 megs
+0...1...2...3...4...5...6...7...8...9...10	Bounce #1 added RGB(0, 0, 0)
+Build Patch/Sample Hash Table(s).....Done<0.0075 sec>
+0...1...2...3...4...5...6...7...8...9...10FinalLightFace Done
+0 of 0 (0% of) surface lights went in leaf ambient cubes.
+0...1...2...3...4...5...6...7...8...9...10Writing leaf ambient...done
+Ready to Finish
+
+Object names       Objects/Maxobjs  Memory / Maxmem  Fullness 
+------------       ---------------  ---------------  -------- 
+models                   1/1024           48/49152    ( 0.1%) 
+brushes                 17/8192          204/98304    ( 0.2%) 
+brushsides             114/65536         912/524288   ( 0.2%) 
+planes                 168/65536        3360/1310720  ( 0.3%) 
+vertexes              1143/65536       13716/786432   ( 1.7%) 
+nodes                  733/65536       23456/2097152  ( 1.1%) 
+texinfos                14/12288        1008/884736   ( 0.1%) 
+texdata                  4/2048          128/65536    ( 0.2%) 
+dispinfos                0/0               0/0        ( 0.0%) 
+disp_verts               0/0               0/0        ( 0.0%) 
+disp_tris                0/0               0/0        ( 0.0%) 
+disp_lmsamples           0/0               0/0        ( 0.0%) 
+faces                  977/65536       54712/3670016  ( 1.5%) 
+hdr faces                0/65536           0/3670016  ( 0.0%) 
+origfaces               58/65536        3248/3670016  ( 0.1%) 
+leaves                 735/65536       23520/2097152  ( 1.1%) 
+leaffaces             1020/65536        2040/131072   ( 1.6%) 
+leafbrushes            416/65536         832/131072   ( 0.6%) 
+areas                    2/256            16/2048     ( 0.8%) 
+surfedges             4442/512000      17768/2048000  ( 0.9%) 
+edges                 2262/256000       9048/1024000  ( 0.9%) 
+LDR worldlights          0/8192            0/720896   ( 0.0%) 
+HDR worldlights          0/8192            0/720896   ( 0.0%) 
+leafwaterdata            0/32768           0/393216   ( 0.0%) 
+waterstrips             53/32768         530/327680   ( 0.2%) 
+waterverts               0/65536           0/786432   ( 0.0%) 
+waterindices           654/65536        1308/131072   ( 1.0%) 
+cubemapsamples           0/1024            0/16384    ( 0.0%) 
+overlays                 0/512             0/180224   ( 0.0%) 
+LDR lightdata         [variable]      976968/0        ( 0.0%) 
+HDR lightdata         [variable]           0/0        ( 0.0%) 
+visdata               [variable]       20524/16777216 ( 0.1%) 
+entdata               [variable]         632/393216   ( 0.2%) 
+LDR ambient table      735/65536        2940/262144   ( 1.1%) 
+HDR ambient table      735/65536        2940/262144   ( 1.1%) 
+LDR leaf ambient       270/65536        7560/1835008  ( 0.4%) 
+HDR leaf ambient       735/65536       20580/1835008  ( 1.1%) 
+occluders                0/0               0/0        ( 0.0%) 
+occluder polygons        0/0               0/0        ( 0.0%) 
+occluder vert ind        0/0               0/0        ( 0.0%) 
+detail props          [variable]           1/12       ( 8.3%) 
+static props          [variable]           1/12       ( 8.3%) 
+pakfile               [variable]         389/0        ( 0.0%) 
+physics               [variable]        6629/4194304  ( 0.2%) 
+physics terrain       [variable]           2/1048576  ( 0.0%) 
+
+Level flags = 0
+
+Total triangle count: 2256
+Writing c:\dev\domc\maps\domc_test.bsp
+6 seconds elapsed
+
+
+
+materialPath: C:\Program Files (x86)\Steam\steamapps\common\Team Fortress 2\tf\materials
+Loading C:\dev\domc\maps\domc_test.vmf
+Patching WVT material: maps/domc_test/dev/dev_blendmeasure_wvt_patch
+fixing up env_cubemap materials on brush sides...
+0...1...2...3...4...5...6...7...8...9...100...1...2...3...4...5...6...7...8...9...10Processing areas...done (0)
+Building Faces...done (0)
+FixTjuncs...
+PruneNodes...
+WriteBSP...
+done (0)
+writing C:\dev\domc\maps\domc_test.prt...Building visibility clusters...
+done (0)
+*** Error: Skybox vtf files for skybox/sky_alpinestorm_01 weren't compiled with the same size texture and/or same flags!
+Can't load skybox file skybox/sky_alpinestorm_01 to build the default cubemap!
+*** Error: Skybox vtf files for skybox/sky_alpinestorm_01 weren't compiled with the same size texture and/or same flags!
+Can't load skybox file skybox/sky_alpinestorm_01 to build the default cubemap!
+Finding displacement neighbors...
+Finding lightmap sample positions...
+Displacement Alpha : 0...1...2...3...4...5...6...7...8...9...10
+Building Physics collision data...
+done (0) (6629 bytes)
+Placing detail props : 0...1...2...3...4...5...6...7...8...9...10
+Compacting texture/material tables...
+Reduced 27 texinfos to 14
+Reduced 5 texdatas to 4 (155 bytes to 134)
+Writing C:\dev\domc\maps\domc_test.bsp
+MSG_FILEWRITE - Filesystem was asked to write to 'C:\dev\domc\maps\domc_test.bsp', but we don't own that location. Allowing.
+Wrote ZIP buffer, estimated size 469, actual size 389
+0 seconds elapsed
+
+
+
+32 threads
+reading c:\dev\domc\maps\domc_test.bsp
+reading c:\dev\domc\maps\domc_test.prt
+ 270 portalclusters
+ 652 numportals
+0...1...2...3...4...5...6...7...8...9...10Optimized: 346 visible clusters (0.49%)
+Total clusters visible: 71198
+Average clusters visible: 263
+Building PAS...
+Average clusters audible: 270
+visdatasize:20524  compressed from 21600
+writing c:\dev\domc\maps\domc_test.bsp
+MSG_FILEWRITE - Filesystem was asked to write to 'c:\dev\domc\maps\domc_test.bsp', but we don't own that location. Allowing.
+0 seconds elapsed
+
+
+
+[Reading texlights from 'lights.rad']
+[56 texlights parsed from 'lights.rad']
+
+Loading c:\dev\domc\maps\domc_test.bsp
+977 faces
+2449828 square feet [352775296.00 square inches]
+0 Displacements
+0 Square Feet [0.00 Square Inches]
+977 patches before subdivision
+977 patches after subdivision
+0 direct lights
+0...1...2...3...4...5...6...7...8...9...100...1...2...3...4...5...6...7...8...9...10transfers 101583, max 313
+transfer lists:   0.8 megs
+0...1...2...3...4...5...6...7...8...9...10	Bounce #1 added RGB(0, 0, 0)
+Build Patch/Sample Hash Table(s).....Done<0.0073 sec>
+0...1...2...3...4...5...6...7...8...9...10FinalLightFace Done
+0 of 0 (0% of) surface lights went in leaf ambient cubes.
+0...1...2...3...4...5...6...7...8...9...10Writing leaf ambient...done
+Ready to Finish
+
+Object names       Objects/Maxobjs  Memory / Maxmem  Fullness 
+------------       ---------------  ---------------  -------- 
+models                   1/1024           48/49152    ( 0.1%) 
+brushes                 17/8192          204/98304    ( 0.2%) 
+brushsides             114/65536         912/524288   ( 0.2%) 
+planes                 168/65536        3360/1310720  ( 0.3%) 
+vertexes              1143/65536       13716/786432   ( 1.7%) 
+nodes                  733/65536       23456/2097152  ( 1.1%) 
+texinfos                14/12288        1008/884736   ( 0.1%) 
+texdata                  4/2048          128/65536    ( 0.2%) 
+dispinfos                0/0               0/0        ( 0.0%) 
+disp_verts               0/0               0/0        ( 0.0%) 
+disp_tris                0/0               0/0        ( 0.0%) 
+disp_lmsamples           0/0               0/0        ( 0.0%) 
+faces                  977/65536       54712/3670016  ( 1.5%) 
+hdr faces                0/65536           0/3670016  ( 0.0%) 
+origfaces               58/65536        3248/3670016  ( 0.1%) 
+leaves                 735/65536       23520/2097152  ( 1.1%) 
+leaffaces             1020/65536        2040/131072   ( 1.6%) 
+leafbrushes            416/65536         832/131072   ( 0.6%) 
+areas                    2/256            16/2048     ( 0.8%) 
+surfedges             4442/512000      17768/2048000  ( 0.9%) 
+edges                 2262/256000       9048/1024000  ( 0.9%) 
+LDR worldlights          0/8192            0/720896   ( 0.0%) 
+HDR worldlights          0/8192            0/720896   ( 0.0%) 
+leafwaterdata            0/32768           0/393216   ( 0.0%) 
+waterstrips             53/32768         530/327680   ( 0.2%) 
+waterverts               0/65536           0/786432   ( 0.0%) 
+waterindices           654/65536        1308/131072   ( 1.0%) 
+cubemapsamples           0/1024            0/16384    ( 0.0%) 
+overlays                 0/512             0/180224   ( 0.0%) 
+LDR lightdata         [variable]      976968/0        ( 0.0%) 
+HDR lightdata         [variable]           0/0        ( 0.0%) 
+visdata               [variable]       20524/16777216 ( 0.1%) 
+entdata               [variable]         769/393216   ( 0.2%) 
+LDR ambient table      735/65536        2940/262144   ( 1.1%) 
+HDR ambient table      735/65536        2940/262144   ( 1.1%) 
+LDR leaf ambient       270/65536        7560/1835008  ( 0.4%) 
+HDR leaf ambient       735/65536       20580/1835008  ( 1.1%) 
+occluders                0/0               0/0        ( 0.0%) 
+occluder polygons        0/0               0/0        ( 0.0%) 
+occluder vert ind        0/0               0/0        ( 0.0%) 
+detail props          [variable]           1/12       ( 8.3%) 
+static props          [variable]           1/12       ( 8.3%) 
+pakfile               [variable]         389/0        ( 0.0%) 
+physics               [variable]        6629/4194304  ( 0.2%) 
+physics terrain       [variable]           2/1048576  ( 0.0%) 
+
+Level flags = 0
+
+Total triangle count: 2256
+Writing c:\dev\domc\maps\domc_test.bsp
+6 seconds elapsed
+
+
+
+materialPath: C:\Program Files (x86)\Steam\steamapps\common\Team Fortress 2\tf\materials
+Loading C:\dev\domc\maps\domc_test.vmf
+Patching WVT material: maps/domc_test/dev/dev_blendmeasure_wvt_patch
+fixing up env_cubemap materials on brush sides...
+0...1...2...3...4...5...6...7...8...9...100...1...2...3...4...5...6...7...8...9...10Processing areas...done (0)
+Building Faces...done (0)
+FixTjuncs...
+PruneNodes...
+WriteBSP...
+done (0)
+writing C:\dev\domc\maps\domc_test.prt...Building visibility clusters...
+done (0)
+*** Error: Skybox vtf files for skybox/sky_alpinestorm_01 weren't compiled with the same size texture and/or same flags!
+Can't load skybox file skybox/sky_alpinestorm_01 to build the default cubemap!
+*** Error: Skybox vtf files for skybox/sky_alpinestorm_01 weren't compiled with the same size texture and/or same flags!
+Can't load skybox file skybox/sky_alpinestorm_01 to build the default cubemap!
+Finding displacement neighbors...
+Finding lightmap sample positions...
+Displacement Alpha : 0...1...2...3...4...5...6...7...8...9...10
+Building Physics collision data...
+done (0) (6629 bytes)
+Placing detail props : 0...1...2...3...4...5...6...7...8...9...10
+Compacting texture/material tables...
+Reduced 27 texinfos to 14
+Reduced 5 texdatas to 4 (155 bytes to 134)
+Writing C:\dev\domc\maps\domc_test.bsp
+MSG_FILEWRITE - Filesystem was asked to write to 'C:\dev\domc\maps\domc_test.bsp', but we don't own that location. Allowing.
+Wrote ZIP buffer, estimated size 469, actual size 389
+0 seconds elapsed
+
+
+
+32 threads
+reading c:\dev\domc\maps\domc_test.bsp
+reading c:\dev\domc\maps\domc_test.prt
+ 270 portalclusters
+ 652 numportals
+0...1...2...3...4...5...6...7...8...9...10Optimized: 346 visible clusters (0.49%)
+Total clusters visible: 71198
+Average clusters visible: 263
+Building PAS...
+Average clusters audible: 270
+visdatasize:20524  compressed from 21600
+writing c:\dev\domc\maps\domc_test.bsp
+MSG_FILEWRITE - Filesystem was asked to write to 'c:\dev\domc\maps\domc_test.bsp', but we don't own that location. Allowing.
+0 seconds elapsed
+
+
+
+[Reading texlights from 'lights.rad']
+[56 texlights parsed from 'lights.rad']
+
+Loading c:\dev\domc\maps\domc_test.bsp
+977 faces
+2449828 square feet [352775296.00 square inches]
+0 Displacements
+0 Square Feet [0.00 Square Inches]
+977 patches before subdivision
+977 patches after subdivision
+0 direct lights
+0...1...2...3...4...5...6...7...8...9...100...1...2...3...4...5...6...7...8...9...10transfers 101583, max 313
+transfer lists:   0.8 megs
+0...1...2...3...4...5...6...7...8...9...10	Bounce #1 added RGB(0, 0, 0)
+Build Patch/Sample Hash Table(s).....Done<0.0074 sec>
+0...1...2...3...4...5...6...7...8...9...10FinalLightFace Done
+0 of 0 (0% of) surface lights went in leaf ambient cubes.
+0...1...2...3...4...5...6...7...8...9...10Writing leaf ambient...done
+Ready to Finish
+
+Object names       Objects/Maxobjs  Memory / Maxmem  Fullness 
+------------       ---------------  ---------------  -------- 
+models                   1/1024           48/49152    ( 0.1%) 
+brushes                 17/8192          204/98304    ( 0.2%) 
+brushsides             114/65536         912/524288   ( 0.2%) 
+planes                 168/65536        3360/1310720  ( 0.3%) 
+vertexes              1143/65536       13716/786432   ( 1.7%) 
+nodes                  733/65536       23456/2097152  ( 1.1%) 
+texinfos                14/12288        1008/884736   ( 0.1%) 
+texdata                  4/2048          128/65536    ( 0.2%) 
+dispinfos                0/0               0/0        ( 0.0%) 
+disp_verts               0/0               0/0        ( 0.0%) 
+disp_tris                0/0               0/0        ( 0.0%) 
+disp_lmsamples           0/0               0/0        ( 0.0%) 
+faces                  977/65536       54712/3670016  ( 1.5%) 
+hdr faces                0/65536           0/3670016  ( 0.0%) 
+origfaces               58/65536        3248/3670016  ( 0.1%) 
+leaves                 735/65536       23520/2097152  ( 1.1%) 
+leaffaces             1020/65536        2040/131072   ( 1.6%) 
+leafbrushes            416/65536         832/131072   ( 0.6%) 
+areas                    2/256            16/2048     ( 0.8%) 
+surfedges             4442/512000      17768/2048000  ( 0.9%) 
+edges                 2262/256000       9048/1024000  ( 0.9%) 
+LDR worldlights          0/8192            0/720896   ( 0.0%) 
+HDR worldlights          0/8192            0/720896   ( 0.0%) 
+leafwaterdata            0/32768           0/393216   ( 0.0%) 
+waterstrips             53/32768         530/327680   ( 0.2%) 
+waterverts               0/65536           0/786432   ( 0.0%) 
+waterindices           654/65536        1308/131072   ( 1.0%) 
+cubemapsamples           0/1024            0/16384    ( 0.0%) 
+overlays                 0/512             0/180224   ( 0.0%) 
+LDR lightdata         [variable]      976968/0        ( 0.0%) 
+HDR lightdata         [variable]           0/0        ( 0.0%) 
+visdata               [variable]       20524/16777216 ( 0.1%) 
+entdata               [variable]         770/393216   ( 0.2%) 
+LDR ambient table      735/65536        2940/262144   ( 1.1%) 
+HDR ambient table      735/65536        2940/262144   ( 1.1%) 
+LDR leaf ambient       270/65536        7560/1835008  ( 0.4%) 
+HDR leaf ambient       735/65536       20580/1835008  ( 1.1%) 
+occluders                0/0               0/0        ( 0.0%) 
+occluder polygons        0/0               0/0        ( 0.0%) 
+occluder vert ind        0/0               0/0        ( 0.0%) 
+detail props          [variable]           1/12       ( 8.3%) 
+static props          [variable]           1/12       ( 8.3%) 
+pakfile               [variable]         389/0        ( 0.0%) 
+physics               [variable]        6629/4194304  ( 0.2%) 
+physics terrain       [variable]           2/1048576  ( 0.0%) 
+
+Level flags = 0
+
+Total triangle count: 2256
+Writing c:\dev\domc\maps\domc_test.bsp
+6 seconds elapsed
+
+
+
+materialPath: C:\Program Files (x86)\Steam\steamapps\common\Team Fortress 2\tf\materials
+Loading C:\dev\domc\maps\domc_test.vmf
+Patching WVT material: maps/domc_test/dev/dev_blendmeasure_wvt_patch
+fixing up env_cubemap materials on brush sides...
+0...1...2...3...4...5...6...7...8...9...100...1...2...3...4...5...6...7...8...9...10Processing areas...done (0)
+Building Faces...done (0)
+FixTjuncs...
+PruneNodes...
+WriteBSP...
+done (0)
+writing C:\dev\domc\maps\domc_test.prt...Building visibility clusters...
+done (0)
+*** Error: Skybox vtf files for skybox/sky_alpinestorm_01 weren't compiled with the same size texture and/or same flags!
+Can't load skybox file skybox/sky_alpinestorm_01 to build the default cubemap!
+*** Error: Skybox vtf files for skybox/sky_alpinestorm_01 weren't compiled with the same size texture and/or same flags!
+Can't load skybox file skybox/sky_alpinestorm_01 to build the default cubemap!
+Finding displacement neighbors...
+Finding lightmap sample positions...
+Displacement Alpha : 0...1...2...3...4...5...6...7...8...9...10
+Building Physics collision data...
+done (0) (6629 bytes)
+Placing detail props : 0...1...2...3...4...5...6...7...8...9...10
+Compacting texture/material tables...
+Reduced 27 texinfos to 14
+Reduced 5 texdatas to 4 (155 bytes to 134)
+Writing C:\dev\domc\maps\domc_test.bsp
+MSG_FILEWRITE - Filesystem was asked to write to 'C:\dev\domc\maps\domc_test.bsp', but we don't own that location. Allowing.
+Wrote ZIP buffer, estimated size 469, actual size 389
+0 seconds elapsed
+
+
+
+32 threads
+reading c:\dev\domc\maps\domc_test.bsp
+reading c:\dev\domc\maps\domc_test.prt
+ 270 portalclusters
+ 652 numportals
+0...1...2...3...4...5...6...7...8...9...10Optimized: 346 visible clusters (0.49%)
+Total clusters visible: 71198
+Average clusters visible: 263
+Building PAS...
+Average clusters audible: 270
+visdatasize:20524  compressed from 21600
+writing c:\dev\domc\maps\domc_test.bsp
+MSG_FILEWRITE - Filesystem was asked to write to 'c:\dev\domc\maps\domc_test.bsp', but we don't own that location. Allowing.
+0 seconds elapsed
+
+
+
+[Reading texlights from 'lights.rad']
+[56 texlights parsed from 'lights.rad']
+
+Loading c:\dev\domc\maps\domc_test.bsp
+977 faces
+2449828 square feet [352775296.00 square inches]
+0 Displacements
+0 Square Feet [0.00 Square Inches]
+977 patches before subdivision
+977 patches after subdivision
+0 direct lights
+0...1...2...3...4...5...6...7...8...9...100...1...2...3...4...5...6...7...8...9...10transfers 101583, max 313
+transfer lists:   0.8 megs
+0...1...2...3...4...5...6...7...8...9...10	Bounce #1 added RGB(0, 0, 0)
+Build Patch/Sample Hash Table(s).....Done<0.0074 sec>
+0...1...2...3...4...5...6...7...8...9...10FinalLightFace Done
+0 of 0 (0% of) surface lights went in leaf ambient cubes.
+0...1...2...3...4...5...6...7...8...9...10Writing leaf ambient...done
+Ready to Finish
+
+Object names       Objects/Maxobjs  Memory / Maxmem  Fullness 
+------------       ---------------  ---------------  -------- 
+models                   1/1024           48/49152    ( 0.1%) 
+brushes                 17/8192          204/98304    ( 0.2%) 
+brushsides             114/65536         912/524288   ( 0.2%) 
+planes                 168/65536        3360/1310720  ( 0.3%) 
+vertexes              1143/65536       13716/786432   ( 1.7%) 
+nodes                  733/65536       23456/2097152  ( 1.1%) 
+texinfos                14/12288        1008/884736   ( 0.1%) 
+texdata                  4/2048          128/65536    ( 0.2%) 
+dispinfos                0/0               0/0        ( 0.0%) 
+disp_verts               0/0               0/0        ( 0.0%) 
+disp_tris                0/0               0/0        ( 0.0%) 
+disp_lmsamples           0/0               0/0        ( 0.0%) 
+faces                  977/65536       54712/3670016  ( 1.5%) 
+hdr faces                0/65536           0/3670016  ( 0.0%) 
+origfaces               58/65536        3248/3670016  ( 0.1%) 
+leaves                 735/65536       23520/2097152  ( 1.1%) 
+leaffaces             1020/65536        2040/131072   ( 1.6%) 
+leafbrushes            416/65536         832/131072   ( 0.6%) 
+areas                    2/256            16/2048     ( 0.8%) 
+surfedges             4442/512000      17768/2048000  ( 0.9%) 
+edges                 2262/256000       9048/1024000  ( 0.9%) 
+LDR worldlights          0/8192            0/720896   ( 0.0%) 
+HDR worldlights          0/8192            0/720896   ( 0.0%) 
+leafwaterdata            0/32768           0/393216   ( 0.0%) 
+waterstrips             53/32768         530/327680   ( 0.2%) 
+waterverts               0/65536           0/786432   ( 0.0%) 
+waterindices           654/65536        1308/131072   ( 1.0%) 
+cubemapsamples           0/1024            0/16384    ( 0.0%) 
+overlays                 0/512             0/180224   ( 0.0%) 
+LDR lightdata         [variable]      976968/0        ( 0.0%) 
+HDR lightdata         [variable]           0/0        ( 0.0%) 
+visdata               [variable]       20524/16777216 ( 0.1%) 
+entdata               [variable]        2273/393216   ( 0.6%) 
+LDR ambient table      735/65536        2940/262144   ( 1.1%) 
+HDR ambient table      735/65536        2940/262144   ( 1.1%) 
+LDR leaf ambient       270/65536        7560/1835008  ( 0.4%) 
+HDR leaf ambient       735/65536       20580/1835008  ( 1.1%) 
+occluders                0/0               0/0        ( 0.0%) 
+occluder polygons        0/0               0/0        ( 0.0%) 
+occluder vert ind        0/0               0/0        ( 0.0%) 
+detail props          [variable]           1/12       ( 8.3%) 
+static props          [variable]           1/12       ( 8.3%) 
+pakfile               [variable]         389/0        ( 0.0%) 
+physics               [variable]        6629/4194304  ( 0.2%) 
+physics terrain       [variable]           2/1048576  ( 0.0%) 
+
+Level flags = 0
+
+Total triangle count: 2256
+Writing c:\dev\domc\maps\domc_test.bsp
+6 seconds elapsed

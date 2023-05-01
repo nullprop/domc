@@ -74,6 +74,39 @@ class GamemodeDomc
         {
             spawner.OnRoundStart();
         }
+
+        foreach(tower in this.towers)
+        {
+            tower.Kill();
+        }
+        this.towers = [];
+
+        local target = null;
+        while(target = Entities.FindByClassname(target, "info_target"))
+        {
+            local parts = split(target.GetName(), "_");
+            if (parts.len() <= 0)
+            {
+                continue;
+            }
+
+            if (parts[0] == "tower")
+            {
+                local teamName = parts[1];
+                local team = 0;
+                local tier = parts[2].tointeger();
+                local laneIndex = parts[3].tointeger();
+                if (teamName == "red")
+                {
+                    team = Constants.ETFTeam.TF_TEAM_RED;
+                }
+                else
+                {
+                    team = Constants.ETFTeam.TF_TEAM_BLUE;
+                }
+                this.AddTower(team, tier, laneIndex, target.GetOrigin(), target.GetAbsAngles());
+            }
+        }
     }
 
     function AddPlayer(userid)
@@ -117,10 +150,10 @@ class GamemodeDomc
         delete this.players[userid];
     }
 
-    function AddTower(tier, team, laneIndex, pos, ang)
+    function AddTower(team, tier, laneIndex, pos, ang)
     {
-        Log(format("AddTower %d, %d, %d", tier, team, laneIndex));
-        local tower = Tower(tier, team, laneIndex, pos, ang);
+        Log(format("AddTower %d, %d, %d", team, tier, laneIndex));
+        local tower = Tower(team, tier, laneIndex, pos, ang);
         this.towers.append(tower);
     }
 
@@ -425,14 +458,14 @@ else
     }
 }
 
-::TestTower <- function(tier, team, laneIndex)
+::TestTower <- function(team, tier, laneIndex)
 {
     if ("gamemode_domc" in getroottable())
     {
         local ply = GetListenServerHost();
         ::gamemode_domc.AddTower(
-            tier,
             team,
+            tier,
             laneIndex,
             ply.EyePosition() + ply.GetForwardVector()*256,
             ply.GetAbsAngles()
