@@ -104,6 +104,11 @@ class Bot
     xpAward = BOT_XP_AWARD_BASE;
 
     constructor(type, team, lane, pos, ang){
+        if (team != Constants.ETFTeam.TF_TEAM_RED && team != Constants.ETFTeam.TF_TEAM_BLUE)
+        {
+            error(format"Invalid bot team %d", team);
+        }
+
         this.lane = lane;
         this.botType = type;
         this.botTypeName = TF_BOT_TYPE_NAME[type];

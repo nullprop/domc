@@ -8,6 +8,11 @@ class Fountain
 
     constructor(team, pos, ang)
     {
+        if (team != Constants.ETFTeam.TF_TEAM_RED && team != Constants.ETFTeam.TF_TEAM_BLUE)
+        {
+            error(format"Invalid fountain team %d", team);
+        }
+
         this.team = team;
 
         local skin = 1;

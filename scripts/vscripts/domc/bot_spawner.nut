@@ -14,6 +14,11 @@ class BotSpawner
 
     constructor(team, botType, lane, pos, ang)
     {
+        if (team != Constants.ETFTeam.TF_TEAM_RED && team != Constants.ETFTeam.TF_TEAM_BLUE)
+        {
+            error(format"Invalid spawner team %d", team);
+        }
+
         this.team = team;
         this.botType = botType;
         this.lane = lane;
