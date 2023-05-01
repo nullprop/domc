@@ -1,0 +1,39 @@
+
+
+
+materialPath: C:\Program Files (x86)\Steam\steamapps\common\Team Fortress 2\tf\materials
+Loading C:\dev\domc\maps\domc_test.vmf
+fixing up env_cubemap materials on brush sides...
+0...1...2...3...4...5...6...7...8...9...10**** leaked ****
+Processing areas...done (0)
+Building Faces...done (0)
+FixTjuncs...
+PruneNodes...
+WriteBSP...
+done (0)
+Creating default LDR cubemaps for env_cubemap using skybox materials:
+   skybox/sky_day01_01*.vmt
+ ! Run buildcubemaps in the engine to get the correct cube maps.
+Creating default HDR cubemaps for env_cubemap using skybox materials:
+   skybox/sky_day01_01*.vmt
+ ! Run buildcubemaps in the engine to get the correct cube maps.
+Finding displacement neighbors...
+Finding lightmap sample positions...
+Displacement Alpha : 0...1...2...3...4...5...6...7...8...9...10
+Building Physics collision data...
+done (0) (2288 bytes)
+Placing detail props : 0...1...2...3...4...5...6...7...8...9...10
+Compacting texture/material tables...
+Reduced 3 texinfos to 1
+Reduced 1 texdatas to 1 (20 bytes to 20)
+Writing C:\dev\domc\maps\domc_test.bsp
+MSG_FILEWRITE - Filesystem was asked to write to 'C:\dev\domc\maps\domc_test.bsp', but we don't own that location. Allowing.
+Wrote ZIP buffer, estimated size 105881, actual size 105667
+0 seconds elapsed
+
+
+
+32 threads
+reading c:\dev\domc\maps\domc_test.bsp
+reading c:\dev\domc\maps\domc_test.prt
+LoadPortals: couldn't read c:\dev\domc\maps\domc_test.prt
