@@ -3,15 +3,15 @@ DoIncludeScript("domc/util.nut", null);
 TOWER_SETTINGS <-
 [
 	{
-		"health": 12000,
+		"health": 6000,
 		"damage": 10.0,
 	},
     {
-		"health": 20000,
+		"health": 10000,
 		"damage": 20.0,
 	},
     {
-		"health": 25000,
+		"health": 15000,
 		"damage": 30.0,
 	}
 ];
@@ -26,6 +26,11 @@ class Tower
 
     constructor(tier, team, laneIndex, pos, ang)
     {
+        if (team != Constants.ETFTeam.TF_TEAM_RED && team != Constants.ETFTeam.TF_TEAM_BLUE)
+        {
+            error(format"Invalid tower team %d", team);
+        }
+
         this.towerSettings = TOWER_SETTINGS[tier];
         this.tier = tier;
         this.laneIndex = laneIndex;
