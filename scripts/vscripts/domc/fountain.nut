@@ -32,7 +32,8 @@ class Fountain
                 angles = ang,
                 defaultupgrade = 2,
                 SolidToPlayer = 1,
-                touch_trigger = triggerName
+                touch_trigger = triggerName,
+                health = 10000,
             }
         );
 

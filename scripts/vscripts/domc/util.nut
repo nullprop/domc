@@ -236,3 +236,16 @@ GetOppositeTeam <- function(team)
 
     return Constants.ETFTeam.TEAM_INVALID;
 }
+
+TeamNameToEnum <- function(teamName)
+{
+    if (teamName == "red")
+    {
+        return Constants.ETFTeam.TF_TEAM_RED;
+    }
+    else if (teamName == "blu")
+    {
+        return Constants.ETFTeam.TF_TEAM_BLUE;
+    }
+    return Constants.ETFTeam.TEAM_INVALID;
+}

@@ -80,18 +80,9 @@ class GamemodeDomc
 
             if (parts[0] == "tower")
             {
-                local teamName = parts[1];
-                local team = 0;
+                local team = TeamNameToEnum(parts[1]);
                 local tier = parts[2].tointeger();
                 local laneIndex = parts[3].tointeger();
-                if (teamName == "red")
-                {
-                    team = Constants.ETFTeam.TF_TEAM_RED;
-                }
-                else
-                {
-                    team = Constants.ETFTeam.TF_TEAM_BLUE;
-                }
                 this.towers.append(Tower(team, tier, laneIndex, target.GetOrigin(), target.GetAbsAngles()));
             }
 
@@ -108,18 +99,9 @@ class GamemodeDomc
 
             if (parts[0] == "spawner")
             {
-                local teamName = parts[1];
-                local team = 0;
+                local team = TeamNameToEnum(parts[1]);
                 local type = parts[2].tointeger();
                 local laneIndex = parts[3].tointeger();
-                if (teamName == "red")
-                {
-                    team = Constants.ETFTeam.TF_TEAM_RED;
-                }
-                else
-                {
-                    team = Constants.ETFTeam.TF_TEAM_BLUE;
-                }
                 this.spawners.append(
                     BotSpawner(
                         team,
@@ -129,6 +111,12 @@ class GamemodeDomc
                         target.GetAbsAngles()
                     )
                 );
+            }
+
+            if (parts[0] == "fountain")
+            {
+                local team = TeamNameToEnum(parts[1]);
+                this.fountains.append(Fountain(team, target.GetOrigin(), target.GetAbsAngles()));
             }
         }
 
@@ -192,13 +180,6 @@ class GamemodeDomc
         }
 
         delete this.players[userid];
-    }
-
-    function AddFountain(team, pos, ang)
-    {
-        Log(format("AddFountain %d", team));
-        local fountain = Fountain(team, pos, ang);
-        this.fountains.append(fountain);
     }
 
     function DebugDrawLanes(duration)
@@ -377,11 +358,16 @@ function OnScriptHook_OnTakeDamage(params)
         return;
     }
 
-    // Can't damage fountains
-    if (::gamemode_domc.GetFountain(ent))
+    local fountain = ::gamemode_domc.GetFountain(ent);
+    if (fountain)
     {
-        params.damage = 0;
-        return;
+        // todo
+    }
+
+    local targetTower = ::gamemode_domc.GetTower(ent);
+    if (targetTower)
+    {
+        // todo
     }
 
     // Apply proper tower dmg
@@ -466,19 +452,6 @@ else
             type,
             team,
             ::gamemode_domc.lanes[laneIndex],
-            ply.EyePosition() + ply.GetForwardVector()*256,
-            ply.GetAbsAngles()
-        );
-    }
-}
-
-::TestFountain <- function(team)
-{
-    if ("gamemode_domc" in getroottable())
-    {
-        local ply = GetListenServerHost();
-        ::gamemode_domc.AddFountain(
-            team,
             ply.EyePosition() + ply.GetForwardVector()*256,
             ply.GetAbsAngles()
         );
