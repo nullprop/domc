@@ -3,7 +3,7 @@ DoIncludeScript("domc/util.nut", null);
 TOWER_SETTINGS <-
 [
 	{
-		"health": 6000,
+		"health": 5000,
 		"damage": 10.0,
 	},
     {
@@ -62,8 +62,8 @@ class Tower
         EntFireByHandle(this.sentryEnt, "SetHealth", "" + this.towerSettings["health"], 0.0, null, null);
 
         // prevent upgrades
-        NetProps.SetPropInt(this.sentryEnt, "m_iUpgradeLevel", tier);
-        NetProps.SetPropInt(this.sentryEnt, "m_iHighestUpgradeLevel", tier);
+        NetProps.SetPropInt(this.sentryEnt, "m_iUpgradeLevel", tier + 1);
+        NetProps.SetPropInt(this.sentryEnt, "m_iHighestUpgradeLevel", tier + 1);
 
         // prevent repair
         NetProps.SetPropBool(this.sentryEnt, "m_bDisposableBuilding", true);
