@@ -2,7 +2,7 @@ versioninfo
 {
 	"editorversion" "400"
 	"editorbuild" "8864"
-	"mapversion" "27"
+	"mapversion" "42"
 	"formatversion" "100"
 	"prefab" "0"
 }
@@ -72,7 +72,7 @@ bgimages_plus
 world
 {
 	"id" "1"
-	"mapversion" "27"
+	"mapversion" "42"
 	"classname" "worldspawn"
 	"detailmaterial" "detail/detailsprites"
 	"detailvbsp" "detail.vbsp"
@@ -2290,6 +2290,854 @@ entity
 		"visgroupshown" "1"
 		"visgroupautoshown" "1"
 		"logicalpos" "[0 8500]"
+	}
+}
+entity
+{
+	"id" "241"
+	"classname" "info_target"
+	"angles" "0 -90 0"
+	"spawnflags" "0"
+	"targetname" "tower_red_1_2"
+	"origin" "1152 1472 64"
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 8500]"
+	}
+}
+entity
+{
+	"id" "245"
+	"classname" "info_target"
+	"angles" "0 -90 0"
+	"spawnflags" "0"
+	"targetname" "tower_red_1_1"
+	"origin" "-256 1472 64"
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 8500]"
+	}
+}
+entity
+{
+	"id" "249"
+	"classname" "info_target"
+	"angles" "0 -90 0"
+	"spawnflags" "0"
+	"targetname" "tower_red_1_0"
+	"origin" "-1408 1472 64"
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 8500]"
+	}
+}
+entity
+{
+	"id" "256"
+	"classname" "info_target"
+	"angles" "0 0 0"
+	"spawnflags" "0"
+	"targetname" "lane_0_0"
+	"origin" "-736 2080 65"
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 9000]"
+	}
+}
+entity
+{
+	"id" "267"
+	"classname" "info_target"
+	"angles" "0 0 0"
+	"spawnflags" "0"
+	"targetname" "lane_0_1"
+	"origin" "-1408 1280 65"
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 9000]"
+	}
+}
+entity
+{
+	"id" "275"
+	"classname" "info_target"
+	"angles" "0 0 0"
+	"spawnflags" "0"
+	"targetname" "lane_0_2"
+	"origin" "-3136 -256 65"
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 9000]"
+	}
+}
+entity
+{
+	"id" "279"
+	"classname" "info_target"
+	"angles" "0 0 0"
+	"spawnflags" "0"
+	"targetname" "lane_0_3"
+	"origin" "-3136 -1856 65"
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 9000]"
+	}
+}
+entity
+{
+	"id" "283"
+	"classname" "info_target"
+	"angles" "0 0 0"
+	"spawnflags" "0"
+	"targetname" "lane_0_4"
+	"origin" "-1600 -3328 65"
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 9000]"
+	}
+}
+entity
+{
+	"id" "288"
+	"classname" "info_target"
+	"angles" "0 0 0"
+	"spawnflags" "0"
+	"targetname" "lane_0_5"
+	"origin" "-512 -4224 65"
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 9000]"
+	}
+}
+entity
+{
+	"id" "294"
+	"classname" "info_target"
+	"angles" "0 0 0"
+	"spawnflags" "0"
+	"targetname" "lane_1_0"
+	"origin" "-256 2080 65"
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 9000]"
+	}
+}
+entity
+{
+	"id" "298"
+	"classname" "info_target"
+	"angles" "0 0 0"
+	"spawnflags" "0"
+	"targetname" "lane_2_0"
+	"origin" "192 2080 65"
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 9000]"
+	}
+}
+entity
+{
+	"id" "302"
+	"classname" "info_target"
+	"angles" "0 0 0"
+	"spawnflags" "0"
+	"targetname" "lane_1_1"
+	"origin" "-256 1280 65"
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 9000]"
+	}
+}
+entity
+{
+	"id" "308"
+	"classname" "info_target"
+	"angles" "0 0 0"
+	"spawnflags" "0"
+	"targetname" "lane_1_2"
+	"origin" "-256 -384 65"
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 9000]"
+	}
+}
+entity
+{
+	"id" "312"
+	"classname" "info_target"
+	"angles" "0 0 0"
+	"spawnflags" "0"
+	"targetname" "lane_1_3"
+	"origin" "-256 -1600 65"
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 9000]"
+	}
+}
+entity
+{
+	"id" "319"
+	"classname" "info_target"
+	"angles" "0 0 0"
+	"spawnflags" "0"
+	"targetname" "lane_1_4"
+	"origin" "-256 -3264 65"
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 9000]"
+	}
+}
+entity
+{
+	"id" "323"
+	"classname" "info_target"
+	"angles" "0 0 0"
+	"spawnflags" "0"
+	"targetname" "lane_1_5"
+	"origin" "-256 -4224 65"
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 9000]"
+	}
+}
+entity
+{
+	"id" "327"
+	"classname" "info_target"
+	"angles" "0 0 0"
+	"spawnflags" "0"
+	"targetname" "lane_2_5"
+	"origin" "0 -4224 65"
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 9000]"
+	}
+}
+entity
+{
+	"id" "331"
+	"classname" "info_target"
+	"angles" "0 0 0"
+	"spawnflags" "0"
+	"targetname" "lane_2_4"
+	"origin" "1088 -3264 65"
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 9000]"
+	}
+}
+entity
+{
+	"id" "335"
+	"classname" "info_target"
+	"angles" "0 0 0"
+	"spawnflags" "0"
+	"targetname" "lane_2_3"
+	"origin" "2624 -1664 65"
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 9000]"
+	}
+}
+entity
+{
+	"id" "339"
+	"classname" "info_target"
+	"angles" "0 0 0"
+	"spawnflags" "0"
+	"targetname" "lane_2_2"
+	"origin" "2688 -64 65"
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 9000]"
+	}
+}
+entity
+{
+	"id" "344"
+	"classname" "info_target"
+	"angles" "0 0 0"
+	"spawnflags" "0"
+	"targetname" "lane_2_1"
+	"origin" "1152 1344 65"
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 9000]"
+	}
+}
+entity
+{
+	"id" "351"
+	"classname" "info_target"
+	"angles" "0 270 0"
+	"spawnflags" "0"
+	"targetname" "spawner_red_0_0"
+	"origin" "-896 1920 65"
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 9500]"
+	}
+}
+entity
+{
+	"id" "496"
+	"classname" "info_target"
+	"angles" "0 270 0"
+	"spawnflags" "0"
+	"targetname" "spawner_blue_0_2"
+	"origin" "192 -4032 65"
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 9500]"
+	}
+}
+entity
+{
+	"id" "361"
+	"classname" "info_target"
+	"angles" "0 270 0"
+	"spawnflags" "0"
+	"targetname" "spawner_red_0_0"
+	"origin" "-960 1920 65"
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 9500]"
+	}
+}
+entity
+{
+	"id" "369"
+	"classname" "info_target"
+	"angles" "0 270 0"
+	"spawnflags" "0"
+	"targetname" "spawner_red_1_0"
+	"origin" "-832 1984 65"
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 9500]"
+	}
+}
+entity
+{
+	"id" "365"
+	"classname" "info_target"
+	"angles" "0 270 0"
+	"spawnflags" "0"
+	"targetname" "spawner_red_1_0"
+	"origin" "-896 1984 65"
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 9500]"
+	}
+}
+entity
+{
+	"id" "373"
+	"classname" "info_target"
+	"angles" "0 270 0"
+	"spawnflags" "0"
+	"targetname" "spawner_red_0_0"
+	"origin" "-1024 1920 65"
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 9500]"
+	}
+}
+entity
+{
+	"id" "534"
+	"classname" "info_target"
+	"angles" "0 -90 0"
+	"spawnflags" "0"
+	"targetname" "tower_red_2_0"
+	"origin" "-256 2496 64"
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 8500]"
+	}
+}
+entity
+{
+	"id" "377"
+	"classname" "info_target"
+	"angles" "0 270 0"
+	"spawnflags" "0"
+	"targetname" "spawner_blue_1_0"
+	"origin" "-640 -4096 65"
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 9500]"
+	}
+}
+entity
+{
+	"id" "379"
+	"classname" "info_target"
+	"angles" "0 270 0"
+	"spawnflags" "0"
+	"targetname" "spawner_blue_1_0"
+	"origin" "-704 -4096 65"
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 9500]"
+	}
+}
+entity
+{
+	"id" "381"
+	"classname" "info_target"
+	"angles" "0 270 0"
+	"spawnflags" "0"
+	"targetname" "spawner_blue_0_0"
+	"origin" "-704 -4032 65"
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 9500]"
+	}
+}
+entity
+{
+	"id" "383"
+	"classname" "info_target"
+	"angles" "0 270 0"
+	"spawnflags" "0"
+	"targetname" "spawner_blue_0_0"
+	"origin" "-768 -4032 65"
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 9500]"
+	}
+}
+entity
+{
+	"id" "385"
+	"classname" "info_target"
+	"angles" "0 270 0"
+	"spawnflags" "0"
+	"targetname" "spawner_blue_0_0"
+	"origin" "-832 -4032 65"
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 9500]"
+	}
+}
+entity
+{
+	"id" "418"
+	"classname" "info_target"
+	"angles" "0 270 0"
+	"spawnflags" "0"
+	"targetname" "spawner_red_0_1"
+	"origin" "-192 1920 65"
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 9500]"
+	}
+}
+entity
+{
+	"id" "420"
+	"classname" "info_target"
+	"angles" "0 270 0"
+	"spawnflags" "0"
+	"targetname" "spawner_red_0_1"
+	"origin" "-256 1920 65"
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 9500]"
+	}
+}
+entity
+{
+	"id" "422"
+	"classname" "info_target"
+	"angles" "0 270 0"
+	"spawnflags" "0"
+	"targetname" "spawner_red_0_1"
+	"origin" "-320 1920 65"
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 9500]"
+	}
+}
+entity
+{
+	"id" "498"
+	"classname" "info_target"
+	"angles" "0 270 0"
+	"spawnflags" "0"
+	"targetname" "spawner_blue_0_2"
+	"origin" "128 -4032 65"
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 9500]"
+	}
+}
+entity
+{
+	"id" "426"
+	"classname" "info_target"
+	"angles" "0 270 0"
+	"spawnflags" "0"
+	"targetname" "spawner_red_1_1"
+	"origin" "-192 1984 65"
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 9500]"
+	}
+}
+entity
+{
+	"id" "428"
+	"classname" "info_target"
+	"angles" "0 270 0"
+	"spawnflags" "0"
+	"targetname" "spawner_red_1_1"
+	"origin" "-256 1984 65"
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 9500]"
+	}
+}
+entity
+{
+	"id" "447"
+	"classname" "info_target"
+	"angles" "0 270 0"
+	"spawnflags" "0"
+	"targetname" "spawner_red_0_2"
+	"origin" "448 1920 65"
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 9500]"
+	}
+}
+entity
+{
+	"id" "449"
+	"classname" "info_target"
+	"angles" "0 270 0"
+	"spawnflags" "0"
+	"targetname" "spawner_red_0_2"
+	"origin" "384 1920 65"
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 9500]"
+	}
+}
+entity
+{
+	"id" "451"
+	"classname" "info_target"
+	"angles" "0 270 0"
+	"spawnflags" "0"
+	"targetname" "spawner_red_0_2"
+	"origin" "320 1920 65"
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 9500]"
+	}
+}
+entity
+{
+	"id" "500"
+	"classname" "info_target"
+	"angles" "0 270 0"
+	"spawnflags" "0"
+	"targetname" "spawner_blue_0_2"
+	"origin" "64 -4032 65"
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 9500]"
+	}
+}
+entity
+{
+	"id" "455"
+	"classname" "info_target"
+	"angles" "0 270 0"
+	"spawnflags" "0"
+	"targetname" "spawner_red_1_2"
+	"origin" "320 1984 65"
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 9500]"
+	}
+}
+entity
+{
+	"id" "457"
+	"classname" "info_target"
+	"angles" "0 270 0"
+	"spawnflags" "0"
+	"targetname" "spawner_red_1_2"
+	"origin" "256 1984 65"
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 9500]"
+	}
+}
+entity
+{
+	"id" "480"
+	"classname" "info_target"
+	"angles" "0 270 0"
+	"spawnflags" "0"
+	"targetname" "spawner_blue_1_1"
+	"origin" "-192 -4096 65"
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 9500]"
+	}
+}
+entity
+{
+	"id" "482"
+	"classname" "info_target"
+	"angles" "0 270 0"
+	"spawnflags" "0"
+	"targetname" "spawner_blue_1_1"
+	"origin" "-256 -4096 65"
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 9500]"
+	}
+}
+entity
+{
+	"id" "484"
+	"classname" "info_target"
+	"angles" "0 270 0"
+	"spawnflags" "0"
+	"targetname" "spawner_blue_0_1"
+	"origin" "-192 -4032 65"
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 9500]"
+	}
+}
+entity
+{
+	"id" "486"
+	"classname" "info_target"
+	"angles" "0 270 0"
+	"spawnflags" "0"
+	"targetname" "spawner_blue_0_1"
+	"origin" "-256 -4032 65"
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 9500]"
+	}
+}
+entity
+{
+	"id" "488"
+	"classname" "info_target"
+	"angles" "0 270 0"
+	"spawnflags" "0"
+	"targetname" "spawner_blue_0_1"
+	"origin" "-320 -4032 65"
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 9500]"
+	}
+}
+entity
+{
+	"id" "540"
+	"classname" "info_target"
+	"angles" "0 90 0"
+	"spawnflags" "0"
+	"targetname" "tower_blue_2_0"
+	"origin" "-256 -4416 64"
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 8500]"
+	}
+}
+entity
+{
+	"id" "492"
+	"classname" "info_target"
+	"angles" "0 270 0"
+	"spawnflags" "0"
+	"targetname" "spawner_blue_1_2"
+	"origin" "64 -4096 65"
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 9500]"
+	}
+}
+entity
+{
+	"id" "494"
+	"classname" "info_target"
+	"angles" "0 270 0"
+	"spawnflags" "0"
+	"targetname" "spawner_blue_1_2"
+	"origin" "0 -4096 65"
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 9500]"
 	}
 }
 cameras

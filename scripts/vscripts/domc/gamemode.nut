@@ -24,7 +24,7 @@ PrecacheModel("models/items/currencypack_small.mdl");
 PrecacheModel("models/items/currencypack_medium.mdl");
 PrecacheModel("models/items/currencypack_large.mdl");
 
-const XP_AWARD_RADIUS = 768.0;
+const XP_AWARD_RADIUS = 1024.0;
 
 class GamemodeDomc
 {
@@ -41,10 +41,6 @@ class GamemodeDomc
         while(ply = Entities.FindByClassname(ply, "player"))
         {
             this.players[ply.entindex()] <- Player(ply);
-        }
-        for (local i = 0; i < 3; i++)
-        {
-            this.lanes.append(Lane());
         }
     }
 
@@ -65,21 +61,13 @@ class GamemodeDomc
     {
         Log("round start");
 
-        foreach(ply in this.players)
-        {
-            ply.OnRoundStart();
-        }
-
-        foreach(spawner in this.spawners)
-        {
-            spawner.OnRoundStart();
-        }
-
         foreach(tower in this.towers)
         {
             tower.Kill();
         }
         this.towers = [];
+        this.spawners = [];
+        this.lanes = [];
 
         local target = null;
         while(target = Entities.FindByClassname(target, "info_target"))
@@ -104,8 +92,64 @@ class GamemodeDomc
                 {
                     team = Constants.ETFTeam.TF_TEAM_BLUE;
                 }
-                this.AddTower(team, tier, laneIndex, target.GetOrigin(), target.GetAbsAngles());
+                this.towers.append(Tower(team, tier, laneIndex, target.GetOrigin(), target.GetAbsAngles()));
             }
+
+            if (parts[0] == "lane")
+            {
+                local laneIndex = parts[1].tointeger();
+                local nodeIndex = parts[2].tointeger();
+                while (laneIndex >= this.lanes.len())
+                {
+                    this.lanes.append(Lane());
+                }
+                this.lanes[laneIndex].AddNode(nodeIndex, target.GetOrigin());
+            }
+
+            if (parts[0] == "spawner")
+            {
+                local teamName = parts[1];
+                local team = 0;
+                local type = parts[2].tointeger();
+                local laneIndex = parts[3].tointeger();
+                if (teamName == "red")
+                {
+                    team = Constants.ETFTeam.TF_TEAM_RED;
+                }
+                else
+                {
+                    team = Constants.ETFTeam.TF_TEAM_BLUE;
+                }
+                this.spawners.append(
+                    BotSpawner(
+                        team,
+                        type,
+                        laneIndex,
+                        target.GetOrigin(),
+                        target.GetAbsAngles()
+                    )
+                );
+            }
+        }
+
+        foreach(lane in this.lanes)
+        {
+            lane.Finalize();
+        }
+
+        foreach(spawner in this.spawners)
+        {
+            spawner.lane = this.lanes[spawner.laneIndex];
+        }
+
+        foreach(ply in this.players)
+        {
+            ply.OnRoundStart();
+        }
+
+        foreach(spawner in this.spawners)
+        {
+            spawner.OnRoundStart();
         }
     }
 
@@ -150,24 +194,11 @@ class GamemodeDomc
         delete this.players[userid];
     }
 
-    function AddTower(team, tier, laneIndex, pos, ang)
-    {
-        Log(format("AddTower %d, %d, %d", team, tier, laneIndex));
-        local tower = Tower(team, tier, laneIndex, pos, ang);
-        this.towers.append(tower);
-    }
-
     function AddFountain(team, pos, ang)
     {
         Log(format("AddFountain %d", team));
         local fountain = Fountain(team, pos, ang);
         this.fountains.append(fountain);
-    }
-
-    function AddNodeToLane(laneIndex, pos)
-    {
-        Log(format("AddNodeToLane %d %s", laneIndex, pos.tostring()));
-        this.lanes[laneIndex].AddNode(pos);
     }
 
     function DebugDrawLanes(duration)
@@ -441,38 +472,6 @@ else
     }
 }
 
-::TestSpawner <- function(type, team, laneIndex)
-{
-    if ("gamemode_domc" in getroottable())
-    {
-        local ply = GetListenServerHost();
-        local spawner = BotSpawner(
-            team,
-            type,
-            ::gamemode_domc.lanes[laneIndex],
-            ply.EyePosition() + ply.GetForwardVector()*256,
-            ply.GetAbsAngles()
-        );
-        ::gamemode_domc.spawners.append(spawner);
-        spawner.OnRoundStart();
-    }
-}
-
-::TestTower <- function(team, tier, laneIndex)
-{
-    if ("gamemode_domc" in getroottable())
-    {
-        local ply = GetListenServerHost();
-        ::gamemode_domc.AddTower(
-            team,
-            tier,
-            laneIndex,
-            ply.EyePosition() + ply.GetForwardVector()*256,
-            ply.GetAbsAngles()
-        );
-    }
-}
-
 ::TestFountain <- function(team)
 {
     if ("gamemode_domc" in getroottable())
@@ -495,12 +494,6 @@ else
             player.OnGainXP(amount);
         }
     }
-}
-
-::AddLaneNode <- function(laneIndex)
-{
-    local ply = GetListenServerHost();
-    ::gamemode_domc.AddNodeToLane(laneIndex, ply.GetOrigin());
 }
 
 ::DebugDrawLanes <- function()

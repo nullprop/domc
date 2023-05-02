@@ -23,17 +23,25 @@ class Lane
 
     constructor()
     {
-
+        this.nodes = [];
+        this.lines = [];
     }
 
-    function AddNode(pos)
+    function AddNode(index, pos)
     {
-        local node = pos;
-        if (this.nodes.len() > 0)
+        if (index >= this.nodes.len())
         {
-            this.lines.append(Line(this.nodes[this.nodes.len() - 1], node));
+            this.nodes.resize(index + 1, Vector(0, 0, 0));
         }
-        this.nodes.append(node);
+        this.nodes[index] = pos;
+    }
+
+    function Finalize()
+    {
+        for (local i = 1; i < this.nodes.len(); i++)
+        {
+            this.lines.append(Line(this.nodes[i - 1], this.nodes[i]));
+        }
     }
 
     function GetNearestPoint(pos)
