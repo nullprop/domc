@@ -1,5 +1,6 @@
-todo:
-- money attracted towards nearby players
+fix:
+- t3 sentry rockets do no dmg
+
 
 player progression:
 - buy mvm upgrades with money?
@@ -11,6 +12,7 @@ misc:
 - fix bots attacking spectator camera if player dead (on red or blu team)
 
 money:
+- money attracted towards nearby players
 - item_currencypack_custom
 - dropped money is colored by team
 - each team can only pick up their own money
