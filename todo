@@ -26,12 +26,6 @@ bot:
   - if no movement in x secs while there should be,
     pick a random nearby nav spot as target
 
-hammer:
-- entity for lane nodes
-- entity for bot spawn point
-  - bot type, team, lane index
-- entity for sentries
-
 ideas:
 - intel = aegis of the immortal
 - siege unit = demoman in cart
