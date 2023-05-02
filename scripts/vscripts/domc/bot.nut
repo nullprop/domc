@@ -5,7 +5,7 @@ const PATH_INTERVAL = 1.0;
 const TARGET_INTERVAL = 3.0;
 const PATH_MARGIN = 64.0;
 const STEP_HEIGHT = 24.0;
-const BOT_XP_AWARD_BASE = 50.0;
+const BOT_XP_AWARD_BASE = 100.0;
 
 BOT_SETTINGS <-
 {
