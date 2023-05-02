@@ -38,7 +38,7 @@ BOT_SETTINGS <-
 		"damage": 12.0,
         "damage_type": Constants.FDmgType.DMG_BULLET,
         "attack_interval": 1.5,
-		"attack_range": 232.0,
+		"attack_range": 450.0,
 		"aggro_range": 512.0,
 		"class": Constants.ETFClass.TF_CLASS_SNIPER,
 		"model": "models/bots/sniper/bot_sniper.mdl",
@@ -59,7 +59,7 @@ BOT_SETTINGS <-
         "damage_radius": 128.0,
         "projectile_vel": 600.0, // horizontal
         "attack_interval": 4.0,
-		"attack_range": 450.0,
+		"attack_range": 480.0,
 		"aggro_range": 512.0,
 		"class": Constants.ETFClass.TF_CLASS_DEMOMAN,
 		"model": "models/bots/demo_boss/bot_demo_boss.mdl",
