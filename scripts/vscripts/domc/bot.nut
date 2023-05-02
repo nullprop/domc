@@ -30,7 +30,7 @@ BOT_SETTINGS <-
             "AttackStand_MELEE_L"
         ],
 		"weapon": null,
-		"move_speed": 110
+		"move_speed": 120
 	},
 	"ranged":
 	{
@@ -50,7 +50,7 @@ BOT_SETTINGS <-
 		"model_anim_attack": ["AttackStand_PRIMARY"],
 		"weapon": "tf_weapon_sniperrifle",
         "weapon_model": "models/weapons/w_models/w_sniperrifle.mdl",
-		"move_speed": 100
+		"move_speed": 110
 	},
 	"siege":
 	{
@@ -71,7 +71,7 @@ BOT_SETTINGS <-
 		"model_anim_attack": ["AttackStand_PRIMARY"],
 		"weapon": "tf_weapon_grenadelauncher",
         "weapon_model": "models/weapons/w_models/w_grenadelauncher.mdl",
-		"move_speed": 90
+		"move_speed": 110
 	}
 }
 
