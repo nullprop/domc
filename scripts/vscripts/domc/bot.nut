@@ -12,7 +12,7 @@ BOT_SETTINGS <-
 	"melee":
 	{
 		"health": 300,
-		"damage": 8.0,
+		"damage": 15.0,
         "damage_type": Constants.FDmgType.DMG_CLUB,
         "attack_interval": 1.0,
 		"attack_range": 96.0,
@@ -30,12 +30,12 @@ BOT_SETTINGS <-
             "AttackStand_MELEE_L"
         ],
 		"weapon": null,
-		"move_speed": 120
+		"move_speed": 150
 	},
 	"ranged":
 	{
 		"health": 150,
-		"damage": 12.0,
+		"damage": 20.0,
         "damage_type": Constants.FDmgType.DMG_BULLET,
         "attack_interval": 1.5,
 		"attack_range": 450.0,
@@ -50,15 +50,15 @@ BOT_SETTINGS <-
 		"model_anim_attack": ["AttackStand_PRIMARY"],
 		"weapon": "tf_weapon_sniperrifle",
         "weapon_model": "models/weapons/w_models/w_sniperrifle.mdl",
-		"move_speed": 110
+		"move_speed": 145
 	},
 	"siege":
 	{
 		"health": 500,
-		"damage": 50.0,
+		"damage": 60.0,
         "damage_radius": 128.0,
         "projectile_vel": 600.0, // horizontal
-        "attack_interval": 4.0,
+        "attack_interval": 3.0,
 		"attack_range": 480.0,
 		"aggro_range": 512.0,
 		"class": Constants.ETFClass.TF_CLASS_DEMOMAN,
@@ -71,7 +71,7 @@ BOT_SETTINGS <-
 		"model_anim_attack": ["AttackStand_PRIMARY"],
 		"weapon": "tf_weapon_grenadelauncher",
         "weapon_model": "models/weapons/w_models/w_grenadelauncher.mdl",
-		"move_speed": 110
+		"move_speed": 145
 	}
 }
 
@@ -323,6 +323,7 @@ class Bot
             NetProps.SetPropVector(nade, "m_vInitialVelocity", startVel);
             // TODO m_flFullDamage for direct hits
             // https://github.com/ValveSoftware/Source-1-Games/issues/4481#issuecomment-1344759066
+            // maybe use stickies instead?
             NetProps.SetPropFloat(nade, "m_flDamage", this.botSettings["damage"]);
             NetProps.SetPropFloat(nade, "m_DmgRadius", this.botSettings["damage_radius"]);
             NetProps.SetPropBool(nade, "m_bCritical", false);

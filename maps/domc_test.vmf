@@ -2,7 +2,7 @@ versioninfo
 {
 	"editorversion" "400"
 	"editorbuild" "8864"
-	"mapversion" "129"
+	"mapversion" "131"
 	"formatversion" "100"
 	"prefab" "0"
 }
@@ -72,7 +72,7 @@ bgimages_plus
 world
 {
 	"id" "1"
-	"mapversion" "129"
+	"mapversion" "131"
 	"classname" "worldspawn"
 	"detailmaterial" "detail/detailsprites"
 	"detailvbsp" "detail.vbsp"
@@ -14100,7 +14100,7 @@ entity
 	"angles" "0 270 0"
 	"spawnflags" "0"
 	"targetname" "spawner_red_1_2"
-	"origin" "256 1984 65"
+	"origin" "384 1984 65"
 	editor
 	{
 		"color" "220 30 220"
@@ -14148,7 +14148,7 @@ entity
 	"angles" "0 270 0"
 	"spawnflags" "0"
 	"targetname" "spawner_blu_1_2"
-	"origin" "0 -4096 65"
+	"origin" "128 -4096 65"
 	editor
 	{
 		"color" "220 30 220"
@@ -14825,7 +14825,7 @@ entity
 	"angles" "0 270 0"
 	"spawnflags" "0"
 	"targetname" "spawner_red_1_0"
-	"origin" "-832 1984 65"
+	"origin" "-960 1984 65"
 	editor
 	{
 		"color" "220 30 220"
@@ -14889,7 +14889,7 @@ entity
 	"angles" "0 270 0"
 	"spawnflags" "0"
 	"targetname" "spawner_blu_1_0"
-	"origin" "-640 -4096 65"
+	"origin" "-768 -4096 65"
 	editor
 	{
 		"color" "220 30 220"
@@ -16753,6 +16753,102 @@ entity
 		"logicalpos" "[0 15000]"
 	}
 }
+entity
+{
+	"id" "2321"
+	"classname" "info_target"
+	"angles" "0 270 0"
+	"spawnflags" "0"
+	"targetname" "spawner_blu_2_1"
+	"origin" "-320 -4096 65"
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 9500]"
+	}
+}
+entity
+{
+	"id" "2328"
+	"classname" "info_target"
+	"angles" "0 270 0"
+	"spawnflags" "0"
+	"targetname" "spawner_blu_2_0"
+	"origin" "-640 -4096 65"
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 9500]"
+	}
+}
+entity
+{
+	"id" "2335"
+	"classname" "info_target"
+	"angles" "0 270 0"
+	"spawnflags" "0"
+	"targetname" "spawner_blu_2_2"
+	"origin" "-0.000175476 -4096 65"
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 9500]"
+	}
+}
+entity
+{
+	"id" "2340"
+	"classname" "info_target"
+	"angles" "0 270 0"
+	"spawnflags" "0"
+	"targetname" "spawner_red_2_2"
+	"origin" "256 1984 65"
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 9500]"
+	}
+}
+entity
+{
+	"id" "2344"
+	"classname" "info_target"
+	"angles" "0 270 0"
+	"spawnflags" "0"
+	"targetname" "spawner_red_2_1"
+	"origin" "-320 1984 65"
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 9500]"
+	}
+}
+entity
+{
+	"id" "2349"
+	"classname" "info_target"
+	"angles" "0 270 0"
+	"spawnflags" "0"
+	"targetname" "spawner_red_2_0"
+	"origin" "-832 1984 65"
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 9500]"
+	}
+}
 cameras
 {
 	"activecamera" "1"
@@ -16763,8 +16859,8 @@ cameras
 	}
 	camera
 	{
-		"position" "[-401.256 -1523.22 386.091]"
-		"look" "[-359.165 -1325.28 481.319]"
+		"position" "[-969.47 1789.43 219.572]"
+		"look" "[-973.301 1973.04 91.9304]"
 	}
 }
 cordons

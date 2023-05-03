@@ -1,6 +1,7 @@
 DoIncludeScript("domc/bot.nut", null);
 
-const BOT_SPAWN_INTERVAL = 45.0;
+const BOT_SPAWN_INTERVAL = 30.0;
+const BOT_SIEGE_INTERVAL = 3;
 
 class BotSpawner
 {
@@ -12,6 +13,7 @@ class BotSpawner
     ang = null;
     lastSpawnTime = 0.0;
     active = false;
+    wave = 0;
 
     constructor(team, botType, laneIndex, pos, ang)
     {
@@ -49,6 +51,11 @@ class BotSpawner
     function SpawnBot()
     {
         this.lastSpawnTime = Time();
+        this.wave++;
+        if (this.botType == TF_BOT_TYPE["SIEGE"] && this.wave % BOT_SIEGE_INTERVAL != 0)
+        {
+            return;
+        }
         local bot = Bot(this.botType, this.team, this.lane, this.pos, this.ang);
         ::gamemode_domc.bots.append(bot);
     }
