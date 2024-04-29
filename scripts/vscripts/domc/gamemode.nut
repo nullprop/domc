@@ -270,6 +270,17 @@ class GamemodeDomc
         ));
     }
 
+    function RemoveBot(bot)
+    {
+        for (local i = this.bots.len() - 1; i >= 0; i--)
+        {
+            if (this.bots[i] == bot)
+            {
+                this.bots.remove(i);
+            }
+        }
+    }
+
     function AwardXP(team, amount, pos)
     {
         local inRange = [];
@@ -358,18 +369,6 @@ function OnScriptHook_OnTakeDamage(params)
         return;
     }
 
-    local fountain = ::gamemode_domc.GetFountain(ent);
-    if (fountain)
-    {
-        // todo
-    }
-
-    local targetTower = ::gamemode_domc.GetTower(ent);
-    if (targetTower)
-    {
-        // todo
-    }
-
     // Apply proper tower dmg
     if (infClassname == "obj_sentrygun")
     {
@@ -398,11 +397,22 @@ function OnScriptHook_OnTakeDamage(params)
             if (dead)
             {
                 ::gamemode_domc.AwardXP(GetOppositeTeam(bot.team), bot.xpAward, bot.GetPos());
+                ::gamemode_domc.RemoveBot(bot);
             }
         }
     }
 
-    // TODO player dmg taken reduction
+    local fountain = ::gamemode_domc.GetFountain(ent);
+    if (fountain)
+    {
+        // todo gg
+    }
+
+    local targetTower = ::gamemode_domc.GetTower(ent);
+    if (targetTower)
+    {
+        // todo backdoor protection
+    }
 }
 
 // --------------------------------
