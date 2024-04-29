@@ -2,6 +2,8 @@ bugs:
 - t3 sentry rockets do no dmg
 - direct hit bot pipes do no dmg
 - bots attack spectator camera if player dead (on red or blu team)
+- bots don't attack fountain
+- bot hitboxes don't get scaled with the model, at least for rockets
 
 map:
 - killtrigger if falling off
