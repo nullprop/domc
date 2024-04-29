@@ -4,15 +4,15 @@ TOWER_SETTINGS <-
 [
 	{
 		"health": 5000,
-		"damage": 10.0,
+		"damage": 15.0,
 	},
     {
-		"health": 7500,
+		"health": 5500,
+		"damage": 15.0,
+	},
+    {
+		"health": 6000,
 		"damage": 20.0,
-	},
-    {
-		"health": 10000,
-		"damage": 30.0,
 	}
 ];
 

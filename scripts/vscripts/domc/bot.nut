@@ -11,7 +11,7 @@ BOT_SETTINGS <-
 {
 	"melee":
 	{
-		"health": 300,
+		"health": 350,
 		"damage": 15.0,
         "damage_type": Constants.FDmgType.DMG_CLUB,
         "attack_interval": 1.0,
@@ -34,7 +34,7 @@ BOT_SETTINGS <-
 	},
 	"ranged":
 	{
-		"health": 150,
+		"health": 200,
 		"damage": 20.0,
         "damage_type": Constants.FDmgType.DMG_BULLET,
         "attack_interval": 1.5,
@@ -54,7 +54,7 @@ BOT_SETTINGS <-
 	},
 	"siege":
 	{
-		"health": 500,
+		"health": 600,
 		"damage": 60.0,
         "damage_radius": 128.0,
         "projectile_vel": 600.0, // horizontal

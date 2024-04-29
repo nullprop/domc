@@ -1,5 +1,7 @@
 DoIncludeScript("domc/util.nut", null);
 
+const FOUNTAIN_HEALTH = 2000;
+
 class Fountain
 {
     triggerEnt = null;
@@ -33,7 +35,7 @@ class Fountain
                 defaultupgrade = 2,
                 SolidToPlayer = 1,
                 touch_trigger = triggerName,
-                health = 10000,
+                health = FOUNTAIN_HEALTH,
             }
         );
 
@@ -42,8 +44,8 @@ class Fountain
         this.dispenserEnt.SetModelScale(3.0, 0.0);
 
         // buildings do weird stuff with health
-        NetProps.SetPropInt(this.dispenserEnt, "m_iMaxHealth", 100000);
-        EntFireByHandle(this.dispenserEnt, "SetHealth", "" + 100000, 0.0, null, null);
+        NetProps.SetPropInt(this.dispenserEnt, "m_iMaxHealth", FOUNTAIN_HEALTH);
+        EntFireByHandle(this.dispenserEnt, "SetHealth", "" + FOUNTAIN_HEALTH, 0.0, null, null);
 
         // prevent upgrades
         NetProps.SetPropInt(this.dispenserEnt, "m_iUpgradeLevel", 2);
