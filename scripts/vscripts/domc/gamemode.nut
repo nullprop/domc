@@ -327,9 +327,23 @@ class GamemodeDomc
         }
     }
 
-    function TeamWin(team)
+    function TeamLose(team)
     {
-        // todo
+        local winningTeam = GetOppositeTeam(team);
+        // Should these just be in the .bsp? ¯\_(-_-)_/¯
+        local winEnt = SpawnEntityFromTable(
+            "game_round_win",
+            {
+                targetname = format("game_round_win_%d", winningTeam),
+                origin = Vector(0, 0, 0),
+                angles = Vector(0, 0, 0),
+                switch_teams = true,
+                force_map_reset = true,
+                TeamNum = winningTeam
+            }
+        );
+        EntFireByHandle(winEnt, "RoundWin", "", 0, null, null);
+        winEnt.Kill();
     }
 }
 
@@ -357,15 +371,9 @@ function OnGameEvent_player_death(data)
     }
 }
 
-function OnGameEvent_teamplay_round_start(data)
+function OnGameEvent_teamplay_round_active(data)
 {
     ::gamemode_domc.OnRoundStart();
-}
-
-function OnGameEvent_teamplay_round_waiting_ends(data)
-{
-    // TODO: start spawning bots
-    Log("teamplay_round_waiting_ends");
 }
 
 // --------------------------------
@@ -425,7 +433,10 @@ function OnScriptHook_OnTakeDamage(params)
     local fountain = ::gamemode_domc.GetFountain(ent);
     if (fountain)
     {
-        // todo gg
+        if (fountain.OnTakeDamage(params))
+        {
+            ::gamemode_domc.TeamLose(fountain.GetTeam());
+        }
     }
 
     local targetTower = ::gamemode_domc.GetTower(ent);

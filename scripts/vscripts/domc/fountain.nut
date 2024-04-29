@@ -64,6 +64,16 @@ class Fountain
         AddThinkToEnt(this.dispenserEnt, "FountainThink");
     }
 
+    function OnTakeDamage(params)
+    {
+        if (params.damage >= this.dispenserEnt.GetHealth())
+        {
+            return true;
+        }
+
+        return false;
+    }
+
     function Update()
     {
 
@@ -72,6 +82,11 @@ class Fountain
     function GetEnt()
     {
         return this.dispenserEnt;
+    }
+
+    function GetTeam()
+    {
+        return this.team;
     }
 
     function Kill()
