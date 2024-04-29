@@ -57,17 +57,30 @@ class GamemodeDomc
         }
     }
 
-    function OnRoundStart()
+    function Reset()
     {
-        Log("round start");
-
+        foreach(ply in this.players)
+        {
+            ply.Reset();
+        }
+        foreach(bot in this.bots)
+        {
+            bot.Kill();
+        }
         foreach(tower in this.towers)
         {
             tower.Kill();
         }
+        foreach(fountain in this.fountains)
+        {
+            fountain.Kill();
+        }
+        this.bots = [];
         this.towers = [];
+        this.fountains = [];
         this.spawners = [];
         this.lanes = [];
+        CollectGarbage();
 
         local target = null;
         while(target = Entities.FindByClassname(target, "info_target"))
@@ -129,11 +142,13 @@ class GamemodeDomc
         {
             spawner.lane = this.lanes[spawner.laneIndex];
         }
+    }
 
-        foreach(ply in this.players)
-        {
-            ply.OnRoundStart();
-        }
+    function OnRoundStart()
+    {
+        Log("round start");
+
+        Reset();
 
         foreach(spawner in this.spawners)
         {
@@ -311,6 +326,11 @@ class GamemodeDomc
             player.OnGainXP(splitAmount);
         }
     }
+
+    function TeamWin(team)
+    {
+        // todo
+    }
 }
 
 // --------------------------------
@@ -443,10 +463,6 @@ if (!("gamemode_domc" in getroottable()))
         thinker.GetScriptScope()["Think"] <- Think;
         AddThinkToEnt(thinker, "Think");
     }
-}
-else
-{
-    ::gamemode_domc.OnRoundStart();
 }
 
 // --------------------------------

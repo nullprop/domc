@@ -107,7 +107,7 @@ class Tower
 
     function Kill()
     {
-        if (IsValid(this.sentryEnt))
+        if (IsValidAndAlive(this.sentryEnt))
         {
             this.sentryEnt.Kill();
         }

@@ -1,33 +1,15 @@
-fix:
+bugs:
 - t3 sentry rockets do no dmg
+- direct hit bot pipes do no dmg
+- bots attack spectator camera if player dead (on red or blu team)
 
+map:
+- killtrigger if falling off
 
-player progression:
-- buy mvm upgrades with money?
-
-misc:
-- towers drop money
-- show enemy tower, bot healthbars
-- add sentry to fountain
-- fix bots attacking spectator camera if player dead (on red or blu team)
-
-money:
-- money attracted towards nearby players
-- item_currencypack_custom
-- dropped money is colored by team
-- each team can only pick up their own money
-- must get close to mobs to get dosh
-- other team can deny you reaching it / do damage
-- everyone is ranged in tf2, can't really punish people trying to last hit
-- mobs only drop money if last hitted?
-  - maybe not relevant? money is only gained if picked up
-  - last hitting is not the goal
+buildings:
+- backdoor protection
 
 bot:
 - bot unstuck
   - if no movement in x secs while there should be,
     pick a random nearby nav spot as target
-
-ideas:
-- intel = aegis of the immortal
-- siege unit = demoman in cart

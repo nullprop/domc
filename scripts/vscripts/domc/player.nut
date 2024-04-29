@@ -132,9 +132,11 @@ class Player
         this.playerEnt.SetHealth((hpFraction * this.playerEnt.GetMaxHealth()).tointeger());
     }
 
-    function OnRoundStart()
+    function Reset()
     {
-
+        this.level = 1;
+        this.xp = 0.0;
+        this.storedRegen = 0.0;
     }
 
     function OnSpawn()

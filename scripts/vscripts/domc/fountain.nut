@@ -73,6 +73,14 @@ class Fountain
     {
         return this.dispenserEnt;
     }
+
+    function Kill()
+    {
+        if (IsValidAndAlive(this.dispenserEnt))
+        {
+            this.dispenserEnt.Kill();
+        }
+    }
 }
 
 function FountainThink()

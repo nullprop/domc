@@ -595,6 +595,14 @@ class Bot
     {
         return this.botEnt.GetOrigin();
     }
+
+    function Kill()
+    {
+        if (IsValidAndAlive(this.botEnt))
+        {
+            this.botEnt.Kill();
+        }
+    }
 }
 
 function BotThink()
