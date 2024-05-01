@@ -415,6 +415,11 @@ class Bot
                 "ent": null,
                 "dist": FLT_BIG
             },
+            "obj_dispenser":
+            {
+                "ent": null,
+                "dist": FLT_BIG
+            },
             "player":
             {
                 "ent": null,
