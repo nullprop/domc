@@ -137,6 +137,8 @@ class Player
         this.level = 1;
         this.xp = 0.0;
         this.storedRegen = 0.0;
+        UpdateXPAward();
+        ApplyClassSettings();
     }
 
     function OnSpawn()
