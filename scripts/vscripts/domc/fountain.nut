@@ -7,6 +7,8 @@ class Fountain
     triggerEnt = null;
     dispenserEnt = null;
     team = null;
+    protected = false;
+    protectedFx = null;
 
     constructor(team, pos, ang)
     {
@@ -66,6 +68,12 @@ class Fountain
 
     function OnTakeDamage(params)
     {
+        if (this.protected)
+        {
+            params.damage = 0;
+            return false;
+        }
+
         if (params.damage >= this.dispenserEnt.GetHealth())
         {
             return true;
@@ -94,6 +102,38 @@ class Fountain
         if (IsValidAndAlive(this.dispenserEnt))
         {
             this.dispenserEnt.Kill();
+        }
+        if (this.protectedFx != null)
+        {
+            this.protectedFx.Kill();
+            this.protectedFx = null;
+        }
+    }
+
+    function SetProtected(value)
+    {
+        if (this.protected == value)
+        {
+            return;
+        }
+
+        this.protected = value;
+
+        if (value)
+        {
+            this.protectedFx = SpawnEntityFromTable("info_particle_system",
+            {
+                // TODO: use a different particle, this one is not all that visible
+                effect_name = format("teleporter_%s_entrance", TF_TEAM_NAMES_PARTICLES[this.team]),
+                targetname = format("fountain_fx_%s", TF_TEAM_NAMES[team]),
+                origin = this.dispenserEnt.GetOrigin(),
+                start_active = true
+            });
+        }
+        else if (this.protectedFx != null)
+        {
+            this.protectedFx.Kill();
+            this.protectedFx = null;
         }
     }
 }

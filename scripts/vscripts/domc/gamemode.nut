@@ -142,6 +142,19 @@ class GamemodeDomc
         {
             spawner.lane = this.lanes[spawner.laneIndex];
         }
+
+        foreach(tower in this.towers)
+        {
+            if (tower.tier != 0)
+            {
+                tower.SetProtected(true);
+            }
+        }
+
+        foreach(fountain in this.fountains)
+        {
+            fountain.SetProtected(true);
+        }
     }
 
     function OnRoundStart()
@@ -345,6 +358,48 @@ class GamemodeDomc
         EntFireByHandle(winEnt, "RoundWin", "", 0, null, null);
         winEnt.Kill();
     }
+
+    function TowerDestroyed(tower)
+    {
+        if (tower.tier == 2)
+        {
+            foreach(fountain in this.fountains)
+            {
+                if (fountain.team == tower.team)
+                {
+                    fountain.SetProtected(false);
+                    break;
+                }
+            }
+        }
+        else
+        {
+            foreach(t in this.towers)
+            {
+                local protectionDestroyed = false;
+                if (tower.team == t.team)
+                {
+                    if (tower.tier == 1 && t.tier == 2)
+                    {
+                        protectionDestroyed = true;
+                    }
+                    else if (
+                        tower.tier == 0
+                        && t.tier == 1
+                        && tower.laneIndex == t.laneIndex
+                    )
+                    {
+                        protectionDestroyed = true;
+                    }
+                }
+                if (protectionDestroyed) 
+                {
+                    t.SetProtected(false);
+                    break;
+                }
+            }
+        }
+    }
 }
 
 // --------------------------------
@@ -442,7 +497,10 @@ function OnScriptHook_OnTakeDamage(params)
     local targetTower = ::gamemode_domc.GetTower(ent);
     if (targetTower)
     {
-        // todo backdoor protection
+        if (targetTower.OnTakeDamage(params))
+        {
+            ::gamemode_domc.TowerDestroyed(targetTower);
+        }
     }
 }
 

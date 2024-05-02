@@ -23,6 +23,8 @@ class Tower
     tier = null;
     laneIndex = null;
     team = null;
+    protected = false;
+    protectedFx = null;
 
     constructor(team, tier, laneIndex, pos, ang)
     {
@@ -105,11 +107,59 @@ class Tower
         return this.sentryEnt;
     }
 
+    function OnTakeDamage(params)
+    {
+        if (this.protected)
+        {
+            params.damage = 0;
+            return false;
+        }
+
+        if (params.damage >= this.sentryEnt.GetHealth())
+        {
+            return true;
+        }
+
+        return false;
+    }
+
     function Kill()
     {
         if (IsValidAndAlive(this.sentryEnt))
         {
             this.sentryEnt.Kill();
+        }
+        if (this.protectedFx != null)
+        {
+            this.protectedFx.Kill();
+            this.protectedFx = null;
+        }
+    }
+
+    function SetProtected(value)
+    {
+        if (this.protected == value)
+        {
+            return;
+        }
+
+        this.protected = value;
+
+        if (value)
+        {
+            this.protectedFx = SpawnEntityFromTable("info_particle_system",
+            {
+                // TODO: use a different particle, this one is not all that visible
+                effect_name = format("teleporter_%s_entrance", TF_TEAM_NAMES_PARTICLES[this.team]),
+                targetname = format("tower_fx_%s_%d_%d", TF_TEAM_NAMES[this.team], this.tier, this.laneIndex),
+                origin = this.sentryEnt.GetOrigin(),
+                start_active = true
+            });
+        }
+        else if (this.protectedFx != null)
+        {
+            this.protectedFx.Kill();
+            this.protectedFx = null;
         }
     }
 }

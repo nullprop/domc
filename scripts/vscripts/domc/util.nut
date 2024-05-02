@@ -29,6 +29,14 @@ TF_TEAM_NAMES <-
     "blu"
 ]
 
+TF_TEAM_NAMES_PARTICLES <-
+[
+    "",
+    "",
+    "red",
+    "blue"
+]
+
 TF_BOT_TYPE <-
 {
     "MELEE": 0,
