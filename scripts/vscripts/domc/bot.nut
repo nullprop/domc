@@ -237,24 +237,32 @@ class Bot
             local myPos = this.botEnt.GetOrigin();
             local attackVec = targetOrigin - myPos;
             local inRange = attackVec.Length() <= this.botSettings["attack_range"];
+            local hasLOS = this.HasLOS(
+                myPos + Vector(0, 0, 48),
+                targetOrigin + Vector(0, 0, 48),
+                this.targetEnt
+            );
 
-            if (inRange)
+            if (hasLOS)
             {
-                local frontTowardEnemy = Vector(attackVec.x, attackVec.y, 0.0);
-                this.botEnt.SetForwardVector(frontTowardEnemy);
-
-                if (this.CanAttack(myPos))
+                if (inRange)
                 {
-                    this.Attack(myPos, attackVec);
+                    local frontTowardEnemy = Vector(attackVec.x, attackVec.y, 0.0);
+                    this.botEnt.SetForwardVector(frontTowardEnemy);
+
+                    if (this.CanAttack())
+                    {
+                        this.Attack(myPos, attackVec);
+                    }
+                    else
+                    {
+                        this.Idle();
+                    }
                 }
                 else
                 {
-                    this.Idle();
+                    this.Move(targetOrigin);
                 }
-            }
-            else if (this.HasLOS(myPos + Vector(0, 0, 48), targetOrigin + Vector(0, 0, 48), this.targetEnt))
-            {
-                this.Move(targetOrigin);
             }
             else
             {
@@ -300,19 +308,14 @@ class Bot
         return false;
     }
 
-    function CanAttack(myPos)
+    function CanAttack()
     {
         if (Time() - this.lastAttackTime < this.botSettings["attack_interval"])
         {
             return false;
         }
 
-        if (this.HasLOS(myPos + Vector(0, 0, 48), this.targetEnt.GetOrigin() + Vector(0, 0, 48), this.targetEnt))
-        {
-            return true;
-        }
-
-        return false;
+        return true;
     }
 
     function Attack(myPos, attackVec)
