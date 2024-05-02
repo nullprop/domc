@@ -118,7 +118,7 @@ class Bot
         this.uname = UniqueString();
 
         // Spawn on navmesh
-        local navArea = NavMesh.GetNavArea(pos, 512.0);
+        local navArea = NavMesh.GetNavArea(pos, 64.0);
         if (navArea)
         {
             pos = navArea.FindRandomSpot();
@@ -189,9 +189,31 @@ class Bot
         if (this.locomotion.IsStuck())
         {
             local stuckTime = this.locomotion.GetStuckDuration();
-            Log(format("bot %s stuck for %f at %s", this.uname, stuckTime, this.botEnt.GetOrigin().tostring()));
-            if (stuckTime > 10.0)
+
+            if (stuckTime > 1.0)
             {
+                local origin = this.botEnt.GetOrigin();
+                // FIXME, this doesn't ever seem to find anything...
+                local navArea = NavMesh.GetNearestNavArea(origin + Vector(0, 0, 64), 256, false, true);
+                if (navArea)
+                {
+                    local newPos = navArea.FindRandomSpot();
+                    Log(format(
+                        "bot %s stuck at %s, teleporting to %s",
+                        this.uname,
+                        origin.tostring(),
+                        newPos
+                    ));
+                    this.locomotion.DriveTo(newPos);
+                    this.locomotion.ClearStuckStatus("force unstuck");
+                    return;
+                }
+
+                Log(format(
+                    "bot %s stuck at %s, killing",
+                    this.uname,
+                    origin.tostring()
+                ));
                 this.botEnt.Kill();
                 return;
             }
@@ -377,7 +399,7 @@ class Bot
 
     function Move(targetPos)
     {
-        this.locomotion.Approach(targetPos, 0.1);
+        this.locomotion.Approach(targetPos, 1.0);
         this.locomotion.FaceTowards(targetPos);
 
         this.botEnt.SetForwardVector(this.locomotion.GetGroundMotionVector());
