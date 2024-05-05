@@ -29,7 +29,7 @@ BOT_SETTINGS <-
             "AttackStand_MELEE_R",
             "AttackStand_MELEE_L"
         ],
-		"weapon": null,
+        "weapon_model": null,
 		"move_speed": 150
 	},
 	"ranged":
@@ -38,7 +38,7 @@ BOT_SETTINGS <-
 		"damage": 20.0,
         "damage_type": Constants.FDmgType.DMG_BULLET,
         "attack_interval": 1.5,
-		"attack_range": 450.0,
+		"attack_range": 400.0,
 		"aggro_range": 512.0,
 		"class": Constants.ETFClass.TF_CLASS_SNIPER,
 		"model": "models/bots/sniper/bot_sniper.mdl",
@@ -48,15 +48,15 @@ BOT_SETTINGS <-
 		"model_anim_idle": "Stand_PRIMARY",
 		"model_anim_move": "Run_PRIMARY",
 		"model_anim_attack": ["AttackStand_PRIMARY"],
-		"weapon": "tf_weapon_sniperrifle",
         "weapon_model": "models/weapons/w_models/w_sniperrifle.mdl",
 		"move_speed": 145
 	},
 	"siege":
 	{
 		"health": 600,
-		"damage": 60.0,
-        "damage_radius": 128.0,
+		"damage": 80.0,
+        "damage_type": Constants.FDmgType.DMG_BLAST,
+        "damage_radius": 192.0,
         "projectile_vel": 600.0, // horizontal
         "attack_interval": 3.0,
 		"attack_range": 480.0,
@@ -69,7 +69,6 @@ BOT_SETTINGS <-
 		"model_anim_idle": "Stand_PRIMARY",
 		"model_anim_move": "Run_PRIMARY",
 		"model_anim_attack": ["AttackStand_PRIMARY"],
-		"weapon": "tf_weapon_grenadelauncher",
         "weapon_model": "models/weapons/w_models/w_grenadelauncher.mdl",
 		"move_speed": 145
 	}
@@ -88,7 +87,7 @@ class Bot
     team = null;
     teamName = null;
     botSettings = null;
-    weaponEnt = null;
+    weaponModel = null;
 
     uname = null;
 
@@ -160,20 +159,31 @@ class Bot
         this.botEnt.GetScriptScope().my_bot <- this;
         AddThinkToEnt(this.botEnt, "BotThink");
 
-        if (this.botSettings["weapon"])
+        if (this.botSettings["weapon_model"])
         {
-            this.weaponEnt = Entities.CreateByClassname("prop_dynamic");
-            this.weaponEnt.SetTeam(team);
-            this.weaponEnt.SetAbsOrigin(pos + Vector(0, 0, 40.0 * this.botSettings["model_scale"]));
-            this.weaponEnt.SetSolidFlags(Constants.FSolid.FSOLID_NOT_SOLID);
-            this.weaponEnt.SetCollisionGroup(Constants.ECollisionGroup.COLLISION_GROUP_NONE);
-            this.weaponEnt.SetModelSimple(this.botSettings["weapon_model"]);
-            this.weaponEnt.SetModelScale(this.botSettings["model_scale"], 0.0);
-            this.weaponEnt.DispatchSpawn();
+            this.weaponModel = Entities.CreateByClassname("prop_dynamic");
+            this.weaponModel.SetTeam(team);
+            this.weaponModel.SetOwner(this.botEnt);
+            this.weaponModel.SetSolidFlags(Constants.FSolid.FSOLID_NOT_SOLID);
+            this.weaponModel.SetCollisionGroup(Constants.ECollisionGroup.COLLISION_GROUP_NONE);
+            this.weaponModel.SetModelSimple(this.botSettings["weapon_model"]);
+            this.weaponModel.SetModelScale(this.botSettings["model_scale"], 0.0);
+            this.weaponModel.DispatchSpawn();
 
-            EntFireByHandle(this.weaponEnt, "SetParent", "bot_" + this.uname, 0.1, null, null);
-            // TODO: lookup attachment name in HLMV
-            // EntFireByHandle(this.weaponEnt, "SetParentAttachment", "weapon_bone", 0.2, null, null);
+            EntFireByHandle(this.weaponModel, "SetParent", "bot_" + this.uname, 0.1, null, null);
+
+            // FIXME: doesn't seem to work
+            local bone = this.botEnt.LookupBone("weapon_bone");
+            if (bone >= 0)
+            {
+                this.weaponModel.SetAbsOrigin(this.botEnt.GetBoneOrigin(bone));
+                this.weaponModel.SetAbsAngles(this.botEnt.GetBoneAngles(bone));
+            }
+            else
+            {
+                this.weaponModel.SetAbsOrigin(pos + Vector(0, 0, 40.0 * this.botSettings["model_scale"]));
+                this.weaponModel.SetAbsAngles(this.botEnt.GetAbsAngles());
+            }
         }
     }
 
@@ -181,7 +191,7 @@ class Bot
     {
         if (!IsValidAndAlive(this.botEnt))
         {
-            return;
+            return 1.0;
         }
 
         local time = Time();
@@ -206,7 +216,7 @@ class Bot
                     ));
                     this.locomotion.DriveTo(newPos);
                     this.locomotion.ClearStuckStatus("force unstuck");
-                    return;
+                    return 0.0;
                 }
 
                 Log(format(
@@ -215,7 +225,7 @@ class Bot
                     origin.tostring()
                 ));
                 this.botEnt.Kill();
-                return;
+                return 1.0;
             }
         }
 
@@ -266,12 +276,12 @@ class Bot
             }
             else
             {
-                this.PathFind();
+                this.FindPath();
             }
         }
         else
         {
-            this.PathFind();
+            this.FindPath();
         }
 
         // loop anim
@@ -283,6 +293,8 @@ class Bot
         // advance anim
         this.botEnt.StudioFrameAdvance();
         this.botEnt.DispatchAnimEvents(this.botEnt);
+
+        return 0.0;
     }
 
     function HasLOS(startPos, endPos, targetEnt)
@@ -328,15 +340,14 @@ class Bot
             this.SetPoseParameter("move_scale", 1.0);
         }
 
-        // TODO: direct hits are broken due to m_flFullDamage
         if (this.botType == TF_BOT_TYPE["SIEGE"])
         {
             local forward = this.botEnt.GetForwardVector();
             local startPos = myPos + Vector(0, 0, 48.0) + forward * 32.0;
-            local startAng = this.botEnt.GetAbsAngles();
             local horizontalVel = this.botSettings["projectile_vel"];
             local verticalVel = TrajectoryVertVel(attackVec.Length2D(), horizontalVel, 800.0);
             local startVel = forward * horizontalVel + Vector(0.0, 0.0, verticalVel);
+            local startAng = VectorAngles(startVel);
 
             // local nadeUname = UniqueString();
             // local targetname = "bot_" + this.uname + "_grenade_" + nadeUname;
@@ -346,15 +357,14 @@ class Bot
             nade.SetOwner(this.botEnt);
             NetProps.SetPropEntity(nade, "m_hThrower", this.botEnt);
             NetProps.SetPropVector(nade, "m_vInitialVelocity", startVel);
-            // TODO m_flFullDamage for direct hits
-            // https://github.com/ValveSoftware/Source-1-Games/issues/4481#issuecomment-1344759066
-            // maybe use stickies instead?
+            NetProps.SetPropInt(nade, "m_iType", 0); // pipe
             NetProps.SetPropFloat(nade, "m_flDamage", this.botSettings["damage"]);
             NetProps.SetPropFloat(nade, "m_DmgRadius", this.botSettings["damage_radius"]);
             NetProps.SetPropBool(nade, "m_bCritical", false);
             nade.DispatchSpawn();
             // needed for nades
             nade.Teleport(true, startPos, true, startAng, true, startVel);
+            AddThinkToEnt(nade, "GrenadeThink");
         }
         else
         {
@@ -365,7 +375,7 @@ class Bot
         }
     }
 
-    function PathFind()
+    function FindPath()
     {
         local time = Time();
 
@@ -402,8 +412,8 @@ class Bot
 
     function Move(targetPos)
     {
-        this.locomotion.Approach(targetPos, 1.0);
         this.locomotion.FaceTowards(targetPos);
+        this.locomotion.Approach(targetPos, 1.0);
 
         this.botEnt.SetForwardVector(this.locomotion.GetGroundMotionVector());
 
@@ -639,3 +649,58 @@ function BotThink()
 {
 	return self.GetScriptScope().my_bot.Update();
 }
+
+// m_flFullDamage is not exposed as a netprop,
+// so we need to fudge direct hit grenades... :(
+function GrenadeThink()
+{
+    local aboutToCollide = false;
+    local origin = self.GetOrigin() - Vector(0, 0, 16);
+    local vel = self.GetAbsVelocity();
+
+    local tr =
+    {
+        "start": origin,
+        "end": origin + vel * 0.05,
+        "mask": MASK_BOT_PIPE,
+        "ignore": self,
+        "hullmin": self.GetBoundingMins(),
+        "hullmax": self.GetBoundingMaxs()
+    };
+    if (TraceHull(tr))
+    {
+        if (tr["hit"])
+        {
+            aboutToCollide = true;
+        }
+    }
+
+    if (aboutToCollide)
+    {
+        local radius = BOT_SETTINGS["siege"]["damage_radius"];
+        local damage = BOT_SETTINGS["siege"]["damage"];
+        local damageType = BOT_SETTINGS["siege"]["damage_type"];
+        local myTeam = self.GetTeam();
+        local bot = NetProps.GetPropEntity(self, "m_hThrower");
+        local ent = null;
+        while (ent = Entities.FindInSphere(ent, origin, radius))
+        {
+            local team = ent.GetTeam();
+            if (team == myTeam || (team != Constants.ETFTeam.TF_TEAM_RED && team != Constants.ETFTeam.TF_TEAM_BLUE))
+            {
+                continue;
+            }
+
+            local pos = ent.GetOrigin();
+            local dist = (pos - origin).Length();
+            local damageScale = 1.0 - (dist / radius);
+            ent.TakeDamageEx(self, bot, null, Vector(), origin, damage * damageScale, damageType);
+        }
+
+        DispatchParticleEffect("ExplosionCore_MidAir", origin, Vector());
+        self.Kill();
+    }
+
+    return 0.0;
+}
+

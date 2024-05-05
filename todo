@@ -1,13 +1,11 @@
 bugs:
 - t3 sentry rockets do no dmg
-- direct hit bot pipes do no dmg
 - bots attack spectator camera if player dead (on red or blu team)
 - bot hitboxes don't get scaled with the model, at least for rockets
-- bot walking anim is broken
+- bot walking anim is broken after first wave
+- siege bot faces wrong direction when walking
 - bots tilt sideways when playing attack anim
-- melee bots take forever to change direction when walking
 - bots can get stuck in the air, gravity broken?
-- bots try to attack without LOS instead of moving
 - bots overlap eachother
 
 map:

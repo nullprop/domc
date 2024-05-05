@@ -64,6 +64,12 @@ MASK_ATTACK_TRACE <-
     Constants.FContents.CONTENTS_WINDOW |
     Constants.FContents.CONTENTS_GRATE;
 
+MASK_BOT_PIPE <- 
+    Constants.FContents.CONTENTS_SOLID |
+    Constants.FContents.CONTENTS_MONSTER |
+    Constants.FContents.CONTENTS_MOVEABLE |
+    Constants.FContents.CONTENTS_GRATE;
+
 ::Min <- function(a, b)
 {
     if (a < b) return a;
@@ -257,3 +263,29 @@ TeamNameToEnum <- function(teamName)
     }
     return Constants.ETFTeam.TEAM_INVALID;
 }
+
+VectorAngles <- function(forward)
+{
+	local yaw;
+    local pitch;
+	if (forward.y == 0.0 && forward.x == 0.0)
+	{
+		yaw = 0.0;
+		if (forward.z > 0.0)
+			pitch = 270.0;
+		else
+			pitch = 90.0;
+	}
+	else
+	{
+		yaw = (atan2(forward.y, forward.x) * 180.0 / Constants.Math.Pi);
+		if (yaw < 0.0)
+			yaw += 360.0;
+		pitch = (atan2(-forward.z, forward.Length2D()) * 180.0 / Constants.Math.Pi);
+		if (pitch < 0.0)
+			pitch += 360.0;
+	}
+
+	return QAngle(pitch, yaw, 0.0);
+}
+
