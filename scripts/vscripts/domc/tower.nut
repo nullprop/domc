@@ -125,11 +125,11 @@ class Tower
 
     function Kill()
     {
-        if (IsValidAndAlive(this.sentryEnt))
+        if (IsValid(this.sentryEnt))
         {
             this.sentryEnt.Kill();
         }
-        if (IsValidAndAlive(this.protectedFx))
+        if (IsValid(this.protectedFx))
         {
             this.protectedFx.Kill();
         }
@@ -155,7 +155,7 @@ class Tower
                 start_active = true
             });
         }
-        else if (IsValidAndAlive(this.protectedFx))
+        else if (IsValid(this.protectedFx))
         {
             this.protectedFx.Kill();
         }

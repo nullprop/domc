@@ -137,7 +137,7 @@ IsValidAndAlive <- function(ent)
         return false;
     }
 
-    if (ent.GetHealth() < 0)
+    if (!IsAlive(ent))
     {
         return false;
     }
@@ -158,6 +158,16 @@ IsValid <- function(ent)
     }
 
     return true;
+}
+
+IsAlive <- function(ent)
+{
+    if (ent.GetHealth() <= 0)
+    {
+        return false;
+    }
+
+    return NetProps.GetPropInt(ent, "m_lifeState") == 0;
 }
 
 GetTrueInflictor <- function(ent)

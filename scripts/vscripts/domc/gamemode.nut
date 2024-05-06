@@ -272,7 +272,7 @@ class GamemodeDomc
         local garbageBots = 0;
         for (local i = this.bots.len() - 1; i >= 0; i--)
         {
-            if (!IsValidAndAlive(this.bots[i].GetEnt()))
+            if (!IsValid(this.bots[i].GetEnt()))
             {
                 this.bots.remove(i);
                 garbageBots++;

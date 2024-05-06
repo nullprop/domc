@@ -99,11 +99,11 @@ class Fountain
 
     function Kill()
     {
-        if (IsValidAndAlive(this.dispenserEnt))
+        if (IsValid(this.dispenserEnt))
         {
             this.dispenserEnt.Kill();
         }
-        if (IsValidAndAlive(this.protectedFx))
+        if (IsValid(this.protectedFx))
         {
             this.protectedFx.Kill();
         }
@@ -129,7 +129,7 @@ class Fountain
                 start_active = true
             });
         }
-        else if (IsValidAndAlive(this.protectedFx))
+        else if (IsValid(this.protectedFx))
         {
             this.protectedFx.Kill();
         }

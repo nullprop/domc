@@ -526,6 +526,11 @@ class Bot
 
         while (ent = Entities.FindInSphere(ent, pos, radius))
         {
+            if (!IsValidAndAlive(ent))
+            {
+                continue;
+            }
+
             local team = ent.GetTeam();
             if (team == myTeam || (team != Constants.ETFTeam.TF_TEAM_RED && team != Constants.ETFTeam.TF_TEAM_BLUE))
             {
@@ -683,7 +688,7 @@ class Bot
 
     function Kill()
     {
-        if (IsValidAndAlive(this.botEnt))
+        if (IsValid(this.botEnt))
         {
             this.botEnt.Kill();
         }
