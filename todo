@@ -3,6 +3,7 @@ bugs:
 - bots tilt sideways when playing victory taunt anim
 - bots can get stuck in the air, how to gravity with loco?
 - bots can get stuck on eachother
+- base_boss spews money everywhere on death, need to destroy
 
 map:
 - power runes
