@@ -129,10 +129,9 @@ class Tower
         {
             this.sentryEnt.Kill();
         }
-        if (this.protectedFx != null)
+        if (IsValidAndAlive(this.protectedFx))
         {
             this.protectedFx.Kill();
-            this.protectedFx = null;
         }
     }
 
@@ -156,10 +155,9 @@ class Tower
                 start_active = true
             });
         }
-        else if (this.protectedFx != null)
+        else if (IsValidAndAlive(this.protectedFx))
         {
             this.protectedFx.Kill();
-            this.protectedFx = null;
         }
     }
 }
