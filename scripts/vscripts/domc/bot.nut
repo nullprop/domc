@@ -131,13 +131,6 @@ class Bot
         this.botSettings = BOT_SETTINGS[this.botTypeName];
         this.uname = UniqueString();
 
-        // Spawn on navmesh
-        local navArea = NavMesh.GetNavArea(pos, 64.0);
-        if (navArea)
-        {
-            pos = navArea.FindRandomSpot();
-        }
-
         this.botEnt = SpawnEntityFromTable(
             "base_boss",
             {
@@ -247,8 +240,7 @@ class Bot
             if (stuckTime > 1.0)
             {
                 local origin = this.botEnt.GetOrigin();
-                // FIXME, this doesn't ever seem to find anything...
-                local navArea = NavMesh.GetNearestNavArea(origin + Vector(0, 0, 64), 256, false, true);
+                local navArea = NavMesh.GetNearestNavArea(origin + Vector(0, 0, 32), 64, false, true);
                 if (navArea)
                 {
                     local newPos = navArea.FindRandomSpot();
@@ -256,7 +248,7 @@ class Bot
                         "bot %s stuck at %s, teleporting to %s",
                         this.uname,
                         origin.tostring(),
-                        newPos
+                        newPos.tostring()
                     ));
                     this.locomotion.DriveTo(newPos);
                     this.locomotion.ClearStuckStatus("force unstuck");
@@ -268,7 +260,7 @@ class Bot
                     this.uname,
                     origin.tostring()
                 ));
-                this.botEnt.Kill();
+                this.Kill();
                 return 1.0;
             }
         }
@@ -601,7 +593,15 @@ class Bot
         }
 
         local pathTable = {};
-        local builtPath = NavMesh.GetNavAreasFromBuildPath(startArea, endArea, this.targetPos, 10000.0, this.team, false, pathTable);
+        local builtPath = NavMesh.GetNavAreasFromBuildPath(
+            startArea,
+            endArea,
+            this.targetPos,
+            10000.0,
+            this.team,
+            false,
+            pathTable
+        );
         this.pathTime = Time();
 
         if (builtPath && pathTable.len() > 0)

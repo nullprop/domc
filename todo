@@ -1,10 +1,8 @@
 bugs:
 - t3 sentry rockets do no dmg
-- bots attack spectator camera if player is dead but on red or blu team
 - bots tilt sideways when playing victory taunt anim
 - bots can get stuck in the air, how to gravity with loco?
-- bots overlap eachother
-- bot unstuck doesn't work, always kills
+- bots can get stuck on eachother
 
 map:
 - power runes
