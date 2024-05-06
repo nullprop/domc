@@ -1,17 +1,13 @@
 bugs:
 - t3 sentry rockets do no dmg
-- bots attack spectator camera if player dead (on red or blu team)
-- bot hitboxes don't get scaled with the model, at least for rockets
-- bot walking anim is broken after first wave
-- siege bot faces wrong direction when walking
-- bots tilt sideways when playing attack anim
-- bots can get stuck in the air, gravity broken?
+- bots attack spectator camera if player is dead but on red or blu team
+- bots tilt sideways when playing victory taunt anim
+- bots can get stuck in the air, how to gravity with loco?
 - bots overlap eachother
+- bot unstuck doesn't work, always kills
 
 map:
 - killtrigger if falling off
+- power runes
+- move mid lane t2 sentry forward so it doesn't shoot side lanes pushing to t3
 
-bot:
-- bot unstuck
-  - if no movement in x secs while there should be,
-    pick a random nearby nav spot as target

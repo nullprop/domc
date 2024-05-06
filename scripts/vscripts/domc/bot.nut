@@ -29,6 +29,8 @@ BOT_SETTINGS <-
             "AttackStand_MELEE_R",
             "AttackStand_MELEE_L"
         ],
+        "model_anim_victory": "taunt04",
+        "model_anim_lose": "Stand_LOSER",
         "weapon_model": null,
 		"move_speed": 150
 	},
@@ -48,6 +50,8 @@ BOT_SETTINGS <-
 		"model_anim_idle": "Stand_PRIMARY",
 		"model_anim_move": "Run_PRIMARY",
 		"model_anim_attack": ["AttackStand_PRIMARY"],
+        "model_anim_victory": "taunt01",
+        "model_anim_lose": "Stand_LOSER",
         "weapon_model": "models/weapons/w_models/w_sniperrifle.mdl",
 		"move_speed": 145
 	},
@@ -69,6 +73,8 @@ BOT_SETTINGS <-
 		"model_anim_idle": "Stand_PRIMARY",
 		"model_anim_move": "Run_PRIMARY",
 		"model_anim_attack": ["AttackStand_PRIMARY"],
+        "model_anim_victory": "taunt01",
+        "model_anim_lose": "Stand_LOSER",
         "weapon_model": "models/weapons/w_models/w_grenadelauncher.mdl",
 		"move_speed": 145
 	}
@@ -88,6 +94,15 @@ class Bot
     teamName = null;
     botSettings = null;
     weaponModel = null;
+
+    runSequence = null;
+    idleSequence = null;
+    attackSequences = [];
+    victorySequence = null;
+    loseSequence = null;
+
+    roundOver = false;
+    roundWinner = false;
 
     uname = null;
 
@@ -141,20 +156,42 @@ class Bot
 
         this.botEnt.SetGravity(800.0);
 
-        this.botEnt.SetModelScale(this.botSettings["model_scale"], 0.0);
+        local mins = this.botEnt.GetBoundingMins();
+        local maxs = this.botEnt.GetBoundingMaxs();
+        local scale = this.botSettings["model_scale"];
+        mins *= scale;
+        maxs *= scale;
+        if (mins.z < 0)
+        {
+            maxs.z -= mins.z;
+            mins.z = 0;
+        }
+
+        //this.botEnt.SetSize(mins, maxs);
+        this.botEnt.SetModelScale(scale, 0.0);
         this.botEnt.SetSkin(this.botSettings["model_skin_" + this.teamName]);
-        NetProps.SetPropInt(this.botEnt, "m_bClientSideAnimation", 1);
+        //NetProps.SetPropInt(this.botEnt, "m_bClientSideAnimation", 1);
 
         this.botEnt.SetTeam(team);
 
         this.locomotion.SetDesiredSpeed(this.botSettings["move_speed"]);
         this.locomotion.SetSpeedLimit(3500.0);
+        EntFireByHandle(this.botEnt, "SetStepHeight", STEP_HEIGHT.tostring(), 0, null, null);
 
         if (!this.botEnt.ValidateScriptScope())
         {
             Log("Failed to validate bot script scope");
             return;
         }
+
+        this.runSequence = this.botEnt.LookupSequence(this.botSettings["model_anim_move"]);
+        this.idleSequence = this.botEnt.LookupSequence(this.botSettings["model_anim_idle"]);
+        for (local i = 0; i < this.botSettings["model_anim_attack"].len(); i++)
+        {
+            this.attackSequences.append(this.botEnt.LookupSequence(this.botSettings["model_anim_attack"][i]));
+        }
+        this.victorySequence = this.botEnt.LookupSequence(this.botSettings["model_anim_victory"]);
+        this.loseSequence = this.botEnt.LookupSequence(this.botSettings["model_anim_lose"]);
 
         this.botEnt.GetScriptScope().my_bot <- this;
         AddThinkToEnt(this.botEnt, "BotThink");
@@ -192,6 +229,13 @@ class Bot
         if (!IsValidAndAlive(this.botEnt))
         {
             return 1.0;
+        }
+
+        if (this.roundOver)
+        {
+            this.locomotion.Stop();
+            this.Animate();
+            return 0.0;
         }
 
         local time = Time();
@@ -284,6 +328,13 @@ class Bot
             this.FindPath();
         }
 
+        this.Animate();
+
+        return 0.0;
+    }
+
+    function Animate()
+    {
         // loop anim
         if (this.botEnt.GetCycle() > 0.99)
 		{
@@ -293,8 +344,6 @@ class Bot
         // advance anim
         this.botEnt.StudioFrameAdvance();
         this.botEnt.DispatchAnimEvents(this.botEnt);
-
-        return 0.0;
     }
 
     function HasLOS(startPos, endPos, targetEnt)
@@ -333,11 +382,11 @@ class Bot
     function Attack(myPos, attackVec)
     {
         this.lastAttackTime = Time();
-        this.PlayAnim(RandomElement(this.botSettings["model_anim_attack"]));
+        this.botEnt.ResetSequence(RandomElement(this.attackSequences));
         this.SetPoseParameter("move_x", 0.0);
         if (this.botType == TF_BOT_TYPE["RANGED"])
         {
-            this.SetPoseParameter("move_scale", 1.0);
+            this.SetPoseParameter("move_scale", 0.0);
         }
 
         if (this.botType == TF_BOT_TYPE["SIEGE"])
@@ -415,9 +464,17 @@ class Bot
         this.locomotion.FaceTowards(targetPos);
         this.locomotion.Approach(targetPos, 1.0);
 
-        this.botEnt.SetForwardVector(this.locomotion.GetGroundMotionVector());
+        if (this.botType == TF_BOT_TYPE["SIEGE"])
+        {
+            // wtf
+            this.botEnt.SetForwardVector(this.locomotion.GetGroundMotionVector() * -1);
+        }
+        else
+        {
+            this.botEnt.SetForwardVector(this.locomotion.GetGroundMotionVector());
+        }
 
-        this.PlayAnim(this.botSettings["model_anim_move"]);
+        this.botEnt.ResetSequence(this.runSequence);
         this.SetPoseParameter("move_x", 1.0);
         if (this.botType == TF_BOT_TYPE["RANGED"])
         {
@@ -427,11 +484,11 @@ class Bot
 
     function Idle()
     {
-        this.PlayAnim(this.botSettings["model_anim_idle"]);
+        this.botEnt.ResetSequence(this.idleSequence);
         this.SetPoseParameter("move_x", 0.0);
         if (this.botType == TF_BOT_TYPE["RANGED"])
         {
-            this.SetPoseParameter("move_scale", 1.0);
+            this.SetPoseParameter("move_scale", 0.0);
         }
     }
 
@@ -574,12 +631,6 @@ class Bot
         */
     }
 
-    function PlayAnim(name)
-    {
-        local seq = this.botEnt.LookupSequence(name);
-        this.botEnt.ResetSequence(seq);
-    }
-
     function SetPoseParameter(name, val)
     {
         local index = this.botEnt.LookupPoseParameter(name);
@@ -587,12 +638,6 @@ class Bot
         {
             this.botEnt.SetPoseParameter(index, val);
         }
-    }
-
-    function IsCurrentAnim(name)
-    {
-        local seq = this.botEnt.LookupSequence(name);
-        return this.botEnt.GetSequence() == seq;
     }
 
     function GetEnt()
@@ -641,6 +686,32 @@ class Bot
         if (IsValidAndAlive(this.botEnt))
         {
             this.botEnt.Kill();
+        }
+    }
+
+    function OnRoundEnd(isWinner)
+    {
+        if (!IsValidAndAlive(this.botEnt))
+        {
+            return;
+        }
+
+        this.roundOver = true;
+        this.roundWinner = isWinner;
+
+        if (this.roundWinner)
+        {
+            this.botEnt.ResetSequence(this.victorySequence);
+        }
+        else
+        {
+            this.botEnt.ResetSequence(this.loseSequence);
+        }
+
+        this.SetPoseParameter("move_x", 0.0);
+        if (this.botType == TF_BOT_TYPE["RANGED"])
+        {
+            this.SetPoseParameter("move_scale", 0.0);
         }
     }
 }

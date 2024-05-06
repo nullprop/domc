@@ -343,6 +343,7 @@ class GamemodeDomc
     function TeamLose(team)
     {
         local winningTeam = GetOppositeTeam(team);
+
         // Should these just be in the .bsp? ¯\_(-_-)_/¯
         local winEnt = SpawnEntityFromTable(
             "game_round_win",
@@ -357,6 +358,16 @@ class GamemodeDomc
         );
         EntFireByHandle(winEnt, "RoundWin", "", 0, null, null);
         winEnt.Kill();
+
+        foreach (spawner in this.spawners)
+        {
+            spawner.OnRoundEnd();
+        }
+
+        foreach (bot in this.bots)
+        {
+            bot.OnRoundEnd(winningTeam == bot.team);
+        }
     }
 
     function TowerDestroyed(tower)
@@ -443,7 +454,20 @@ function OnScriptHook_OnTakeDamage(params)
     local infClassname = inf.GetClassname();
     local entName = ent.GetName();
     local infName = inf.GetName();
-    //Log(format("take dmg | %s (%s) -> %s (%s) : %d", infClassname, infName, entClassname, entName, params.damage));
+    local trueInf = GetTrueInflictor(inf);
+    local trueInfClassname = trueInf.GetClassname();
+    local trueInfName = trueInf.GetName();
+    /*
+    Log(format("take dmg | %s (%s) [%s (%s)] -> %s (%s) : %d",
+        infClassname,
+        infName,
+        trueInfClassname,
+        trueInfName,
+        entClassname,
+        entName,
+        params.damage
+    ));
+    */
 
     // Don't crush things
     if (infClassname == "base_boss" && params.damage_type == Constants.FDmgType.DMG_CRUSH)
@@ -463,7 +487,6 @@ function OnScriptHook_OnTakeDamage(params)
     }
 
     // Player inflictor dmg bonus
-    local trueInf = GetTrueInflictor(inf);
     local player = ::gamemode_domc.GetPlayer(trueInf);
     if (player)
     {

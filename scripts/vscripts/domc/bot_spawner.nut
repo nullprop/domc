@@ -35,6 +35,11 @@ class BotSpawner
         this.SpawnBot();
     }
 
+    function OnRoundEnd()
+    {
+        this.active = false;
+    }
+
     function Think()
     {
         if (!this.active)
