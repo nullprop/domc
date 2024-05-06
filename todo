@@ -7,7 +7,5 @@ bugs:
 - bot unstuck doesn't work, always kills
 
 map:
-- killtrigger if falling off
 - power runes
-- move mid lane t2 sentry forward so it doesn't shoot side lanes pushing to t3
 
