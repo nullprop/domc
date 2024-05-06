@@ -63,8 +63,8 @@ BOT_SETTINGS <-
         "damage_radius": 192.0,
         "projectile_vel": 600.0, // horizontal
         "attack_interval": 3.0,
-		"attack_range": 480.0,
-		"aggro_range": 512.0,
+		"attack_range": 520.0,
+		"aggro_range": 540.0,
 		"class": Constants.ETFClass.TF_CLASS_DEMOMAN,
 		"model": "models/bots/demo_boss/bot_demo_boss.mdl",
 		"model_scale": 0.8,
