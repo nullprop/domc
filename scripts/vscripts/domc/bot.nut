@@ -32,7 +32,8 @@ BOT_SETTINGS <-
         "model_anim_victory": "taunt04",
         "model_anim_lose": "Stand_LOSER",
         "weapon_model": null,
-		"move_speed": 150
+        "move_speed": 150,
+        "death_particle": "ExplosionCore_buildings"
 	},
 	"ranged":
 	{
@@ -53,7 +54,8 @@ BOT_SETTINGS <-
         "model_anim_victory": "taunt01",
         "model_anim_lose": "Stand_LOSER",
         "weapon_model": "models/weapons/w_models/w_sniperrifle.mdl",
-		"move_speed": 145
+        "move_speed": 145,
+        "death_particle": "ExplosionCore_buildings"
 	},
 	"siege":
 	{
@@ -76,7 +78,8 @@ BOT_SETTINGS <-
         "model_anim_victory": "taunt01",
         "model_anim_lose": "Stand_LOSER",
         "weapon_model": "models/weapons/w_models/w_grenadelauncher.mdl",
-		"move_speed": 145
+        "move_speed": 145,
+        "death_particle": "rd_robot_explosion"
 	}
 }
 
@@ -650,6 +653,11 @@ class Bot
 
         if (params.damage >= this.botEnt.GetHealth())
         {
+            DispatchParticleEffect(
+                this.botSettings["death_particle"],
+                this.botEnt.GetOrigin() + Vector(0, 0, 32),
+                Vector()
+            );
             return true;
         }
 
