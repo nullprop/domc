@@ -149,21 +149,9 @@ class Bot
 
         this.botEnt.SetGravity(800.0);
 
-        local mins = this.botEnt.GetBoundingMins();
-        local maxs = this.botEnt.GetBoundingMaxs();
-        local scale = this.botSettings["model_scale"];
-        mins *= scale;
-        maxs *= scale;
-        if (mins.z < 0)
-        {
-            maxs.z -= mins.z;
-            mins.z = 0;
-        }
-
-        //this.botEnt.SetSize(mins, maxs);
-        this.botEnt.SetModelScale(scale, 0.0);
+        this.botEnt.SetModelScale(this.botSettings["model_scale"], 0.0);
         this.botEnt.SetSkin(this.botSettings["model_skin_" + this.teamName]);
-        //NetProps.SetPropInt(this.botEnt, "m_bClientSideAnimation", 1);
+        this.botEnt.SetCollisionGroup(Constants.ECollisionGroup.COLLISION_GROUP_NPC);
 
         this.botEnt.SetTeam(team);
 

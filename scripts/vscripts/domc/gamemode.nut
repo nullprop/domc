@@ -161,6 +161,8 @@ class GamemodeDomc
     {
         Log("round start");
 
+        Convars.SetValue("sv_turbophysics", 0);
+
         Reset();
 
         foreach(spawner in this.spawners)
@@ -537,6 +539,15 @@ function Think()
     {
         ::gamemode_domc.Think();
     }
+
+    // >:(
+    local cash = null;
+    while (cash = Entities.FindByClassname(cash, "item_currencypack_custom"))
+    {
+        cash.Kill();
+    }
+
+    return 0.015;
 }
 
 if (!("gamemode_domc" in getroottable()))
