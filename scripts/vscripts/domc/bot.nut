@@ -470,8 +470,10 @@ class Bot
         local ent = null;
         local avoidWeight = 0.0;
         local avoidVec = Vector();
-        local avoidDistance = 64.0;
-        while (ent = Entities.FindInSphere(ent, origin, avoidDistance))
+        local avoidDistance = 16.0;
+        local boundsDist = this.botEnt.GetBoundingMaxs().Length2D(); 
+        local queryDistance = boundsDist * 5.0;
+        while (ent = Entities.FindInSphere(ent, origin, queryDistance))
         {
             if (!IsValidAndAlive(ent))
             {
@@ -486,12 +488,15 @@ class Bot
             }
 
             local toEnt = ent.GetOrigin() - origin;
-            local range = toEnt.Norm();
-            local depen = avoidDistance - range;
-            local weight = 1.0 + 150.0 * depen/avoidDistance;
-            avoidVec += toEnt * -weight;
-            avoidWeight += weight;
-            //DebugDrawLine(origin, ent.GetOrigin(), 255, 0, 0, true, 0.02);
+            local range = toEnt.Norm() - boundsDist - ent.GetBoundingMaxs().Length2D();
+            if (range < avoidDistance)
+            {
+                local depen = avoidDistance - range;
+                local weight = 1.0 + 150.0 * depen/avoidDistance;
+                avoidVec += toEnt * -weight;
+                avoidWeight += weight;
+                //DebugDrawLine(origin, ent.GetOrigin(), 255, 0, 0, true, 0.02);
+            }
         }
 
         //DebugDrawBox(goal, Vector(-8.0, -8.0, -8.0), Vector(8.0, 8.0, 8.0), 0, 255, 0, 100, 0.02);
