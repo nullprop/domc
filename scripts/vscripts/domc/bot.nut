@@ -154,8 +154,6 @@ class Bot
 
         this.botEnt.SetModelScale(this.botSettings["model_scale"], 0.0);
         this.botEnt.SetSkin(this.botSettings["model_skin_" + this.teamName]);
-        this.botEnt.SetCollisionGroup(Constants.ECollisionGroup.COLLISION_GROUP_NPC);
-
         this.botEnt.SetTeam(team);
 
         this.locomotion.SetDesiredSpeed(this.botSettings["move_speed"]);
@@ -229,7 +227,7 @@ class Bot
         {
             local stuckTime = this.locomotion.GetStuckDuration();
 
-            if (stuckTime > 1.0)
+            if (stuckTime > 0.1)
             {
                 local origin = this.botEnt.GetOrigin();
                 local navArea = NavMesh.GetNearestNavArea(origin + Vector(0, 0, 32), 64, false, true);
@@ -449,8 +447,65 @@ class Bot
 
     function Move(targetPos)
     {
-        this.locomotion.FaceTowards(targetPos);
-        this.locomotion.Approach(targetPos, 1.0);
+        local goal = targetPos;
+        local origin = this.botEnt.GetOrigin();
+
+        // Make sure goal isn't too far, otherwise avoidance wont have much impact
+        local toGoal = goal - origin;
+        local goalDist = toGoal.Norm();
+        if (goalDist > 64.0)
+        {
+            goalDist = 64.0;
+        }
+        toGoal = toGoal * goalDist;
+        goal = origin + toGoal;
+
+        local avoid =
+        [
+            "base_boss",
+            "obj_sentrygun",
+            "obj_dispenser",
+            "player"
+        ];
+        local ent = null;
+        local avoidWeight = 0.0;
+        local avoidVec = Vector();
+        local avoidDistance = 64.0;
+        while (ent = Entities.FindInSphere(ent, origin, avoidDistance))
+        {
+            if (!IsValidAndAlive(ent))
+            {
+                continue;
+            }
+
+            local classname = ent.GetClassname();
+            if (!ArrayContains(avoid, classname))
+            {
+                //DebugDrawLine(origin, ent.GetOrigin(), 0, 0, 255, true, 0.02);
+                continue;
+            }
+
+            local toEnt = ent.GetOrigin() - origin;
+            local range = toEnt.Norm();
+            local depen = avoidDistance - range;
+            local weight = 1.0 + 150.0 * depen/avoidDistance;
+            avoidVec += toEnt * -weight;
+            avoidWeight += weight;
+            //DebugDrawLine(origin, ent.GetOrigin(), 255, 0, 0, true, 0.02);
+        }
+
+        //DebugDrawBox(goal, Vector(-8.0, -8.0, -8.0), Vector(8.0, 8.0, 8.0), 0, 255, 0, 100, 0.02);
+
+        if (avoidWeight > 0.0)
+        {
+            local oldGoal = goal;
+            goal += avoidVec;
+            //DebugDrawBox(goal, Vector(-8.0, -8.0, -8.0), Vector(8.0, 8.0, 8.0), 255, 0, 0, 100, 0.02);
+            //DebugDrawLine(oldGoal, goal, 255, 255, 255, true, 0.02);
+        }
+
+        this.locomotion.FaceTowards(goal);
+        this.locomotion.Approach(goal, 1.0);
 
         if (this.botType == TF_BOT_TYPE["SIEGE"])
         {
@@ -613,12 +668,24 @@ class Bot
                     this.navPath.append(area.GetCenter());
                 }
                 */
+
                 local parentArea = area.GetParent();
+
                 if (parentArea)
                 {
-                    local portalPoint = area.ComputeClosestPointInPortal(parentArea, area.GetParentHow(), area.GetCenter());
+                    local portalPoint = area.ComputeClosestPointInPortal(
+                        parentArea,
+                        area.GetParentHow(),
+                        area.GetCenter()
+                    );
                     this.navPath.append(portalPoint);
                 }
+                /*
+                if (area != startArea && area != endArea)
+                {
+                    this.navPath.append(area.FindRandomSpot());
+                }
+                */
 
                 area = parentArea;
             }
@@ -627,7 +694,7 @@ class Bot
         /*
         foreach (p in this.navPath)
         {
-            DebugDrawBox(p, Vector(-8.0, -8.0, -8.0), Vector(8.0, 8.0, 8.0), 255, 255, 255, 100, 1.0);
+            DebugDrawBox(p, Vector(-8.0, -8.0, -8.0), Vector(8.0, 8.0, 8.0), 255, 255, 255, 100, 0.1);
         }
         */
     }

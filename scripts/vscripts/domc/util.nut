@@ -216,6 +216,18 @@ RandomElement <- function(arr)
     return arr[RandomInt(0, len - 1)];
 }
 
+ArrayContains <- function(arr, elem)
+{
+    foreach(e in arr)
+    {
+        if (e == elem)
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
 TrajectoryDistance <- function(velX, velY, gravity)
 {
     // parabolic trajectory

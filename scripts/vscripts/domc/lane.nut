@@ -1,6 +1,6 @@
 DoIncludeScript("domc/util.nut", null);
 
-const LANE_EPSILON = 256.0;
+const LANE_EPSILON = 128.0;
 
 class NearestPoint
 {
