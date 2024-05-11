@@ -159,7 +159,7 @@ class Bot
         this.botEnt.SetTeam(team);
 
         this.locomotion.SetDesiredSpeed(this.botSettings["move_speed"]);
-        this.locomotion.SetSpeedLimit(3500.0);
+        this.locomotion.SetSpeedLimit(this.botSettings["move_speed"]);
         EntFireByHandle(this.botEnt, "SetStepHeight", STEP_HEIGHT.tostring(), 0, null, null);
 
         if (!this.botEnt.ValidateScriptScope())
@@ -185,6 +185,7 @@ class Bot
             this.weaponModel = Entities.CreateByClassname("prop_dynamic");
             this.weaponModel.SetTeam(team);
             this.weaponModel.SetOwner(this.botEnt);
+            this.weaponModel.ClearSolidFlags();
             this.weaponModel.SetSolidFlags(Constants.FSolid.FSOLID_NOT_SOLID);
             this.weaponModel.SetCollisionGroup(Constants.ECollisionGroup.COLLISION_GROUP_NONE);
             this.weaponModel.SetModelSimple(this.botSettings["weapon_model"]);
@@ -263,9 +264,13 @@ class Bot
             !IsValidAndAlive(this.targetEnt)
         )
         {
+            local prevTarget = this.targetEnt;
             this.targetCheckTime = time;
             this.targetEnt = this.FindTarget();
-            this.hasNewTarget = true;
+            if (prevTarget != this.targetEnt && IsValidAndAlive(this.targetEnt))
+            {
+                this.hasNewTarget = true;
+            }
         }
 
         if (IsValidAndAlive(this.targetEnt))
