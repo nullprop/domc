@@ -372,43 +372,60 @@ class GamemodeDomc
         }
     }
 
-    function TowerDestroyed(tower)
+    function TowerDestroyed(destroyed)
     {
-        if (tower.tier == 2)
+        // Check fountain protection is last tower destroyed
+        if (destroyed.tier == 2)
         {
             foreach(fountain in this.fountains)
             {
-                if (fountain.team == tower.team)
+                if (fountain.team == destroyed.team)
                 {
                     fountain.SetProtected(false);
                     break;
                 }
             }
         }
+        // Otherwise, check next tower
         else
         {
-            foreach(t in this.towers)
+            foreach(tower in this.towers)
             {
-                local protectionDestroyed = false;
-                if (tower.team == t.team)
+                local removeProtection = false;
+                if (destroyed.team == tower.team)
                 {
-                    if (tower.tier == 1 && t.tier == 2)
+                    if (destroyed.tier == 1 && tower.tier == 2)
                     {
-                        protectionDestroyed = true;
+                        removeProtection = true;
                     }
                     else if (
-                        tower.tier == 0
-                        && t.tier == 1
-                        && tower.laneIndex == t.laneIndex
+                        destroyed.tier == 0
+                        && tower.tier == 1
+                        && destroyed.laneIndex == tower.laneIndex
                     )
                     {
-                        protectionDestroyed = true;
+                        removeProtection = true;
                     }
                 }
-                if (protectionDestroyed) 
+                if (removeProtection) 
                 {
-                    t.SetProtected(false);
+                    tower.SetProtected(false);
                     break;
+                }
+            }
+        }
+
+        // Start spawning mega creeps for opposite team if 2nd tower
+        if (destroyed.tier == 1)
+        {
+            foreach (spawner in this.spawners)
+            {
+                if (
+                    spawner.laneIndex == destroyed.laneIndex
+                    && spawner.team != destroyed.team
+                )
+                {
+                    spawner.mega = true;
                 }
             }
         }

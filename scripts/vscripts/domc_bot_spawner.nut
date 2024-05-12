@@ -11,6 +11,7 @@ class BotSpawner
     lane = null;
     pos = null;
     ang = null;
+    mega = false;
     lastSpawnTime = 0.0;
     active = false;
     wave = 0;
@@ -61,7 +62,7 @@ class BotSpawner
         {
             return;
         }
-        local bot = Bot(this.botType, this.team, this.lane, this.pos, this.ang);
+        local bot = Bot(this.botType, this.team, this.lane, this.pos, this.ang, this.mega);
         ::gamemode_domc.bots.append(bot);
     }
 }

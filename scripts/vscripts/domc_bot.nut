@@ -119,8 +119,9 @@ class Bot
     pathTime = 0.0;
     lastAttackTime = 0.0;
     xpAward = BOT_XP_AWARD_BASE;
+    mega = false;
 
-    constructor(type, team, lane, pos, ang){
+    constructor(type, team, lane, pos, ang, mega){
         if (team != Constants.ETFTeam.TF_TEAM_RED && team != Constants.ETFTeam.TF_TEAM_BLUE)
         {
             error(format"Invalid bot team %d", team);
@@ -133,6 +134,15 @@ class Bot
         this.teamName = TF_TEAM_NAMES[team];
         this.botSettings = BOT_SETTINGS[this.botTypeName];
         this.uname = UniqueString();
+        this.mega = mega;
+
+        local health = this.botSettings["health"];
+        local model_scale = this.botSettings["model_scale"];
+        if (this.mega)
+        {
+            health *= 1.25;
+            model_scale *= 1.25;
+        }
 
         this.botEnt = SpawnEntityFromTable(
             "base_boss",
@@ -141,7 +151,7 @@ class Bot
                 origin = pos,
                 model = this.botSettings["model"],
                 playbackrate = 1.0,
-                health = this.botSettings["health"],
+                health = health,
                 speed = this.botSettings["move_speed"]
             }
         );
@@ -152,7 +162,7 @@ class Bot
 
         this.botEnt.SetGravity(800.0);
 
-        this.botEnt.SetModelScale(this.botSettings["model_scale"], 0.0);
+        this.botEnt.SetModelScale(model_scale, 0.0);
         this.botEnt.SetSkin(this.botSettings["model_skin_" + this.teamName]);
         this.botEnt.SetTeam(team);
 
@@ -187,7 +197,7 @@ class Bot
             this.weaponModel.SetSolidFlags(Constants.FSolid.FSOLID_NOT_SOLID);
             this.weaponModel.SetCollisionGroup(Constants.ECollisionGroup.COLLISION_GROUP_NONE);
             this.weaponModel.SetModelSimple(this.botSettings["weapon_model"]);
-            this.weaponModel.SetModelScale(this.botSettings["model_scale"], 0.0);
+            this.weaponModel.SetModelScale(model_scale, 0.0);
             this.weaponModel.DispatchSpawn();
 
             EntFireByHandle(this.weaponModel, "SetParent", "bot_" + this.uname, 0.1, null, null);
@@ -201,7 +211,7 @@ class Bot
             }
             else
             {
-                this.weaponModel.SetAbsOrigin(pos + Vector(0, 0, 40.0 * this.botSettings["model_scale"]));
+                this.weaponModel.SetAbsOrigin(pos + Vector(0, 0, 40.0 * model_scale));
                 this.weaponModel.SetAbsAngles(this.botEnt.GetAbsAngles());
             }
         }
@@ -375,6 +385,12 @@ class Bot
             this.SetPoseParameter("move_scale", 0.0);
         }
 
+        local damage = this.botSettings["damage"];
+        if (this.mega)
+        {
+            damage *= 1.25;
+        }
+
         if (this.botType == TF_BOT_TYPE["SIEGE"])
         {
             local forward = this.botEnt.GetForwardVector();
@@ -393,7 +409,7 @@ class Bot
             NetProps.SetPropEntity(nade, "m_hThrower", this.botEnt);
             NetProps.SetPropVector(nade, "m_vInitialVelocity", startVel);
             NetProps.SetPropInt(nade, "m_iType", 0); // pipe
-            NetProps.SetPropFloat(nade, "m_flDamage", this.botSettings["damage"]);
+            NetProps.SetPropFloat(nade, "m_flDamage", damage);
             NetProps.SetPropFloat(nade, "m_DmgRadius", this.botSettings["damage_radius"]);
             NetProps.SetPropBool(nade, "m_bCritical", false);
             nade.DispatchSpawn();
@@ -405,7 +421,7 @@ class Bot
         {
             if (this.targetEnt && this.targetEnt.IsValid())
             {
-                this.targetEnt.TakeDamage(this.botSettings["damage"], this.botSettings["damage_type"], this.botEnt);
+                this.targetEnt.TakeDamage(damage, this.botSettings["damage_type"], this.botEnt);
             }
         }
     }
