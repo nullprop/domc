@@ -1,8 +1,31 @@
+playtest issues:
+- gamemode breaks if a player leaves
+- map sentries can be sapped
+  - could be an intended mechanic but needs nerfing, limit sap duration
+- server starts lagging when a lot of bots present
+  - measure & optimize bot think
+  - get rid of siege pipes, these are a pain anyway
+    - just hitscan + smoke/fire/explosion particles
+- maybe nerf long range damage to towers
+  - reduce tower health to balance
+- late joiners shouldn't start at level 1
+  - maybe equal to lowest level in lobby?
+  - keep player level if they disconnect/rejoin?
+
 bugs:
 - t3 sentry rockets do no dmg
 - bots tilt sideways when playing victory taunt anim
-- bots can get stuck in the air, how to gravity with loco?
 
 map:
 - power runes
+- clutter sightlines more, too open for now
+
+features:
+- sniper should be able to headshot bots
+- spy disguise should work against bots
+- spy bot sapping?
+- engineer tower repair?
+
+misc:
+- replace backdoor protection particles
 
