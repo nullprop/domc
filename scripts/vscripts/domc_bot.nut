@@ -1,5 +1,5 @@
-DoIncludeScript("domc/util.nut", null);
-DoIncludeScript("domc/settings.nut", null);
+DoIncludeScript("domc_util.nut", null);
+DoIncludeScript("domc_settings.nut", null);
 
 const PATH_INTERVAL = 1.0;
 const TARGET_INTERVAL = 3.0;

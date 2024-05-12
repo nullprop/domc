@@ -1,10 +1,10 @@
-DoIncludeScript("domc/util.nut", null);
-DoIncludeScript("domc/player.nut", null);
-DoIncludeScript("domc/bot.nut", null);
-DoIncludeScript("domc/bot_spawner.nut", null);
-DoIncludeScript("domc/tower.nut", null);
-DoIncludeScript("domc/fountain.nut", null);
-DoIncludeScript("domc/lane.nut", null);
+DoIncludeScript("domc_util.nut", null);
+DoIncludeScript("domc_player.nut", null);
+DoIncludeScript("domc_bot.nut", null);
+DoIncludeScript("domc_bot_spawner.nut", null);
+DoIncludeScript("domc_tower.nut", null);
+DoIncludeScript("domc_fountain.nut", null);
+DoIncludeScript("domc_lane.nut", null);
 
 PrecacheModel("models/bots/heavy/bot_heavy.mdl");
 PrecacheModel("models/bots/gibs/heavybot_gib_pelvis.mdl");

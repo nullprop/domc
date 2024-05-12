@@ -1,4 +1,4 @@
-DoIncludeScript("domc/util.nut", null);
+DoIncludeScript("domc_util.nut", null);
 
 const LANE_EPSILON = 128.0;
 

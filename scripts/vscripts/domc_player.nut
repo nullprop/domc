@@ -1,5 +1,5 @@
-DoIncludeScript("domc/util.nut", null);
-DoIncludeScript("domc/settings.nut", null);
+DoIncludeScript("domc_util.nut", null);
+DoIncludeScript("domc_settings.nut", null);
 
 const SENTRY_PROTECT_INTERVAL = 1.0;
 const SENTRY_PROTECT_RADIUS = 512.0;
