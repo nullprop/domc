@@ -46,12 +46,27 @@ class GamemodeDomc
 
     function Think()
     {
-        foreach(ply in this.players)
+        // yikes, workaround for no player disconnect hook
+        local validPlayers = [];
+        local plyEnt = null;
+        while (plyEnt = Entities.FindByClassname(plyEnt, "player"))
+        {
+            validPlayers.append(plyEnt.entindex());
+        }
+        foreach (entindex in this.players.keys())
+        {
+            if (validPlayers.find(entindex) == null)
+            {
+                delete this.players[entindex];
+            }
+        }
+
+        foreach (ply in this.players)
         {
             ply.Think();
         }
 
-        foreach(spawner in this.spawners)
+        foreach (spawner in this.spawners)
         {
             spawner.Think();
         }
@@ -192,7 +207,7 @@ class GamemodeDomc
         local entindex = ent.entindex();
         if (!(entindex in this.players))
         {
-            Log(format("OnPlayerSpawn called for %d but not in players", userid));
+            Log(format("OnPlayerSpawn called for (%d, %d) but not in players", userid, entindex));
             return;
         }
 
@@ -200,16 +215,6 @@ class GamemodeDomc
         {
             this.players[entindex].OnSpawn();
         }
-    }
-
-    function RemovePlayer(userid)
-    {
-        if (!(userid in this.players))
-        {
-            return;
-        }
-
-        delete this.players[userid];
     }
 
     function DebugDrawLanes(duration)
@@ -564,7 +569,7 @@ function Think()
         cash.Kill();
     }
 
-    return 0.015;
+    return 0.0;
 }
 
 if (!("gamemode_domc" in getroottable()))

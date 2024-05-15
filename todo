@@ -1,5 +1,4 @@
 playtest issues:
-- gamemode breaks if a player leaves
 - map sentries can be sapped
   - could be an intended mechanic but needs nerfing, limit sap duration
 - server starts lagging when a lot of bots present
@@ -24,7 +23,9 @@ features:
 - sniper should be able to headshot bots
 - spy disguise should work against bots
 - spy bot sapping?
-- engineer tower repair?
+- make engineer viable
+  - tower repair?
+  - scale player buildings with lvl
 
 misc:
 - replace backdoor protection particles
