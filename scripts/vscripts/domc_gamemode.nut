@@ -57,6 +57,7 @@ class GamemodeDomc
         {
             if (validPlayers.find(entindex) == null)
             {
+                Log("remove player");
                 delete this.players[entindex];
             }
         }
@@ -500,6 +501,8 @@ function OnScriptHook_OnTakeDamage(params)
         return;
     }
 
+    local damageDistance = (ent.GetOrigin() - trueInf.GetOrigin()).Length();
+
     // Apply proper tower dmg
     if (infClassname == "obj_sentrygun")
     {
@@ -514,7 +517,13 @@ function OnScriptHook_OnTakeDamage(params)
     local player = ::gamemode_domc.GetPlayer(trueInf);
     if (player)
     {
-        params.damage *= player.GetDamageMult();
+        local applyFalloff = true;
+        if (entClassname == "player")
+        {
+            // Game already applies falloff to player-to-player dmg.
+            applyFalloff = false;
+        }
+        params.damage *= player.GetDamageMult(applyFalloff, damageDistance);
     }
 
     // Bot callback for aggro + award xp

@@ -16,15 +16,17 @@ CLASS_SETTINGS <-
         "hp_per_level": 15,
         "regen_base": 0.8,
         "regen_per_level": 0.4,
-        "dmg_mult_per_level": 0.1
+        "dmg_mult_per_level": 0.1,
+        "dmg_range": 1024
     },
 	// SCOUT
     {
         "hp_base": 125,
         "hp_per_level": 15,
         "regen_base": 0.8,
-        "regen_per_level": 0.4,
-        "dmg_mult_per_level": 0.1
+        "regen_per_level": 0.8,
+        "dmg_mult_per_level": 0.15,
+        "dmg_range": 512
     },
 	// SNIPER
     {
@@ -32,7 +34,8 @@ CLASS_SETTINGS <-
         "hp_per_level": 15,
         "regen_base": 0.8,
         "regen_per_level": 0.4,
-        "dmg_mult_per_level": 0.1
+        "dmg_mult_per_level": 0.1,
+        "dmg_range": 4096
     },
 	// SOLDIER
     {
@@ -40,7 +43,8 @@ CLASS_SETTINGS <-
         "hp_per_level": 20,
         "regen_base": 0.6,
         "regen_per_level": 1.0,
-        "dmg_mult_per_level": 0.1
+        "dmg_mult_per_level": 0.1,
+        "dmg_range": 768
     },
 	// DEMOMAN
     {
@@ -48,7 +52,8 @@ CLASS_SETTINGS <-
         "hp_per_level": 18,
         "regen_base": 0.7,
         "regen_per_level": 0.8,
-        "dmg_mult_per_level": 0.1
+        "dmg_mult_per_level": 0.1,
+        "dmg_range": 768
     },
 	// MEDIC
     {
@@ -56,7 +61,8 @@ CLASS_SETTINGS <-
         "hp_per_level": 18,
         "regen_base": 0.7,
         "regen_per_level": 1.0,
-        "dmg_mult_per_level": 0.1
+        "dmg_mult_per_level": 0.1,
+        "dmg_range": 2048
     },
 	// HEAVY
     {
@@ -64,7 +70,8 @@ CLASS_SETTINGS <-
         "hp_per_level": 30,
         "regen_base": 0.6,
         "regen_per_level": 2.0,
-        "dmg_mult_per_level": 0.1
+        "dmg_mult_per_level": 0.1,
+        "dmg_range": 1024
     },
 	// PYRO
     {
@@ -72,7 +79,8 @@ CLASS_SETTINGS <-
         "hp_per_level": 18,
         "regen_base": 0.8,
         "regen_per_level": 0.8,
-        "dmg_mult_per_level": 0.1
+        "dmg_mult_per_level": 0.1,
+        "dmg_range": 768
     },
 	// SPY
     {
@@ -80,7 +88,8 @@ CLASS_SETTINGS <-
         "hp_per_level": 15,
         "regen_base": 0.8,
         "regen_per_level": 0.8,
-        "dmg_mult_per_level": 0.1
+        "dmg_mult_per_level": 0.1,
+        "dmg_range": 768
     },
 	// ENGINEER
     {
@@ -88,7 +97,8 @@ CLASS_SETTINGS <-
         "hp_per_level": 15,
         "regen_base": 0.8,
         "regen_per_level": 0.4,
-        "dmg_mult_per_level": 0.1
+        "dmg_mult_per_level": 0.1,
+        "dmg_range": 1024
     },
 ]
 
@@ -302,10 +312,14 @@ class Player
         }
     }
 
-    function GetDamageMult()
+    function GetDamageMult(applyFalloff, distance)
     {
         local dmgMult = 1.0;
         dmgMult += this.level * this.classSettings["dmg_mult_per_level"];
+        if (applyFalloff)
+        {
+            dmgMult *= Min(this.classSettings["dmg_range"] / distance, 1.0);
+        }
         return dmgMult;
     }
 }
