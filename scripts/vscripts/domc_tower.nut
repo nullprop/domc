@@ -1,5 +1,7 @@
 DoIncludeScript("domc_util.nut", null);
 
+const TOWER_SAP_DURATION = 5.0;
+
 TOWER_SETTINGS <-
 [
 	{
@@ -25,6 +27,8 @@ class Tower
     team = null;
     protected = false;
     protectedFx = null;
+    sapTime = 0.0;
+    sapper = null;
 
     constructor(team, tier, laneIndex, pos, ang)
     {
@@ -82,6 +86,39 @@ class Tower
 
     function Update()
     {
+        if (IsValidAndAlive(this.sapper))
+        {
+            if (Time() - this.sapTime >= TOWER_SAP_DURATION)
+            {
+                this.sapper.Kill();
+                this.sapper = null;
+            }
+        }
+        else
+        {
+            this.sapper = null;
+            if (NetProps.GetPropBool(this.sentryEnt, "m_bDisabled"))
+            {
+                local sapperEnt = null;
+                while (sapperEnt = Entities.FindByClassname(sapperEnt, "obj_attachment_sapper"))
+                {
+                    if (sapperEnt.GetMoveParent() == this.sentryEnt)
+                    {
+                        if (this.protected)
+                        {
+                            sapperEnt.Kill();
+                        }
+                        else
+                        {
+                            this.sapper = sapperEnt;
+                            this.sapTime = Time();
+                        }
+                        break;
+                    }
+                }
+            }
+        }
+
         // refill ammo
         local shellCount = 150;
         local rocketCount = 0;
@@ -122,6 +159,14 @@ class Tower
 
         return false;
     }
+
+    /*
+    function OnSapped(sapper)
+    {
+        this.sapTime = Time();
+        this.sapper = sapper;
+    }
+    */
 
     function Kill()
     {

@@ -1,7 +1,4 @@
 playtest issues:
-- map sentries can be sapped
-  - could be an intended mechanic but needs nerfing, limit sap duration
-  - check player_sapped_object event
 - server starts lagging when a lot of bots present
   - measure & optimize bot think
   - get rid of siege pipes, these are a pain anyway

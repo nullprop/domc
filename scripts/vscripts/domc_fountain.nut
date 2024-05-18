@@ -1,6 +1,7 @@
 DoIncludeScript("domc_util.nut", null);
 
 const FOUNTAIN_HEALTH = 2000;
+const FOUNTAIN_SAP_DURATION = 10.0;
 
 class Fountain
 {
@@ -9,6 +10,8 @@ class Fountain
     team = null;
     protected = false;
     protectedFx = null;
+    sapTime = 0.0;
+    sapper = null;
 
     constructor(team, pos, ang)
     {
@@ -84,7 +87,38 @@ class Fountain
 
     function Update()
     {
-
+        if (IsValidAndAlive(this.sapper))
+        {
+            if (Time() - this.sapTime >= FOUNTAIN_SAP_DURATION)
+            {
+                this.sapper.Kill();
+                this.sapper = null;
+            }
+        }
+        else
+        {
+            this.sapper = null;
+            if (NetProps.GetPropBool(this.dispenserEnt, "m_bDisabled"))
+            {
+                local sapperEnt = null;
+                while (sapperEnt = Entities.FindByClassname(sapperEnt, "obj_attachment_sapper"))
+                {
+                    if (sapperEnt.GetMoveParent() == this.dispenserEnt)
+                    {
+                        if (this.protected)
+                        {
+                            sapperEnt.Kill();
+                        }
+                        else
+                        {
+                            this.sapper = sapperEnt;
+                            this.sapTime = Time();
+                        }
+                        break;
+                    }
+                }
+            }
+        }
     }
 
     function GetEnt()
