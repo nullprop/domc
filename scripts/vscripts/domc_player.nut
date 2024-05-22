@@ -213,7 +213,7 @@ class Player
         return this.playerEnt.GetTeam();
     }
 
-    function PlayerThink()
+    function Think()
     {
         local time = Time();
         local deltaTime = time - lastThinkTime;

@@ -51,12 +51,27 @@ class GamemodeDomc
 
         foreach (ply in this.players)
         {
-            ply.PlayerThink();
+            ply.Think();
         }
 
         foreach (spawner in this.spawners)
         {
-            spawner.SpawnerThink();
+            spawner.Think();
+        }
+
+        foreach (tower in this.towers)
+        {
+            tower.Think();
+        }
+
+        foreach (fountain in this.fountains)
+        {
+            fountain.Think();
+        }
+
+        foreach (bot in this.bots)
+        {
+            bot.Think();
         }
     }
 

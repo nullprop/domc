@@ -58,15 +58,6 @@ class Fountain
 
         // prevent repair
         NetProps.SetPropBool(this.dispenserEnt, "m_bDisposableBuilding", true);
-
-        // Add think
-        if (!this.dispenserEnt.ValidateScriptScope())
-        {
-            Log("Failed to validate fountain script scope");
-            return;
-        }
-        this.dispenserEnt.GetScriptScope().my_fountain <- this;
-        AddThinkToEnt(this.dispenserEnt, "FountainThink");
     }
 
     function OnTakeDamage(params)
@@ -85,7 +76,7 @@ class Fountain
         return false;
     }
 
-    function Update()
+    function Think()
     {
         if (IsValidAndAlive(this.sapper))
         {
@@ -170,7 +161,3 @@ class Fountain
     }
 }
 
-function FountainThink()
-{
-	return self.GetScriptScope().my_fountain.Update();
-}

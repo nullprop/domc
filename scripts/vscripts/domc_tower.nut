@@ -73,18 +73,9 @@ class Tower
 
         // prevent repair
         NetProps.SetPropBool(this.sentryEnt, "m_bDisposableBuilding", true);
-
-        // Add think
-        if (!this.sentryEnt.ValidateScriptScope())
-        {
-            Log("Failed to validate tower script scope");
-            return;
-        }
-        this.sentryEnt.GetScriptScope().my_tower <- this;
-        AddThinkToEnt(this.sentryEnt, "TowerThink");
     }
 
-    function Update()
+    function Think()
     {
         if (IsValidAndAlive(this.sapper))
         {
@@ -207,7 +198,3 @@ class Tower
     }
 }
 
-function TowerThink()
-{
-	return self.GetScriptScope().my_tower.Update();
-}

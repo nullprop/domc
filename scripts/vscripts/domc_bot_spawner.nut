@@ -50,7 +50,7 @@ class BotSpawner
         this.active = false;
     }
 
-    function SpawnerThink()
+    function Think()
     {
         if (!this.active)
         {

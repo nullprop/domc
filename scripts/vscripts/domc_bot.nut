@@ -178,12 +178,6 @@ class Bot
         this.locomotion.SetSpeedLimit(this.botSettings["move_speed"]);
         EntFireByHandle(this.botEnt, "SetStepHeight", STEP_HEIGHT.tostring(), 0, null, null);
 
-        if (!this.botEnt.ValidateScriptScope())
-        {
-            Log("Failed to validate bot script scope");
-            return;
-        }
-
         this.runSequence = this.botEnt.LookupSequence(this.botSettings["model_anim_move"]);
         this.idleSequence = this.botEnt.LookupSequence(this.botSettings["model_anim_idle"]);
         for (local i = 0; i < this.botSettings["model_anim_attack"].len(); i++)
@@ -192,9 +186,6 @@ class Bot
         }
         this.victorySequence = this.botEnt.LookupSequence(this.botSettings["model_anim_victory"]);
         this.loseSequence = this.botEnt.LookupSequence(this.botSettings["model_anim_lose"]);
-
-        this.botEnt.GetScriptScope().my_bot <- this;
-        AddThinkToEnt(this.botEnt, "BotThink");
 
         if (this.botSettings["weapon_model"])
         {
@@ -225,22 +216,23 @@ class Bot
         }
     }
 
-    function Update()
+    function Think()
     {
         if (!IsValidAndAlive(this.botEnt))
         {
-            return 1.0;
+            return;
         }
 
         if (this.roundOver)
         {
             this.locomotion.Stop();
             this.Animate();
-            return 0.0;
+            return;
         }
 
         local time = Time();
 
+        // TODO: this can return true even if moving, check vel
         if (this.locomotion.IsStuck())
         {
             local stuckTime = this.locomotion.GetStuckDuration();
@@ -260,7 +252,7 @@ class Bot
                     ));
                     this.locomotion.DriveTo(newPos);
                     this.locomotion.ClearStuckStatus("force unstuck");
-                    return 0.0;
+                    return;
                 }
 
                 Log(format(
@@ -269,7 +261,7 @@ class Bot
                     origin.tostring()
                 ));
                 this.Kill();
-                return 1.0;
+                return;
             }
         }
 
@@ -336,8 +328,6 @@ class Bot
         }
 
         this.Animate();
-
-        return 0.0;
     }
 
     function Animate()
@@ -751,6 +741,7 @@ class Bot
         {
             this.botEnt.Kill();
         }
+        ::gamemode_domc.RemoveBot(this);
     }
 
     function OnRoundEnd(isWinner)
@@ -801,10 +792,5 @@ class Bot
 
         DispatchParticleEffect("ExplosionCore_MidAir", origin, Vector());
     }
-}
-
-function BotThink()
-{
-	return self.GetScriptScope().my_bot.Update();
 }
 
