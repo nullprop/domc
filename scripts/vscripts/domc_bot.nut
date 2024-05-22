@@ -1,7 +1,7 @@
 DoIncludeScript("domc_util.nut", null);
 DoIncludeScript("domc_settings.nut", null);
 
-const PATH_INTERVAL = 1.0;
+const PATH_INTERVAL = 2.0;
 const TARGET_INTERVAL = 3.0;
 const AVOIDANCE_INTERVAL = 0.2;
 const INTERVAL_RAND = 0.05; // Try to spread recalculations across multiple ticks
