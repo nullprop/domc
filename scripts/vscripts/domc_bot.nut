@@ -7,7 +7,7 @@ const AVOIDANCE_INTERVAL = 0.2;
 const INTERVAL_RAND = 0.05; // Try to spread recalculations across multiple ticks
 const PATH_MARGIN = 64.0;
 const STEP_HEIGHT = 32.0;
-const BOT_XP_AWARD_BASE = 100.0;
+const BOT_XP_AWARD_BASE = 125.0;
 
 BOT_SETTINGS <-
 {
