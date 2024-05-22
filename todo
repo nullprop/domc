@@ -1,8 +1,6 @@
 playtest issues:
 - server starts lagging when a lot of bots present
   - measure & optimize bot think
-  - get rid of siege pipes, these are a pain anyway
-    - just hitscan + smoke/fire/explosion particles
 - late joiners shouldn't start at level 1
   - maybe equal to lowest level in lobby?
   - keep player level if they disconnect/rejoin?
