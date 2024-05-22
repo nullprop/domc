@@ -44,7 +44,33 @@ class GamemodeDomc
         }
     }
 
-    function Think()
+    function GamemodeThink()
+    {
+        ThisIsSoNotCashMoney();
+        ValidatePlayers();
+
+        foreach (ply in this.players)
+        {
+            ply.PlayerThink();
+        }
+
+        foreach (spawner in this.spawners)
+        {
+            spawner.SpawnerThink();
+        }
+    }
+
+    function ThisIsSoNotCashMoney()
+    {
+        // >:(
+        local cash = null;
+        while (cash = Entities.FindByClassname(cash, "item_currencypack_custom"))
+        {
+            cash.Kill();
+        }
+    }
+
+    function ValidatePlayers()
     {
         // yikes, workaround for no player disconnect hook
         local validPlayers = [];
@@ -60,16 +86,6 @@ class GamemodeDomc
                 Log("remove player");
                 delete this.players[entindex];
             }
-        }
-
-        foreach (ply in this.players)
-        {
-            ply.Think();
-        }
-
-        foreach (spawner in this.spawners)
-        {
-            spawner.Think();
         }
     }
 
@@ -568,14 +584,7 @@ function Think()
 {
     if (("gamemode_domc" in getroottable()))
     {
-        ::gamemode_domc.Think();
-    }
-
-    // >:(
-    local cash = null;
-    while (cash = Entities.FindByClassname(cash, "item_currencypack_custom"))
-    {
-        cash.Kill();
+        ::gamemode_domc.GamemodeThink();
     }
 
     return 0.0;

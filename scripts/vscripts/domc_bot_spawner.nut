@@ -1,7 +1,7 @@
 DoIncludeScript("domc_bot.nut", null);
 
 const BOT_SPAWN_INTERVAL = 30.0;
-const BOT_SIEGE_INTERVAL = 3;
+const BOT_SIEGE_INTERVAL = 1;
 
 class BotSpawner
 {
@@ -41,7 +41,7 @@ class BotSpawner
         this.active = false;
     }
 
-    function Think()
+    function SpawnerThink()
     {
         if (!this.active)
         {

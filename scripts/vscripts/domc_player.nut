@@ -168,7 +168,6 @@ class Player
 
     function OnGainXP(amount)
     {
-        Log("OnGainXP " + amount);
         if (this.level >= MAX_LEVEL)
         {
             return;
@@ -214,7 +213,7 @@ class Player
         return this.playerEnt.GetTeam();
     }
 
-    function Think()
+    function PlayerThink()
     {
         local time = Time();
         local deltaTime = time - lastThinkTime;

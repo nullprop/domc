@@ -393,29 +393,16 @@ class Bot
 
         if (this.botType == TF_BOT_TYPE["SIEGE"])
         {
-            local forward = this.botEnt.GetForwardVector();
-            local startPos = myPos + Vector(0, 0, 48.0) + forward * 32.0;
-            local horizontalVel = this.botSettings["projectile_vel"];
-            local verticalVel = TrajectoryVertVel(attackVec.Length2D(), horizontalVel, 800.0);
-            local startVel = forward * horizontalVel + Vector(0.0, 0.0, verticalVel);
-            local startAng = VectorAngles(startVel);
+            local explosionPos = this.targetEnt.GetOrigin();
 
-            // local nadeUname = UniqueString();
-            // local targetname = "bot_" + this.uname + "_grenade_" + nadeUname;
-            local nade = Entities.CreateByClassname("tf_projectile_pipe");
+            local direction = explosionPos - this.botEnt.GetOrigin();
+            direction.Norm();
 
-            nade.SetTeam(this.team);
-            nade.SetOwner(this.botEnt);
-            NetProps.SetPropEntity(nade, "m_hThrower", this.botEnt);
-            NetProps.SetPropVector(nade, "m_vInitialVelocity", startVel);
-            NetProps.SetPropInt(nade, "m_iType", 0); // pipe
-            NetProps.SetPropFloat(nade, "m_flDamage", damage);
-            NetProps.SetPropFloat(nade, "m_DmgRadius", this.botSettings["damage_radius"]);
-            NetProps.SetPropBool(nade, "m_bCritical", false);
-            nade.DispatchSpawn();
-            // needed for nades
-            nade.Teleport(true, startPos, true, startAng, true, startVel);
-            AddThinkToEnt(nade, "GrenadeThink");
+            // Pull out of target and up a bit
+            explosionPos -= direction * 16.0;
+            explosionPos += Vector(0.0, 0.0, 16.0);
+
+            CreateExplosion(explosionPos);
         }
         else
         {
@@ -586,7 +573,6 @@ class Bot
         local ent = null;
         local pos = this.botEnt.GetOrigin();
         local radius = this.botSettings["aggro_range"];
-        local myTeam = this.botEnt.GetTeam();
 
         while (ent = Entities.FindInSphere(ent, pos, radius))
         {
@@ -596,7 +582,7 @@ class Bot
             }
 
             local team = ent.GetTeam();
-            if (team == myTeam || (team != Constants.ETFTeam.TF_TEAM_RED && team != Constants.ETFTeam.TF_TEAM_BLUE))
+            if (team == this.team || (team != Constants.ETFTeam.TF_TEAM_RED && team != Constants.ETFTeam.TF_TEAM_BLUE))
             {
                 continue;
             }
@@ -808,50 +794,17 @@ class Bot
             this.SetPoseParameter("move_scale", 0.0);
         }
     }
-}
 
-function BotThink()
-{
-	return self.GetScriptScope().my_bot.Update();
-}
-
-// m_flFullDamage is not exposed as a netprop,
-// so we need to fudge direct hit grenades... :(
-function GrenadeThink()
-{
-    local aboutToCollide = false;
-    local origin = self.GetOrigin() - Vector(0, 0, 16);
-    local vel = self.GetAbsVelocity();
-
-    local tr =
-    {
-        "start": origin,
-        "end": origin + vel * 0.05,
-        "mask": MASK_BOT_PIPE,
-        "ignore": self,
-        "hullmin": self.GetBoundingMins(),
-        "hullmax": self.GetBoundingMaxs()
-    };
-    if (TraceHull(tr))
-    {
-        if (tr["hit"])
-        {
-            aboutToCollide = true;
-        }
-    }
-
-    if (aboutToCollide)
+    function CreateExplosion(origin)
     {
         local radius = BOT_SETTINGS["siege"]["damage_radius"];
         local damage = BOT_SETTINGS["siege"]["damage"];
         local damageType = BOT_SETTINGS["siege"]["damage_type"];
-        local myTeam = self.GetTeam();
-        local bot = NetProps.GetPropEntity(self, "m_hThrower");
         local ent = null;
         while (ent = Entities.FindInSphere(ent, origin, radius))
         {
             local team = ent.GetTeam();
-            if (team == myTeam || (team != Constants.ETFTeam.TF_TEAM_RED && team != Constants.ETFTeam.TF_TEAM_BLUE))
+            if (team == this.team || (team != Constants.ETFTeam.TF_TEAM_RED && team != Constants.ETFTeam.TF_TEAM_BLUE))
             {
                 continue;
             }
@@ -859,13 +812,15 @@ function GrenadeThink()
             local pos = ent.GetOrigin();
             local dist = (pos - origin).Length();
             local damageScale = 1.0 - (dist / radius);
-            ent.TakeDamageEx(self, bot, null, Vector(), origin, damage * damageScale, damageType);
+            ent.TakeDamageEx(this.botEnt, this.botEnt, null, Vector(), origin, damage * damageScale, damageType);
         }
 
         DispatchParticleEffect("ExplosionCore_MidAir", origin, Vector());
-        self.Kill();
     }
+}
 
-    return 0.0;
+function BotThink()
+{
+	return self.GetScriptScope().my_bot.Update();
 }
 
