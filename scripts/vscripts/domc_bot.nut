@@ -265,37 +265,40 @@ class Bot
             }
         }
 
+        local validTarget = IsValidAndAlive(this.targetEnt);
+
         if (
             // time to recheck?
             time - this.targetCheckTime > TARGET_INTERVAL ||
             // has our previous target died?
-            !IsValidAndAlive(this.targetEnt)
+            !validTarget
         )
         {
             local prevTarget = this.targetEnt;
             this.targetCheckTime = time;
             this.targetEnt = this.FindTarget();
-            if (prevTarget != this.targetEnt && IsValidAndAlive(this.targetEnt))
+            validTarget = IsValidAndAlive(this.targetEnt);
+            if (prevTarget != this.targetEnt && validTarget)
             {
                 this.hasNewTarget = true;
             }
         }
 
-        if (IsValidAndAlive(this.targetEnt))
+        if (validTarget)
         {
             local targetOrigin = this.targetEnt.GetOrigin();
             local myPos = this.botEnt.GetOrigin();
             local attackVec = targetOrigin - myPos;
             local inRange = attackVec.Length() <= this.botSettings["attack_range"];
-            local hasLOS = this.HasLOS(
-                myPos + Vector(0, 0, 48),
-                targetOrigin + Vector(0, 0, 48),
-                this.targetEnt
-            );
 
-            if (hasLOS)
+            if (inRange)
             {
-                if (inRange)
+                local hasLOS = this.HasLOS(
+                    myPos + Vector(0, 0, 48),
+                    targetOrigin + Vector(0, 0, 48),
+                    this.targetEnt
+                );
+                if (hasLOS)
                 {
                     local frontTowardEnemy = Vector(attackVec.x, attackVec.y, 0.0);
                     this.botEnt.SetForwardVector(frontTowardEnemy);
@@ -486,7 +489,6 @@ class Bot
             local classname = ent.GetClassname();
             if (!ArrayContains(avoid, classname))
             {
-                //DebugDrawLine(origin, ent.GetOrigin(), 0, 0, 255, true, 0.02);
                 continue;
             }
 
@@ -498,18 +500,14 @@ class Bot
                 local weight = 1.0 + 150.0 * depen/avoidDistance;
                 avoidVec += toEnt * -weight;
                 avoidWeight += weight;
-                //DebugDrawLine(origin, ent.GetOrigin(), 255, 0, 0, true, 0.02);
             }
         }
 
-        //DebugDrawBox(goal, Vector(-8.0, -8.0, -8.0), Vector(8.0, 8.0, 8.0), 0, 255, 0, 100, 0.02);
 
         if (avoidWeight > 0.0)
         {
             local oldGoal = goal;
             goal += avoidVec;
-            //DebugDrawBox(goal, Vector(-8.0, -8.0, -8.0), Vector(8.0, 8.0, 8.0), 255, 0, 0, 100, 0.02);
-            //DebugDrawLine(oldGoal, goal, 255, 255, 255, true, 0.02);
         }
 
         this.locomotion.FaceTowards(goal);
@@ -667,15 +665,6 @@ class Bot
             local area = pathTable["area0"];
             while (area != null)
             {
-                /*
-                // Don't add current area so bot will actually leave it...
-                // Don't add end area, use actual targetPos for final point
-                if (area != startArea && area != endArea)
-                {
-                    this.navPath.append(area.GetCenter());
-                }
-                */
-
                 local parentArea = area.GetParent();
 
                 if (parentArea)
@@ -687,23 +676,10 @@ class Bot
                     );
                     this.navPath.append(portalPoint);
                 }
-                /*
-                if (area != startArea && area != endArea)
-                {
-                    this.navPath.append(area.FindRandomSpot());
-                }
-                */
 
                 area = parentArea;
             }
         }
-
-        /*
-        foreach (p in this.navPath)
-        {
-            DebugDrawBox(p, Vector(-8.0, -8.0, -8.0), Vector(8.0, 8.0, 8.0), 255, 255, 255, 100, 0.1);
-        }
-        */
     }
 
     function SetPoseParameter(name, val)
