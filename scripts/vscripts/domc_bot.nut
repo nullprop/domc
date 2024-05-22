@@ -3,6 +3,8 @@ DoIncludeScript("domc_settings.nut", null);
 
 const PATH_INTERVAL = 1.0;
 const TARGET_INTERVAL = 3.0;
+const AVOIDANCE_INTERVAL = 0.2;
+const INTERVAL_RAND = 0.05; // Try to spread recalculations across multiple ticks
 const PATH_MARGIN = 64.0;
 const STEP_HEIGHT = 32.0;
 const BOT_XP_AWARD_BASE = 100.0;
@@ -110,16 +112,22 @@ class Bot
     uname = null;
 
     targetEnt = null;
-    targetCheckTime = 0.0;
+    nextTargetCheckTime = 0.0;
     hasNewTarget = false;
     targetPos = null;
     targetPath = null;
+
     navArea = null;
     navPath = [];
-    pathTime = 0.0;
+    nextPathTime = 0.0;
+
     lastAttackTime = 0.0;
+
     xpAward = BOT_XP_AWARD_BASE;
     mega = false;
+
+    nextAvoidanceTime = 0.0;
+    avoidanceVector = Vector();
 
     constructor(type, team, lane, pos, ang, mega){
         if (team != Constants.ETFTeam.TF_TEAM_RED && team != Constants.ETFTeam.TF_TEAM_BLUE)
@@ -269,13 +277,13 @@ class Bot
 
         if (
             // time to recheck?
-            time - this.targetCheckTime > TARGET_INTERVAL ||
+            time - this.nextTargetCheckTime >= 0.0 ||
             // has our previous target died?
             !validTarget
         )
         {
             local prevTarget = this.targetEnt;
-            this.targetCheckTime = time;
+            this.nextTargetCheckTime = time + TARGET_INTERVAL + RandomFloat(-INTERVAL_RAND, INTERVAL_RAND);
             this.targetEnt = this.FindTarget();
             validTarget = IsValidAndAlive(this.targetEnt);
             if (prevTarget != this.targetEnt && validTarget)
@@ -288,24 +296,24 @@ class Bot
         {
             local targetOrigin = this.targetEnt.GetOrigin();
             local myPos = this.botEnt.GetOrigin();
-            local attackVec = targetOrigin - myPos;
-            local inRange = attackVec.Length() <= this.botSettings["attack_range"];
+            local hasLOS = this.HasLOS(
+                myPos + Vector(0, 0, 48),
+                targetOrigin + Vector(0, 0, 48),
+                this.targetEnt
+            );
 
-            if (inRange)
+            if (hasLOS)
             {
-                local hasLOS = this.HasLOS(
-                    myPos + Vector(0, 0, 48),
-                    targetOrigin + Vector(0, 0, 48),
-                    this.targetEnt
-                );
-                if (hasLOS)
+                local attackVec = targetOrigin - myPos;
+                local inRange = attackVec.Length() <= this.botSettings["attack_range"];
+                if (inRange)
                 {
-                    local frontTowardEnemy = Vector(attackVec.x, attackVec.y, 0.0);
-                    this.botEnt.SetForwardVector(frontTowardEnemy);
+                    attackVec.z = 0.0;
+                    this.botEnt.SetForwardVector(attackVec);
 
                     if (this.CanAttack())
                     {
-                        this.Attack(myPos, attackVec);
+                        this.Attack(myPos);
                     }
                     else
                     {
@@ -378,7 +386,7 @@ class Bot
         return true;
     }
 
-    function Attack(myPos, attackVec)
+    function Attack(myPos)
     {
         this.lastAttackTime = Time();
         this.botEnt.ResetSequence(RandomElement(this.attackSequences));
@@ -420,7 +428,7 @@ class Bot
     {
         local time = Time();
 
-        if (time - this.pathTime > PATH_INTERVAL || this.navPath.len() <= 0 || this.hasNewTarget)
+        if (time - this.nextPathTime >= 0.0 || this.navPath.len() <= 0 || this.hasNewTarget)
         {
             this.hasNewTarget = false;
             this.GetTargetPos();
@@ -466,49 +474,49 @@ class Bot
         toGoal = toGoal * goalDist;
         goal = origin + toGoal;
 
-        local avoid =
-        [
-            "base_boss",
-            "obj_sentrygun",
-            "obj_dispenser",
-            "player"
-        ];
-        local ent = null;
-        local avoidWeight = 0.0;
-        local avoidVec = Vector();
-        local avoidDistance = 16.0;
-        local boundsDist = this.botEnt.GetBoundingMaxs().Length2D(); 
-        local queryDistance = boundsDist * 5.0;
-        while (ent = Entities.FindInSphere(ent, origin, queryDistance))
+        local time = Time();
+        local updateAvoidance = time - this.nextAvoidanceTime >= 0.0;
+
+        if (updateAvoidance)
         {
-            if (!IsValidAndAlive(ent))
+            this.nextAvoidanceTime = time + AVOIDANCE_INTERVAL + RandomFloat(-INTERVAL_RAND, INTERVAL_RAND);
+            this.avoidanceVector = Vector();
+            local avoid =
+            [
+                "base_boss",
+                "obj_sentrygun",
+                "obj_dispenser",
+                "player"
+            ];
+            local ent = null;
+            local avoidDistance = 16.0;
+            local boundsDist = this.botEnt.GetBoundingMaxs().Length2D(); 
+            local queryDistance = boundsDist * 5.0;
+            while (ent = Entities.FindInSphere(ent, origin, queryDistance))
             {
-                continue;
-            }
+                if (!IsValidAndAlive(ent))
+                {
+                    continue;
+                }
 
-            local classname = ent.GetClassname();
-            if (!ArrayContains(avoid, classname))
-            {
-                continue;
-            }
+                local classname = ent.GetClassname();
+                if (!ArrayContains(avoid, classname))
+                {
+                    continue;
+                }
 
-            local toEnt = ent.GetOrigin() - origin;
-            local range = toEnt.Norm() - boundsDist - ent.GetBoundingMaxs().Length2D();
-            if (range < avoidDistance)
-            {
-                local depen = avoidDistance - range;
-                local weight = 1.0 + 150.0 * depen/avoidDistance;
-                avoidVec += toEnt * -weight;
-                avoidWeight += weight;
+                local toEnt = ent.GetOrigin() - origin;
+                local range = toEnt.Norm() - boundsDist - ent.GetBoundingMaxs().Length2D();
+                if (range < avoidDistance)
+                {
+                    local depen = avoidDistance - range;
+                    local weight = 1.0 + 150.0 * depen/avoidDistance;
+                    this.avoidanceVector += toEnt * -weight;
+                }
             }
         }
 
-
-        if (avoidWeight > 0.0)
-        {
-            local oldGoal = goal;
-            goal += avoidVec;
-        }
+        goal += this.avoidanceVector;
 
         this.locomotion.FaceTowards(goal);
         this.locomotion.Approach(goal, 1.0);
@@ -658,7 +666,7 @@ class Bot
             false,
             pathTable
         );
-        this.pathTime = Time();
+        this.nextPathTime = Time() + PATH_INTERVAL + RandomFloat(-INTERVAL_RAND, INTERVAL_RAND);
 
         if (builtPath && pathTable.len() > 0)
         {
@@ -721,12 +729,12 @@ class Bot
         {
             this.targetEnt = inf;
             this.hasNewTarget = true;
-            this.targetCheckTime = Time();
+            this.nextTargetCheckTime = Time() + TARGET_INTERVAL;
         }
         else if (this.targetEnt == inf)
         {
             // Reset timer if current aggro target
-            this.targetCheckTime = Time();
+            this.nextTargetCheckTime = Time() + TARGET_INTERVAL;
         }
 
         return false;
