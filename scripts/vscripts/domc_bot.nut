@@ -314,7 +314,7 @@ class Bot
                 }
                 else
                 {
-                    this.Move(targetOrigin);
+                    this.Move(myPos, targetOrigin);
                 }
             }
             else
@@ -441,7 +441,7 @@ class Bot
 
         if (moveTarget)
         {
-            this.Move(moveTarget);
+            this.Move(currentPos, moveTarget);
         }
         else
         {
@@ -449,10 +449,9 @@ class Bot
         }
     }
 
-    function Move(targetPos)
+    function Move(origin, targetPos)
     {
         local goal = targetPos;
-        local origin = this.botEnt.GetOrigin();
 
         // Make sure goal isn't too far, otherwise avoidance wont have much impact
         local toGoal = goal - origin;
@@ -611,7 +610,7 @@ class Bot
 
     function GetTargetPos()
     {
-        if (this.targetEnt != null && this.targetEnt.IsValid())
+        if (IsValidAndAlive(this.targetEnt))
         {
             this.targetPos = this.targetEnt.GetOrigin();
             return;
