@@ -15,6 +15,10 @@ class BotSpawner
     lastSpawnTime = 0.0;
     active = false;
     wave = 0;
+    // Delay spawn by 1 tick.
+    // Avoid server var hitch from too many spawns at same time.
+    delaySpawn = false;
+    wantsSpawn = false;
 
     constructor(team, botType, laneIndex, pos, ang)
     {
@@ -28,12 +32,17 @@ class BotSpawner
         this.laneIndex = laneIndex;
         this.pos = pos;
         this.ang = ang;
+
+        if (this.botType != TF_BOT_TYPE["MELEE"])
+        {
+            this.delaySpawn = true;
+        }
     }
 
     function OnRoundStart()
     {
         this.active = true;
-        this.SpawnBot();
+        CallSpawn();
     }
 
     function OnRoundEnd()
@@ -48,7 +57,27 @@ class BotSpawner
             return;
         }
 
+        if (this.wantsSpawn)
+        {
+            this.wantsSpawn = false;
+            this.SpawnBot();
+        }
+
         if (Time() - this.lastSpawnTime >= BOT_SPAWN_INTERVAL)
+        {
+            CallSpawn();
+        }
+    }
+
+    function CallSpawn()
+    {
+        this.lastSpawnTime = Time();
+        this.wave++;
+        if (this.delaySpawn)
+        {
+            this.wantsSpawn = true;
+        }
+        else
         {
             this.SpawnBot();
         }
@@ -56,8 +85,6 @@ class BotSpawner
 
     function SpawnBot()
     {
-        this.lastSpawnTime = Time();
-        this.wave++;
         if (this.botType == TF_BOT_TYPE["SIEGE"] && this.wave % BOT_SIEGE_INTERVAL != 0)
         {
             return;
