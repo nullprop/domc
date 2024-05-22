@@ -13,7 +13,7 @@ BOT_SETTINGS <-
 {
 	"melee":
 	{
-		"health": 350,
+		"health": 375,
 		"damage": 15.0,
         "damage_type": Constants.FDmgType.DMG_CLUB,
         "attack_interval": 1.0,
