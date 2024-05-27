@@ -588,6 +588,28 @@ class Bot
                 continue;
             }
 
+            if (classname == "player")
+            {
+                local ignoreConds = [
+                    Constants.ETFCond.TF_COND_DISGUISED,
+                    Constants.ETFCond.TF_COND_STEALTHED,
+                    Constants.ETFCond.TF_COND_INVULNERABLE,
+                ];
+                local ignored = false;
+                foreach (cond in ignoreConds)
+                {
+                    if (ent.InCond(cond))
+                    {
+                        ignored = true;
+                        break;
+                    }
+                }
+                if (ignored)
+                {
+                    continue;
+                }
+            }
+
             local origin = ent.GetOrigin();
             local dist = (origin - pos).Length();
             if (dist < nearest[classname]["dist"])

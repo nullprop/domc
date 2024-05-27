@@ -1,12 +1,13 @@
 playtest issues:
 - server starts lagging when a lot of bots present
   - measure & optimize bot think
-- late joiners shouldn't start at level 1
+- late joiners maybe shouldn't start at level 1
   - maybe equal to lowest level in lobby?
   - keep player level if they disconnect/rejoin?
 
-bugs:
+bugs
 - t3 sentry rockets do no dmg
+- ranged and siege bots dont carry weapons correctly
 - bots tilt sideways when playing victory taunt anim
 
 map:
@@ -15,7 +16,6 @@ map:
 
 features:
 - sniper should be able to headshot bots
-- spy disguise should work against bots
 - spy bot sapping?
 - make engineer viable
   - tower repair?
