@@ -262,7 +262,7 @@ class Bot
         {
             local stuckTime = this.locomotion.GetStuckDuration();
 
-            if (stuckTime > 0.1)
+            if (stuckTime > 0.5)
             {
                 local origin = this.botEnt.GetOrigin();
                 local navArea = NavMesh.GetNearestNavArea(origin + Vector(0, 0, 32), 64, false, true);
