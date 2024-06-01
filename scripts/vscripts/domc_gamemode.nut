@@ -24,6 +24,14 @@ PrecacheModel("models/items/currencypack_small.mdl");
 PrecacheModel("models/items/currencypack_medium.mdl");
 PrecacheModel("models/items/currencypack_large.mdl");
 
+PrecacheParticle("fireSmokeExplosion");
+PrecacheParticle("mvm_pow_gold_seq_firework_mid");
+PrecacheParticle("rd_robot_explosion");
+PrecacheParticle("ExplosionCore_MidAir");
+PrecacheParticle("ExplosionCore_buildings");
+PrecacheParticle("utaunt_firework_red_launcher");
+PrecacheParticle("utaunt_firework_blue_launcher");
+
 const XP_AWARD_RADIUS = 1024.0;
 
 class GamemodeDomc

@@ -145,6 +145,11 @@ class Tower
 
         if (params.damage >= this.sentryEnt.GetHealth())
         {
+            DispatchParticleEffect(
+                format("utaunt_firework_%s_launcher", TF_TEAM_NAMES_PARTICLES[this.team]),
+                this.sentryEnt.GetOrigin() + Vector(0, 0, 32),
+                Vector()
+            );
             return true;
         }
 

@@ -311,3 +311,8 @@ VectorAngles <- function(forward)
 	return QAngle(pitch, yaw, 0.0);
 }
 
+PrecacheParticle <- function(name)
+{
+    PrecacheEntityFromTable({ classname = "info_particle_system", effect_name = name })
+}
+

@@ -70,6 +70,16 @@ class Fountain
 
         if (params.damage >= this.dispenserEnt.GetHealth())
         {
+            DispatchParticleEffect(
+                "fireSmokeExplosion",
+                this.dispenserEnt.GetOrigin() + Vector(0, 0, 32),
+                Vector()
+            );
+            DispatchParticleEffect(
+                "mvm_pow_gold_seq_firework_mid",
+                this.dispenserEnt.GetOrigin() + Vector(0, 0, 64),
+                Vector()
+            );
             return true;
         }
 
