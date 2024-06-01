@@ -22,6 +22,3 @@ features:
   - scale player buildings with lvl
     - check player_*object events
 
-misc:
-- replace backdoor protection particles
-

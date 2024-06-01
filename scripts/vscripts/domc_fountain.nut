@@ -157,8 +157,7 @@ class Fountain
         {
             this.protectedFx = SpawnEntityFromTable("info_particle_system",
             {
-                // TODO: use a different particle, this one is not all that visible
-                effect_name = format("teleporter_%s_entrance", TF_TEAM_NAMES_PARTICLES[this.team]),
+                effect_name = format("medic_megaheal_%s", TF_TEAM_NAMES_PARTICLES[this.team]),
                 targetname = format("fountain_fx_%s", TF_TEAM_NAMES[team]),
                 origin = this.dispenserEnt.GetOrigin(),
                 start_active = true

@@ -189,8 +189,7 @@ class Tower
         {
             this.protectedFx = SpawnEntityFromTable("info_particle_system",
             {
-                // TODO: use a different particle, this one is not all that visible
-                effect_name = format("teleporter_%s_entrance", TF_TEAM_NAMES_PARTICLES[this.team]),
+                effect_name = format("medic_megaheal_%s", TF_TEAM_NAMES_PARTICLES[this.team]),
                 targetname = format("tower_fx_%s_%d_%d", TF_TEAM_NAMES[this.team], this.tier, this.laneIndex),
                 origin = this.sentryEnt.GetOrigin(),
                 start_active = true
