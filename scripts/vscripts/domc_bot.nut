@@ -56,6 +56,7 @@ BOT_SETTINGS <-
         "model_anim_victory": "taunt01",
         "model_anim_lose": "Stand_LOSER",
         "weapon_model": "models/weapons/w_models/w_sniperrifle.mdl",
+        "weapon_offset": Vector(-7, -10, 9),
         "move_speed": 145,
         "death_particle": "ExplosionCore_buildings"
 	},
@@ -80,6 +81,7 @@ BOT_SETTINGS <-
         "model_anim_victory": "taunt01",
         "model_anim_lose": "Stand_LOSER",
         "weapon_model": "models/weapons/w_models/w_grenadelauncher.mdl",
+        "weapon_offset": Vector(-5, -5, 11),
         "move_speed": 145,
         "death_particle": "rd_robot_explosion"
 	}
@@ -199,19 +201,42 @@ class Bot
             this.weaponModel.SetModelScale(model_scale, 0.0);
             this.weaponModel.DispatchSpawn();
 
-            EntFireByHandle(this.weaponModel, "SetParent", "bot_" + this.uname, 0.1, null, null);
+            // doesn't seem to work in tf2
+            //local effects = NetProps.GetPropInt(this.weaponModel, "m_fEffects");
+            //effects = effects | Constants.FEntityEffects.EF_BONEMERGE;
+            //NetProps.SetPropInt(this.weaponModel, "m_fEffects", effects);
+            // TODO: FollowEntity / prop_dynamic_ornament?
 
-            // FIXME: doesn't seem to work
             local bone = this.botEnt.LookupBone("weapon_bone");
             if (bone >= 0)
             {
-                this.weaponModel.SetAbsOrigin(this.botEnt.GetBoneOrigin(bone));
-                this.weaponModel.SetAbsAngles(this.botEnt.GetBoneAngles(bone));
+                local weaponBone = this.weaponModel.LookupBone("weapon_bone");
+                if (weaponBone >= 0)
+                {
+                    local bonePos = this.botEnt.GetBoneOrigin(bone)
+                        - this.weaponModel.GetBoneOrigin(weaponBone)
+                        // this sucks!
+                        + ang.Forward() * this.botSettings["weapon_offset"].x
+                        + ang.Left() * this.botSettings["weapon_offset"].y
+                        + ang.Up() * this.botSettings["weapon_offset"].z;
+
+                    local boneAng = this.botEnt.GetBoneAngles(bone)
+                        - this.weaponModel.GetBoneAngles(weaponBone)
+                        - QAngle(0, 0, 90); // weapons are rotated by 90 for whatever reason
+                    this.weaponModel.SetAbsOrigin(bonePos);
+                    this.weaponModel.SetAbsAngles(boneAng);
+                    EntFireByHandle(this.weaponModel, "SetParent", "bot_" + this.uname, 0.0, null, null);
+                }
+                else
+                {
+                    Log("No 'weapon_bone' in weapon model, killing weapon");
+                    this.weaponModel.Kill();
+                }
             }
             else
             {
-                this.weaponModel.SetAbsOrigin(pos + Vector(0, 0, 40.0 * model_scale));
-                this.weaponModel.SetAbsAngles(this.botEnt.GetAbsAngles());
+                Log("No 'weapon_bone' in bot model, killing weapon");
+                this.weaponModel.Kill();
             }
         }
     }
