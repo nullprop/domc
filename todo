@@ -1,6 +1,6 @@
 playtest issues:
-- server starts lagging when a lot of bots present
-  - measure & optimize bot think
+- bots get stuck on each other
+  - massive group builds up at spawn, kills server
 - late joiners maybe shouldn't start at level 1
   - maybe equal to lowest level in lobby?
   - keep player level if they disconnect/rejoin?
