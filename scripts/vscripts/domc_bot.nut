@@ -286,6 +286,7 @@ class Bot
                     origin.tostring()
                 ));
                 this.Kill();
+                ::gamemode_domc.RemoveBot(this);
                 return;
             }
         }
@@ -787,7 +788,6 @@ class Bot
         {
             this.botEnt.Kill();
         }
-        ::gamemode_domc.RemoveBot(this);
     }
 
     function OnRoundEnd(isWinner)
