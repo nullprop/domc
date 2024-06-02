@@ -2,11 +2,13 @@ playtest issues:
 - late joiners maybe shouldn't start at level 1
   - maybe equal to lowest level in lobby?
   - keep player level if they disconnect/rejoin?
+- stop gamemode when server hibernates (0 players)
 
 bugs
 - t3 sentry rockets do no dmg
 - ranged and siege bots dont carry weapons correctly
 - bots tilt sideways when playing victory taunt anim
+- bots sometimes stop, RemoveBot probably broken
 
 map:
 - power runes
