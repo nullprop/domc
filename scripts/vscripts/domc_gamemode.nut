@@ -42,6 +42,7 @@ class GamemodeDomc
     lanes = [];
     fountains = [];
     spawners = [];
+    started = false;
 
     constructor()
     {
@@ -54,8 +55,20 @@ class GamemodeDomc
 
     function GamemodeThink()
     {
+        if (!this.started)
+        {
+            return;
+        }
+
         ThisIsSoNotCashMoney();
         ValidatePlayers();
+
+        if (this.players.len() == 0)
+        {
+            Log("gamemode is eepy");
+            Reset();
+            return;
+        }
 
         foreach (ply in this.players)
         {
@@ -106,7 +119,7 @@ class GamemodeDomc
         {
             if (validPlayers.find(entindex) == null)
             {
-                Log("remove player");
+                Log(format("remove player %d", entindex));
                 delete this.players[entindex];
             }
         }
@@ -114,6 +127,8 @@ class GamemodeDomc
 
     function Reset()
     {
+        this.started = false;
+
         foreach(ply in this.players)
         {
             ply.Reset();
@@ -135,7 +150,7 @@ class GamemodeDomc
         this.fountains = [];
         this.spawners = [];
         this.lanes = [];
-        CollectGarbage();
+        //CollectGarbage();
 
         local target = null;
         while(target = Entities.FindByClassname(target, "info_target"))
@@ -218,12 +233,14 @@ class GamemodeDomc
 
         Convars.SetValue("sv_turbophysics", 0);
 
-        Reset();
+        Reset(); 
 
         foreach(spawner in this.spawners)
         {
             spawner.OnRoundStart();
         }
+
+        this.started = true;
     }
 
     function AddPlayer(userid)
