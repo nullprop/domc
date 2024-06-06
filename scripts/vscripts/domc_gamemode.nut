@@ -349,9 +349,11 @@ class GamemodeDomc
     {
         for (local i = this.bots.len() - 1; i >= 0; i--)
         {
-            if (this.bots[i] == bot)
+            if (this.bots[i].uname == bot.uname)
             {
+                //Log(format("Removed bot %s", bot.uname));
                 this.bots.remove(i);
+                break;
             }
         }
     }
