@@ -5,7 +5,7 @@ const PATH_INTERVAL = 2.0;
 const TARGET_INTERVAL = 3.0;
 const AVOIDANCE_INTERVAL = 0.2;
 const INTERVAL_RAND = 0.05; // Try to spread recalculations across multiple ticks
-const PATH_MARGIN = 64.0;
+const PATH_MARGIN = 48.0;
 const STEP_HEIGHT = 32.0;
 const BOT_XP_AWARD_BASE = 125.0;
 
@@ -705,6 +705,7 @@ class Bot
         );
         this.nextPathTime = Time() + PATH_INTERVAL + RandomFloat(-INTERVAL_RAND, INTERVAL_RAND);
 
+        local prevPoint = this.targetPos;
         if (builtPath && pathTable.len() > 0)
         {
             local area = pathTable["area0"];
@@ -717,9 +718,10 @@ class Bot
                     local portalPoint = area.ComputeClosestPointInPortal(
                         parentArea,
                         area.GetParentHow(),
-                        area.GetCenter()
+                        prevPoint
                     );
                     this.navPath.append(portalPoint);
+                    prevPoint = portalPoint;
                 }
 
                 area = parentArea;

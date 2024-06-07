@@ -82,7 +82,7 @@ class Lane
         // don't get stuck and move to the next line.
 
         local endPos = null;
-        local overShoot = 128.0;
+        local overShoot = 64.0;
 
         if (team == Constants.ETFTeam.TF_TEAM_RED)
         {
@@ -94,6 +94,7 @@ class Lane
         }
 
         //DebugDrawBox(nearest.point, Vector(-16.0, -16.0, -16.0), Vector(16.0, 16.0, 16.0), 0, 0, 255, 128, 1.0);
+        //DebugDrawBox(endPos, Vector(-16.0, -16.0, -16.0), Vector(16.0, 16.0, 16.0), 255, 0, 0, 128, 1.0);
 
         return endPos;
     }
