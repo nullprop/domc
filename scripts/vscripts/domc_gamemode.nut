@@ -129,6 +129,8 @@ class GamemodeDomc
     {
         this.started = false;
 
+        ValidatePlayers();
+
         foreach(ply in this.players)
         {
             ply.Reset();

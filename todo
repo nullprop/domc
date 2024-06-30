@@ -12,6 +12,7 @@ map:
 - power runes
 
 features:
+- hud level / xp
 - sniper should be able to headshot bots
 - spy bot sapping?
 - make engineer viable
