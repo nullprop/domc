@@ -17,7 +17,7 @@ CLASS_SETTINGS <-
         "hp_base": 125,
         "hp_per_level": 20,
         "regen_base": 0.8,
-        "regen_per_level": 0.4,
+        "regen_per_level": 0.2,
         "dmg_mult_per_level": 0.02,
         "dmg_range": 1024
     },
@@ -26,7 +26,7 @@ CLASS_SETTINGS <-
         "hp_base": 125,
         "hp_per_level": 20,
         "regen_base": 0.8,
-        "regen_per_level": 0.8,
+        "regen_per_level": 0.4,
         "dmg_mult_per_level": 0.03,
         "dmg_range": 512
     },
@@ -35,7 +35,7 @@ CLASS_SETTINGS <-
         "hp_base": 125,
         "hp_per_level": 20,
         "regen_base": 0.8,
-        "regen_per_level": 0.4,
+        "regen_per_level": 0.2,
         "dmg_mult_per_level": 0.02,
         "dmg_range": 4096
     },
@@ -44,7 +44,7 @@ CLASS_SETTINGS <-
         "hp_base": 200,
         "hp_per_level": 25,
         "regen_base": 0.6,
-        "regen_per_level": 1.0,
+        "regen_per_level": 0.5,
         "dmg_mult_per_level": 0.02,
         "dmg_range": 768
     },
@@ -53,7 +53,7 @@ CLASS_SETTINGS <-
         "hp_base": 175,
         "hp_per_level": 25,
         "regen_base": 0.7,
-        "regen_per_level": 0.8,
+        "regen_per_level": 0.4,
         "dmg_mult_per_level": 0.02,
         "dmg_range": 768
     },
@@ -62,7 +62,7 @@ CLASS_SETTINGS <-
         "hp_base": 150,
         "hp_per_level": 25,
         "regen_base": 0.7,
-        "regen_per_level": 1.0,
+        "regen_per_level": 0.5,
         "dmg_mult_per_level": 0.02,
         "dmg_range": 2048
     },
@@ -71,7 +71,7 @@ CLASS_SETTINGS <-
         "hp_base": 300,
         "hp_per_level": 40,
         "regen_base": 0.6,
-        "regen_per_level": 2.0,
+        "regen_per_level": 1.0,
         "dmg_mult_per_level": 0.02,
         "dmg_range": 1024
     },
@@ -80,7 +80,7 @@ CLASS_SETTINGS <-
         "hp_base": 175,
         "hp_per_level": 25,
         "regen_base": 0.8,
-        "regen_per_level": 0.8,
+        "regen_per_level": 0.4,
         "dmg_mult_per_level": 0.02,
         "dmg_range": 768
     },
@@ -89,7 +89,7 @@ CLASS_SETTINGS <-
         "hp_base": 125,
         "hp_per_level": 20,
         "regen_base": 0.8,
-        "regen_per_level": 0.8,
+        "regen_per_level": 0.4,
         "dmg_mult_per_level": 0.02,
         "dmg_range": 768
     },
@@ -98,7 +98,7 @@ CLASS_SETTINGS <-
         "hp_base": 125,
         "hp_per_level": 20,
         "regen_base": 0.8,
-        "regen_per_level": 0.4,
+        "regen_per_level": 0.2,
         "dmg_mult_per_level": 0.02,
         "dmg_range": 1024
     },
