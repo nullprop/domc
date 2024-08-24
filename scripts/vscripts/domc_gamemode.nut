@@ -154,6 +154,13 @@ class GamemodeDomc
         this.lanes = [];
         //CollectGarbage();
 
+        local ply = null;
+        while(ply = Entities.FindByClassname(ply, "player"))
+        {
+            ply.GrantOrRemoveAllUpgrades(true, false);
+            ply.SetCurrency(0);
+        }
+
         local target = null;
         while(target = Entities.FindByClassname(target, "info_target"))
         {
@@ -233,8 +240,6 @@ class GamemodeDomc
     {
         Log("round start");
 
-        Convars.SetValue("sv_turbophysics", 0);
-
         Reset(); 
 
         foreach(spawner in this.spawners)
@@ -243,6 +248,9 @@ class GamemodeDomc
         }
 
         this.started = true;
+
+        Convars.SetValue("sv_turbophysics", 0);
+        ForceEnableUpgrades(2);
     }
 
     function AddPlayer(userid)
@@ -678,6 +686,18 @@ if (!("gamemode_domc" in getroottable()))
         foreach(player in ::gamemode_domc.players)
         {
             player.OnGainXP(amount);
+        }
+    }
+}
+
+::GiveMoney <- function(amount)
+{
+    if ("gamemode_domc" in getroottable())
+    {
+        local ply = null;
+        while(ply = Entities.FindByClassname(ply, "player"))
+        {
+            ply.AddCurrency(amount);
         }
     }
 }
