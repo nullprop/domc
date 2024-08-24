@@ -2,6 +2,7 @@ playtest issues:
 - late joiners maybe shouldn't start at level 1
   - maybe equal to lowest level in lobby?
   - keep player level if they disconnect/rejoin?
+- regenerate caber after some time
 
 bugs
 - t3 sentry rockets do no dmg
