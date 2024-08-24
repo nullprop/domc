@@ -13,91 +13,91 @@ CLASS_SETTINGS <-
     // UNKNOWN
     {
         "hp_base": 125,
-        "hp_per_level": 15,
+        "hp_per_level": 20,
         "regen_base": 0.8,
         "regen_per_level": 0.4,
-        "dmg_mult_per_level": 0.1,
+        "dmg_mult_per_level": 0.02,
         "dmg_range": 1024
     },
 	// SCOUT
     {
         "hp_base": 125,
-        "hp_per_level": 15,
+        "hp_per_level": 20,
         "regen_base": 0.8,
         "regen_per_level": 0.8,
-        "dmg_mult_per_level": 0.15,
+        "dmg_mult_per_level": 0.03,
         "dmg_range": 512
     },
 	// SNIPER
     {
         "hp_base": 125,
-        "hp_per_level": 15,
+        "hp_per_level": 20,
         "regen_base": 0.8,
         "regen_per_level": 0.4,
-        "dmg_mult_per_level": 0.1,
+        "dmg_mult_per_level": 0.02,
         "dmg_range": 4096
     },
 	// SOLDIER
     {
         "hp_base": 200,
-        "hp_per_level": 20,
+        "hp_per_level": 25,
         "regen_base": 0.6,
         "regen_per_level": 1.0,
-        "dmg_mult_per_level": 0.1,
+        "dmg_mult_per_level": 0.02,
         "dmg_range": 768
     },
 	// DEMOMAN
     {
         "hp_base": 175,
-        "hp_per_level": 18,
+        "hp_per_level": 25,
         "regen_base": 0.7,
         "regen_per_level": 0.8,
-        "dmg_mult_per_level": 0.1,
+        "dmg_mult_per_level": 0.02,
         "dmg_range": 768
     },
 	// MEDIC
     {
         "hp_base": 150,
-        "hp_per_level": 18,
+        "hp_per_level": 25,
         "regen_base": 0.7,
         "regen_per_level": 1.0,
-        "dmg_mult_per_level": 0.1,
+        "dmg_mult_per_level": 0.02,
         "dmg_range": 2048
     },
 	// HEAVY
     {
         "hp_base": 300,
-        "hp_per_level": 30,
+        "hp_per_level": 40,
         "regen_base": 0.6,
         "regen_per_level": 2.0,
-        "dmg_mult_per_level": 0.1,
+        "dmg_mult_per_level": 0.02,
         "dmg_range": 1024
     },
 	// PYRO
     {
         "hp_base": 175,
-        "hp_per_level": 18,
+        "hp_per_level": 25,
         "regen_base": 0.8,
         "regen_per_level": 0.8,
-        "dmg_mult_per_level": 0.1,
+        "dmg_mult_per_level": 0.02,
         "dmg_range": 768
     },
 	// SPY
     {
         "hp_base": 125,
-        "hp_per_level": 15,
+        "hp_per_level": 20,
         "regen_base": 0.8,
         "regen_per_level": 0.8,
-        "dmg_mult_per_level": 0.1,
+        "dmg_mult_per_level": 0.02,
         "dmg_range": 768
     },
 	// ENGINEER
     {
         "hp_base": 125,
-        "hp_per_level": 15,
+        "hp_per_level": 20,
         "regen_base": 0.8,
         "regen_per_level": 0.4,
-        "dmg_mult_per_level": 0.1,
+        "dmg_mult_per_level": 0.02,
         "dmg_range": 1024
     },
 ]
