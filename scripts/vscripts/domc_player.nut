@@ -5,8 +5,10 @@ const SENTRY_PROTECT_INTERVAL = 1.0;
 const SENTRY_PROTECT_RADIUS = 512.0;
 const XP_PER_LEVEL = 1000.0;
 const MAX_LEVEL = 20;
-const XP_AWARD_BASE = 400.0;
-const XP_AWARD_KILLSTREAK = 50.0;
+const XP_REWARD_BASE = 400.0;
+const XP_REWARD_KILLSTREAK = 50.0;
+const MONEY_REWARD_BASE = 100;
+const MONEY_REWARD_KILLSTREAK = 50;
 
 CLASS_SETTINGS <-
 [
@@ -116,7 +118,9 @@ class Player
 
     level = 1;
     xp = 0.0;
-    xpAward = XP_AWARD_BASE;
+
+    xpReward = XP_REWARD_BASE;
+    moneyReward = MONEY_REWARD_BASE;
 
     applySpawn = false;
 
@@ -147,7 +151,7 @@ class Player
         this.level = 1;
         this.xp = 0.0;
         this.storedRegen = 0.0;
-        UpdateXPAward();
+        UpdateReward();
         ApplyClassSettings();
     }
 
@@ -156,14 +160,21 @@ class Player
         Log("Player.OnSpawn");
         // Apply class settings next think, doesn't work here
         this.applySpawn = true;
-        this.UpdateXPAward();
+        this.UpdateReward();
     }
 
-    function UpdateXPAward()
+    function UpdateReward()
     {
-        this.xpAward = XP_AWARD_BASE;
         local killStreak = 0; // TODO
-        this.xpAward += killStreak * XP_AWARD_KILLSTREAK;
+        this.xpReward = XP_REWARD_BASE;
+        this.xpReward += killStreak * XP_REWARD_KILLSTREAK;
+        this.moneyReward = MONEY_REWARD_BASE;
+        this.moneyReward += killStreak * MONEY_REWARD_KILLSTREAK;
+    }
+
+    function GiveCurrency(amount)
+    {
+        this.playerEnt.AddCurrency(amount);
     }
 
     function OnGainXP(amount)
@@ -320,5 +331,25 @@ class Player
             dmgMult *= Min(this.classSettings["dmg_range"] / distance, 1.0);
         }
         return dmgMult;
+    }
+
+    function OnTakeDamage(params)
+    {
+        if (params.damage >= this.playerEnt.GetHealth())
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    function GetXPReward()
+    {
+        return this.xpReward;
+    }
+
+    function GetMoneyReward()
+    {
+        return this.moneyReward;
     }
 }

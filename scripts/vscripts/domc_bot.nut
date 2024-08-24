@@ -7,7 +7,8 @@ const AVOIDANCE_INTERVAL = 0.2;
 const INTERVAL_RAND = 0.05; // Try to spread recalculations across multiple ticks
 const PATH_MARGIN = 48.0;
 const STEP_HEIGHT = 32.0;
-const BOT_XP_AWARD_BASE = 125.0;
+const BOT_XP_REWARD_BASE = 125.0;
+const BOT_MONEY_REWARD_BASE = 40.0;
 
 BOT_SETTINGS <-
 {
@@ -125,7 +126,6 @@ class Bot
 
     lastAttackTime = 0.0;
 
-    xpAward = BOT_XP_AWARD_BASE;
     mega = false;
 
     nextAvoidanceTime = 0.0;
@@ -839,6 +839,16 @@ class Bot
         }
 
         DispatchParticleEffect("ExplosionCore_MidAir", origin, Vector());
+    }
+
+    function GetXPReward()
+    {
+        return BOT_XP_REWARD_BASE;
+    }
+
+    function GetMoneyReward()
+    {
+        return BOT_MONEY_REWARD_BASE;
     }
 }
 

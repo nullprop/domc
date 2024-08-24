@@ -378,7 +378,6 @@ class GamemodeDomc
         {
             if (this.bots[i].uname == bot.uname)
             {
-                //Log(format("Removed bot %s", bot.uname));
                 this.bots.remove(i);
                 break;
             }
@@ -413,6 +412,32 @@ class GamemodeDomc
         foreach(player in inRange)
         {
             player.OnGainXP(splitAmount);
+        }
+    }
+
+    function GiveMoneyToTeam(amount, team)
+    {
+        local oppos = [];
+        foreach(player in this.players)
+        {
+            if (player.GetTeam() != team)
+            {
+                continue;
+            }
+
+            oppos.append(player);
+        }
+
+        local playerCount = oppos.len();
+        if (playerCount == 0)
+        {
+            return;
+        }
+
+        local splitAmount = amount.tofloat() / playerCount;
+        foreach(player in oppos)
+        {
+            player.GiveCurrency(splitAmount);
         }
     }
 
@@ -523,11 +548,6 @@ function OnGameEvent_player_death(data)
 
     local ent = GetPlayerFromUserID(data.userid);
     local player = ::gamemode_domc.GetPlayer(ent);
-
-    if (player)
-    {
-        ::gamemode_domc.AwardXP(GetOppositeTeam(player.GetTeam()), player.xpAward, player.GetPos());
-    }
 }
 
 function OnGameEvent_teamplay_round_active(data)
@@ -562,6 +582,8 @@ function OnScriptHook_OnTakeDamage(params)
     ));
     */
 
+    /* INFLICTORS */
+
     // Don't crush things
     if (infClassname == "base_boss" && params.damage_type == Constants.FDmgType.DMG_CRUSH)
     {
@@ -594,6 +616,36 @@ function OnScriptHook_OnTakeDamage(params)
         params.damage *= player.GetDamageMult(applyFalloff, damageDistance);
     }
 
+    /* VICTIMS */
+
+    local victimPlayer = ::gamemode_domc.GetPlayer(ent);
+    if (victimPlayer)
+    {
+        if (victimPlayer.OnTakeDamage(params))
+        {
+            ::gamemode_domc.AwardXP(
+                GetOppositeTeam(victimPlayer.GetTeam()),
+                victimPlayer.GetXPReward(),
+                victimPlayer.GetPos()
+            );
+
+            local money = victimPlayer.GetMoneyReward();
+            local oppo = GetOppositeTeam(victimPlayer.GetTeam());
+
+            // Last hitting player gets half the money
+            if (player && player.GetTeam() == oppo)
+            {
+                player.GiveCurrency(money / 2);
+                money /= 2;
+            }
+
+            // Remaining money split among the team (incl. last hitting ply)
+            ::gamemode_domc.GiveMoneyToTeam(money, oppo);
+        }
+
+        return;
+    }
+
     // Bot callback for aggro + award xp
     if (entClassname == "base_boss")
     {
@@ -603,10 +655,26 @@ function OnScriptHook_OnTakeDamage(params)
             local dead = bot.OnTakeDamage(params);
             if (dead)
             {
-                ::gamemode_domc.AwardXP(GetOppositeTeam(bot.team), bot.xpAward, bot.GetPos());
+                ::gamemode_domc.AwardXP(GetOppositeTeam(bot.team), bot.GetXPReward(), bot.GetPos());
                 ::gamemode_domc.RemoveBot(bot);
+
+                local oppo = GetOppositeTeam(bot.team);
+                local money = bot.GetMoneyReward();
+
+                // Last hitting player gets all the money
+                if (player && player.GetTeam() == oppo)
+                {
+                    player.GiveCurrency(money);
+                }
+                // If not last hit, give some to the team
+                else
+                {
+                    ::gamemode_domc.GiveMoneyToTeam(money / 8, oppo);
+                }
             }
         }
+
+        return;
     }
 
     local fountain = ::gamemode_domc.GetFountain(ent);
@@ -616,6 +684,8 @@ function OnScriptHook_OnTakeDamage(params)
         {
             ::gamemode_domc.TeamLose(fountain.GetTeam());
         }
+
+        return;
     }
 
     local targetTower = ::gamemode_domc.GetTower(ent);
@@ -624,7 +694,22 @@ function OnScriptHook_OnTakeDamage(params)
         if (targetTower.OnTakeDamage(params))
         {
             ::gamemode_domc.TowerDestroyed(targetTower);
+
+            local money = targetTower.GetMoneyReward();
+            local oppo = GetOppositeTeam(targetTower.team);
+
+            // Last hitting player gets 50% of the money
+            if (player && player.GetTeam() == oppo)
+            {
+                player.GiveCurrency(money / 2);
+                money /= 2;
+            }
+
+            // Remaining money split among the team (incl. last hitting ply)
+            ::gamemode_domc.GiveMoneyToTeam(money, oppo);
         }
+
+        return;
     }
 }
 

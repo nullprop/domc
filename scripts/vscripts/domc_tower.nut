@@ -1,6 +1,7 @@
 DoIncludeScript("domc_util.nut", null);
 
 const TOWER_SAP_DURATION = 5.0;
+const TOWER_MONEY_REWARD = 300;
 
 TOWER_SETTINGS <-
 [
@@ -199,6 +200,11 @@ class Tower
         {
             this.protectedFx.Kill();
         }
+    }
+
+    function GetMoneyReward()
+    {
+        return TOWER_MONEY_REWARD;
     }
 }
 
