@@ -3,14 +3,18 @@ playtest issues:
   - maybe equal to lowest level in lobby?
   - keep player level if they disconnect/rejoin?
 - regenerate caber after some time
+- backdoor protection (no enemy creeps near tower / fountain)
 
 bugs
 - t3 sentry rockets do no dmg
 - ranged and siege bots dont carry weapons correctly
 - bots tilt sideways when playing victory taunt anim
+- you can lose health when leveling up or buying upgrades?
+- pyro afterburn does very little dmg?
+- canteen charges are not cleared on round reset
 
 map:
-- power runes
+- halloween spells as power runes
 - maybe some jump pads
 
 features:
